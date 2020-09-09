@@ -25,16 +25,16 @@ const Sidebar = () => {
           <NavLink to="/">
             <icons.DashboardIcon /> Dashbord
           </NavLink>
-          <NavLink to="/products">
+          <NavLink to="/catalog/products">
             <icons.ShirtIcon /> Produkter
           </NavLink>
-          <NavLink to="/categories">
+          <NavLink to="/catalog/categories">
             <icons.FolderIcon /> Kategorier
           </NavLink>
-          <NavLink to="/orders">
+          <NavLink to="/order">
             <icons.ShirtIcon /> Ordre/Kunder
           </NavLink>
-          <NavLink to="/pages">
+          <NavLink to="/page">
             <icons.ListIcon /> Sider
           </NavLink>
           <NavLink to="/settings">

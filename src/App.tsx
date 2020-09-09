@@ -11,8 +11,6 @@ const Orders = lazy(() => import('./modules/order/Orders'));
 const Pages = lazy(() => import('./modules/page/Pages'));
 const Settings = lazy(() => import('./modules/settings/Settings'));
 
-const About = () => <div>Hallo</div>;
-
 const renderLoader = () => <p>Loading</p>;
 
 const App = () => {

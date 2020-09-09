@@ -18,7 +18,7 @@ const Sidebar = () => {
         <Box
           sx={{ p: 4, display: 'flex', alignItems: 'center', mb: [0, 0, 4] }}
         >
-          <Avatar size="54" src="https://via.placeholder.com/54x54" />
+          <Avatar size="54" alt="user avatar" src="https://via.placeholder.com/54x54" />
           <Text sx={{ ml: 3 }}>Butikknavn</Text>
         </Box>
         <Box sx={{ flexGrow: 3 }}>

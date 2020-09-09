@@ -48,7 +48,7 @@ const Sidebar = () => {
           sx={{ p: 4, alignItems: 'center', justifyContent: 'space-between' }}
         >
           <Text>Emil Walter</Text>
-          <IconButton>
+          <IconButton aria-label="user dropdown">
             <icons.UploadIcon />
           </IconButton>
         </Flex>

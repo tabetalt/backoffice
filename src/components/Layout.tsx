@@ -11,7 +11,7 @@ const Layout: React.FC = ({children}) => {
 
         <Box sx={{ minHeight: '100vh', width: '100%' }}>
           <Header />
-          {children}
+          <main>{children}</main>
           <Footer />
         </Box>
       </Flex>

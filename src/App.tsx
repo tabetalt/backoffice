@@ -4,9 +4,12 @@ import { ThemeProvider } from 'theme-ui';
 import { theme } from '@tabetalt/kit'
 
 // Modules
+const Account = lazy(() => import('./modules/account/Account'));
+const Catalog = lazy(() => import('./modules/catalog/Catalog'));
 const Dashboard = lazy(() => import('./modules/dashboard/Dashboard'));
-
-const About = () => <div>Hallo</div>;
+const Orders = lazy(() => import('./modules/order/Orders'));
+const Pages = lazy(() => import('./modules/page/Pages'));
+const Settings = lazy(() => import('./modules/settings/Settings'));
 
 const renderLoader = () => <p>Loading</p>;
 
@@ -16,7 +19,11 @@ const App = () => {
       <Suspense fallback={renderLoader()}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="about" element={<About />} />
+          <Route path="account" element={<Account />} />
+          <Route path="catalog/*" element={<Catalog />} />
+          <Route path="order" element={<Orders />} />
+          <Route path="page" element={<Pages />} />
+          <Route path="settings" element={<Settings />} />
         </Routes>
       </Suspense>
     </ThemeProvider>

@@ -1,27 +1,19 @@
 import React from 'react';
 import { Table } from '@tabetalt/kit';
 import Layout from '../../components/Layout';
-import {icons} from '@tabetalt/kit';
-import { Box, IconButton } from 'theme-ui';
+import { Badge, Box, Button, IconButton } from 'theme-ui';
 
 const Orders = () => {
   const data = Array(10).fill({
-    productName: 'Testproduktnavn',
-    price: '299,90 NOK',
-    inventoryStatus: 'Ikke på lager',
-    stats: '3 besøk / 0 salg',
-    status: 'Aktiv',
+    orderNumber: '00001',
+    orderDate: '26.05.2020',
+    customer: 'Anne Matilde R. Fjeldstad',
+    orderStatus: <Badge variant="success">Bekreftet</Badge>,
+    paymentStatus: <Badge variant="success">Betalt</Badge>,
+    total: '1229,00',
     actions: (
-      <Box sx={{textAlign: 'right'}}>
-        <IconButton>
-          <icons.OpenIcon />
-        </IconButton>
-        <IconButton>
-          <icons.TrashIcon />
-        </IconButton>
-        <IconButton>
-          <icons.PencilIcon />
-        </IconButton>
+      <Box sx={{ textAlign: 'right' }}>
+        <Button variant="outline">Vis</Button>
       </Box>
     ),
   });
@@ -31,21 +23,28 @@ const Orders = () => {
         <Table
           columns={[
             {
-              Header: 'Produkter',
-              accessor: 'productName',
-              minWidth: '50%'
+              Header: 'Ordre',
+              accessor: 'orderNumber',
             },
             {
-              Header: 'Produktpris',
-              accessor: 'price',
+              Header: 'Dato',
+              accessor: 'orderDate',
             },
             {
-              Header: 'Lagerstatus',
-              accessor: 'inventoryStatus',
+              Header: 'Kunde',
+              accessor: 'customer',
             },
             {
-              Header: 'Statistikk',
-              accessor: 'stats',
+              Header: 'Ordrestatus',
+              accessor: 'orderStatus',
+            },
+            {
+              Header: 'Betaling',
+              accessor: 'paymentStatus',
+            },
+            {
+              Header: 'Totalsum',
+              accessor: 'total',
             },
             {
               Header: '',

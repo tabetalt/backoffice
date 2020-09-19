@@ -12,15 +12,15 @@ const Account = () => (
         <Field
           label="Navn"
           name="name"
-          placeholder="This placeholder is missing 😬"
+          placeholder="Fullt navn"
         />
         <Field
           label="E-post"
           name="email"
           type="email"
-          placeholder="This placeholder is missing 😬"
+          placeholder="E-postadresse"
         />
-        <Field label="Språk" name="lang" as={Select}>
+        <Field label="Språk" name="lang" placeholder="Velg språk" as={Select}>
           <option>Hello</option>
         </Field>
       </Box>

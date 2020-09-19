@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '../../components/Layout';
-import { Heading, Box, Field, Select, Flex } from 'theme-ui';
+import { Heading, Box, Select, Flex } from 'theme-ui';
+import { Field } from '@tabetalt/kit';
 import { Link } from 'react-router-dom';
 
 const Account = () => (

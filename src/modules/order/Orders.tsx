@@ -2,8 +2,10 @@ import React from 'react';
 import { Table } from '@tabetalt/kit';
 import Layout from '../../components/Layout';
 import { Badge, Box, Button } from 'theme-ui';
+import {useNavigate} from 'react-router-dom';
 
 const Orders = () => {
+  const navigate = useNavigate()
   const data = Array(10).fill({
     orderNumber: '00001',
     orderDate: '26.05.2020',
@@ -13,7 +15,9 @@ const Orders = () => {
     total: '1229,00',
     actions: (
       <Box sx={{ textAlign: 'right' }}>
-        <Button variant="outline">Vis</Button>
+        <Button variant="outline" onClick={() => navigate('/order/1')}>
+          Vis
+        </Button>
       </Box>
     ),
   });

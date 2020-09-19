@@ -11,6 +11,9 @@ const Orders = lazy(() => import('./modules/order/Orders'));
 const Order = lazy(() => import('./modules/order/Order'));
 const Pages = lazy(() => import('./modules/page/Pages'));
 const Settings = lazy(() => import('./modules/settings/Settings'));
+const ShippingSettings = lazy(
+  () => import('./modules/settings/ShippingSettings')
+);
 
 const renderLoader = () => <Skeleton />;
 
@@ -26,6 +29,7 @@ const App = () => {
           <Route path="order/*" element={<Order />} />
           <Route path="page" element={<Pages />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="settings/shipping" element={<ShippingSettings />} />
         </Routes>
       </Suspense>
     </ThemeProvider>

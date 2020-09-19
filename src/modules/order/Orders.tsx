@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from '@tabetalt/kit';
 import Layout from '../../components/Layout';
-import { Badge, Box, Button, IconButton } from 'theme-ui';
+import { Badge, Box, Button } from 'theme-ui';
 
 const Orders = () => {
   const data = Array(10).fill({

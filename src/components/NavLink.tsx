@@ -24,7 +24,7 @@ const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps & LinkProps>(
             mr: 3,
           },
           ':hover': {
-            backgroundColor: 'gray_1',
+            backgroundColor: 'gray1',
             color: 'text',
           },
         }}

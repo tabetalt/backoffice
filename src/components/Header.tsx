@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <Flex
       sx={{
-        backgroundColor: 'gray_2',
+        backgroundColor: 'gray2',
         // justifyContent: 'center',
         justifyContent: 'space-between',
       }}
@@ -22,9 +22,10 @@ const Header = () => {
         sx={{
           px: 5,
           py: 4,
-          fontSize: 3,
+          fontSize: 2,
           '> a': {
             color: 'text',
+            textDecoration: 'none',
           },
         }}
       >

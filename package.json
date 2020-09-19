@@ -11,6 +11,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "framer-motion": "^2.6.15",
     "history": "^5.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

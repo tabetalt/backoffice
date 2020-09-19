@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'theme-ui';
-import { theme } from '@tabetalt/kit'
+import { theme, Skeleton } from '@tabetalt/kit'
 
 // Modules
 const Account = lazy(() => import('./modules/account/Account'));
@@ -11,7 +11,7 @@ const Orders = lazy(() => import('./modules/order/Orders'));
 const Pages = lazy(() => import('./modules/page/Pages'));
 const Settings = lazy(() => import('./modules/settings/Settings'));
 
-const renderLoader = () => <p>Loading</p>;
+const renderLoader = () => <Skeleton />;
 
 const App = () => {
   return (

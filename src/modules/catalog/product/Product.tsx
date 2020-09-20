@@ -46,6 +46,8 @@ const product = {
       price: '258.00 NOK',
     },
   ],
+  labels: ['Bestseller / Nyhet / Få igjen'],
+  compareablePrice: '230 NOK',
 };
 
 export type ProductAttr = typeof product;

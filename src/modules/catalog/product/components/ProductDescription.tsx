@@ -1,5 +1,8 @@
 import React from 'react';
+import { ProductAttr } from '../Product';
 
-const ProductDescription = () => <div>Here comes product description</div>;
+const ProductDescription: React.FC<{ product: ProductAttr }> = () => (
+  <div>Here comes product description</div>
+);
 
 export default ProductDescription;

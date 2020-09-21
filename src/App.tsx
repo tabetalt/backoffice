@@ -14,6 +14,9 @@ const Settings = lazy(() => import('./modules/settings/Settings'));
 const ShippingSettings = lazy(
   () => import('./modules/settings/ShippingSettings')
 );
+const GenericSettings = lazy(
+  () => import('./modules/settings/GenericSettings')
+);
 
 const renderLoader = () => <Skeleton />;
 
@@ -30,6 +33,7 @@ const App = () => {
           <Route path="page" element={<Pages />} />
           <Route path="settings" element={<Settings />} />
           <Route path="settings/shipping" element={<ShippingSettings />} />
+          <Route path="settings/generic" element={<GenericSettings />} />
         </Routes>
       </Suspense>
     </ThemeProvider>

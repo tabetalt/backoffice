@@ -20,6 +20,9 @@ const GenericSettings = lazy(
 const DiscountSettings = lazy(
   () => import('./modules/settings/DiscountSettings')
 );
+const PaymentMethodSettings = lazy(
+  () => import('./modules/settings/PaymentMethodSettings')
+);
 
 const renderLoader = () => <Skeleton />;
 
@@ -38,6 +41,7 @@ const App = () => {
           <Route path="settings/shipping" element={<ShippingSettings />} />
           <Route path="settings/generic" element={<GenericSettings />} />
           <Route path="settings/discount" element={<DiscountSettings />} />
+          <Route path="settings/payment-method" element={<PaymentMethodSettings />} />
         </Routes>
       </Suspense>
     </ThemeProvider>

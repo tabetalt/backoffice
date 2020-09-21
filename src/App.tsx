@@ -10,9 +10,19 @@ const Dashboard = lazy(() => import('./modules/dashboard/Dashboard'));
 const Orders = lazy(() => import('./modules/order/Orders'));
 const Order = lazy(() => import('./modules/order/Order'));
 const Pages = lazy(() => import('./modules/page/Pages'));
+const Page = lazy(() => import('./modules/page/Page'));
 const Settings = lazy(() => import('./modules/settings/Settings'));
 const ShippingSettings = lazy(
   () => import('./modules/settings/ShippingSettings')
+);
+const GenericSettings = lazy(
+  () => import('./modules/settings/GenericSettings')
+);
+const DiscountSettings = lazy(
+  () => import('./modules/settings/DiscountSettings')
+);
+const PaymentMethodSettings = lazy(
+  () => import('./modules/settings/PaymentMethodSettings')
 );
 
 const renderLoader = () => <Skeleton />;
@@ -28,8 +38,15 @@ const App = () => {
           <Route path="order" element={<Orders />} />
           <Route path="order/*" element={<Order />} />
           <Route path="page" element={<Pages />} />
+          <Route path="page/create" element={<Page />} />
           <Route path="settings" element={<Settings />} />
           <Route path="settings/shipping" element={<ShippingSettings />} />
+          <Route path="settings/generic" element={<GenericSettings />} />
+          <Route path="settings/discount" element={<DiscountSettings />} />
+          <Route
+            path="settings/payment-method"
+            element={<PaymentMethodSettings />}
+          />
         </Routes>
       </Suspense>
     </ThemeProvider>

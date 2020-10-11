@@ -16,11 +16,18 @@ active development and we don't offer support for it at this time.
 _**Note:** We will be adding a quickstart guide as soon we release it for
 open beta_
 
+## Roadmap
+
+Check out roadmap on our [documentation site][roadmap]
+
 ## Contribution
 
 Contributions are welcome, please read [our guide][contributing] to
 get started! Check the [developer quickstart][dev-start] to
 start to contribute to this repository.
+
+You can also help by [submitting ideas and voting for features][roadmap]
+you'd like added.
 
 The Backoffice is built using React, [@tabetalt/kit][kit], Apollo
 and Theme UI.
@@ -31,6 +38,7 @@ and Theme UI.
 - [Tabetalt Kit][kit] (Tabetalt design as React components)
 
 [banner]: ./.github/assets/header.jpg
+[roadmap]: https://docs.tabetalt.no/roadmap
 [docs]: https://docs.tabetalt.no/
 [dev-start]: docs/QUICKSTART.md
 [kit]: https://github.com/tabetalt/kit

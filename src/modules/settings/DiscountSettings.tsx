@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Heading, IconButton, Text } from 'theme-ui';
 import Layout from '../../components/Layout';
 
-const DiscountSettings = () => (
+const DiscountSettings: React.FC = () => (
   <Layout>
     <Box sx={{ m: 5 }}>
       <Heading>Rabatter</Heading>

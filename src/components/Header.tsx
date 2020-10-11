@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Flex, Button } from 'theme-ui';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header: React.FC = () => {
   const links = [
     {
       name: 'Dashbord',
@@ -29,7 +29,11 @@ const Header = () => {
           },
         }}
       >
-        {links && links.map((link) => <Link to={link.to}>{link.name}</Link>)}
+        {(links || []).map((link, i) => (
+          <Link to={link.to} key={i}>
+            {link.name}
+          </Link>
+        ))}
       </Box>
       <Box sx={{ px: 5, py: 4 }}>
         <Button variant="outline">Gå til butikken</Button>

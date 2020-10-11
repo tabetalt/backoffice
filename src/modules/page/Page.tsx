@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Heading, Select, Text } from 'theme-ui';
 import Layout from '../../components/Layout';
 
-const Page = () => (
+const Page: React.FC = () => (
   <Layout>
     <Box sx={{ m: 5, maxWidth: 820 }}>
       <Heading>Legg til ny innholdsside</Heading>

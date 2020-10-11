@@ -2,10 +2,10 @@ import React from 'react';
 import { Table } from '@tabetalt/kit';
 import Layout from '../../components/Layout';
 import { Badge, Box, Button } from 'theme-ui';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const Orders = () => {
-  const navigate = useNavigate()
+const Orders: React.FC = () => {
+  const navigate = useNavigate();
   const data = Array(10).fill({
     orderNumber: '00001',
     orderDate: '26.05.2020',

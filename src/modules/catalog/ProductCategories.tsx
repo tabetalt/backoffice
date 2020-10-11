@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, IconButton } from 'theme-ui';
 import Layout from '../../components/Layout';
 
-const Categories = () => {
+const Categories: React.FC = () => {
   const data = Array(10).fill({
     name: 'Alle produkter',
     parent: '',

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { NavLink as ThemeUINavLink, NavLinkProps } from 'theme-ui';
 import { Link, LinkProps } from 'react-router-dom';
 
@@ -9,9 +8,10 @@ const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps & LinkProps>(
       replace={replace}
       state={state}
       to={to}
-      style={{textDecoration: 'none'}}
+      style={{ textDecoration: 'none' }}
     >
       <ThemeUINavLink
+        ref={ref}
         sx={{
           px: 4,
           py: 2,
@@ -33,4 +33,7 @@ const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps & LinkProps>(
     </Link>
   )
 );
+
+NavLink.displayName = 'Skeleton';
+
 export default NavLink;

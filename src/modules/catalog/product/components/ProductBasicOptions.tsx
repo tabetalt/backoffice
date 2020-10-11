@@ -9,8 +9,8 @@ export interface CategoriesAttr {
 // TODO: Consider moving this to @tabetalt/kit
 const Categories: React.FC<CategoriesAttr> = ({ value }) => (
   <Flex sx={{ width: '100%', height: '51' }}>
-    {value.map((c) => (
-      <Label>
+    {value.map((c, i) => (
+      <Label key={i}>
         <Checkbox />
         {c}
       </Label>

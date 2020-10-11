@@ -4,16 +4,12 @@ import { Heading, Box, Select, Flex } from 'theme-ui';
 import { Field } from '@tabetalt/kit';
 import { Link } from 'react-router-dom';
 
-const Account = () => (
+const Account: React.FC = () => (
   <Layout>
     <Box sx={{ p: 5 }}>
       <Heading>Din informasjon</Heading>
       <Box sx={{ py: 3, '>div': { py: 2 } }}>
-        <Field
-          label="Navn"
-          name="name"
-          placeholder="Fullt navn"
-        />
+        <Field label="Navn" name="name" placeholder="Fullt navn" />
         <Field
           label="E-post"
           name="email"

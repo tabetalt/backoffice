@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Button, Flex, Heading, Text } from 'theme-ui';
 import Layout from '../../components/Layout';
 
-const PaymentMethod = () => (
+const PaymentMethod: React.FC = () => (
   <Layout>
     <Box sx={{ m: 5 }}>
       <Heading>Betalingsmetoder</Heading>

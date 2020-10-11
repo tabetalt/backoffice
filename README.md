@@ -3,7 +3,6 @@
 > Tabetalt builds headless e-commerce. We belive in Open Source, most of our platform is
 > published under Apache 2.0. Our focus is great developer support.
 
-![Build & Deploy][build-badge]
 [![Total alerts][lgtm-badge]][lgtm-alerts]
 [![LGTM Grade][lgtm-grade]][lgtm-alerts]
 [![Maintainability][codeclimate-badge]][codeclimate]
@@ -36,7 +35,6 @@ and Theme UI.
 [dev-start]: docs/QUICKSTART.md
 [kit]: https://github.com/tabetalt/kit
 [contributing]: https://github.com/tabetalt/.github/blob/main/.github/CONTRIBUTING.md
-[build-badge]: https://img.shields.io/github/workflow/status/tabetalt/backoffice/Build%20and%20Deploy
 [codeclimate-badge]: https://img.shields.io/codeclimate/maintainability/tabetalt/backoffice
 [codeclimate]: https://codeclimate.com/github/tabetalt/backoffice/maintainability
 [lgtm-badge]: https://img.shields.io/lgtm/alerts/g/tabetalt/backoffice.svg?logo=lgtm&logoWidth=18

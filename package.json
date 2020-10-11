@@ -2,6 +2,7 @@
   "name": "admin",
   "version": "0.1.0",
   "private": true,
+  "license": "Apache-2.0",
   "dependencies": {
     "@tabetalt/kit": "^1.8.0",
     "@testing-library/jest-dom": "^4.2.4",

@@ -1,45 +1,44 @@
-![API](.github/assets/header.jpg)
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Backoffice Banner][banner]
 
-## Available Scripts
+> Tabetalt builds headless e-commerce. We belive in Open Source, most of our platform is
+> published under Apache 2.0. Our focus is great developer support.
 
-In the project directory, you can run:
+![Build & Deploy][build-badge]
+[![Total alerts][lgtm-badge]][lgtm-alerts]
+[![LGTM Grade][lgtm-grade]][lgtm-alerts]
+[![Maintainability][codeclimate-badge]][codeclimate]
 
-### `yarn start`
+## Quickstart
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**IMPORTANT:** Our new platform is currently only available as closed beta. Check our
+[documentation][docs] for more information and signing up! Backoffice is still under
+active development and we don't offer support for it at this time.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+_**Note:** We will be adding a quickstart guide as soon we release it for
+open beta_
 
-### `yarn test`
+## Contribution
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Contributions are welcome, please read [our guide][contributing] to
+get started! Check the [developer quickstart][dev-start] to
+start to contribute to this repository.
 
-### `yarn build`
+The Backoffice is built using React, [@tabetalt/kit][kit], Apollo
+and Theme UI.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Relevant links
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+- [Tabetalt Developer Documentation][docs]
+- [Tabetalt Kit][kit] (Tabetalt design as React components)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+[banner]: ./.github/assets/header.jpg
+[docs]: https://docs.tabetalt.no/
+[dev-start]: docs/QUICKSTART.md
+[kit]: https://github.com/tabetalt/kit
+[contributing]: https://github.com/tabetalt/.github/blob/main/.github/CONTRIBUTING.md
+[build-badge]: https://img.shields.io/github/workflow/status/tabetalt/backoffice/Build%20and%20Deploy
+[codeclimate-badge]: https://img.shields.io/codeclimate/maintainability/tabetalt/backoffice
+[codeclimate]: https://codeclimate.com/github/tabetalt/backoffice/maintainability
+[lgtm-badge]: https://img.shields.io/lgtm/alerts/g/tabetalt/backoffice.svg?logo=lgtm&logoWidth=18
+[lgtm-alerts]: https://lgtm.com/projects/g/tabetalt/backoffice/alerts/
+[lgtm-grade]: https://img.shields.io/lgtm/grade/javascript/github/tabetalt/backoffice

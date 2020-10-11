@@ -24,7 +24,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
+    "test:ci": "yarn test --watchAll=false",
+    "lint": "eslint \"src/**/*.ts{,x}\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -41,5 +43,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.4",
+    "husky": "^4.3.0",
+    "prettier": "^2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn test:ci"
+    }
   }
 }

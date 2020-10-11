@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes, useParams, NavLink } from 'react-router-dom';
-import { Box, Heading,  } from 'theme-ui';
+import { Box, Heading } from 'theme-ui';
 import Layout from '../../../components/Layout';
 import ProductBasicOptions from './components/ProductBasicOptions';
 import ProductDescription from './components/ProductDescription';
@@ -56,7 +56,7 @@ const product = {
 
 export type ProductAttr = typeof product;
 
-export const Product = () => {
+export const Product: React.FC = () => {
   const { productId } = useParams();
   product.id = productId;
   const baseUrl = `/catalog/product/${productId}`;

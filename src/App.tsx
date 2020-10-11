@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'theme-ui';
-import { theme, Skeleton } from '@tabetalt/kit'
+import { theme, Skeleton } from '@tabetalt/kit';
 
 // Modules
 const Account = lazy(() => import('./modules/account/Account'));
@@ -27,30 +27,28 @@ const PaymentMethodSettings = lazy(
 
 const renderLoader = () => <Skeleton />;
 
-const App = () => {
-  return (
-    <ThemeProvider theme={theme}>
-      <Suspense fallback={renderLoader()}>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="account" element={<Account />} />
-          <Route path="catalog/*" element={<Catalog />} />
-          <Route path="order" element={<Orders />} />
-          <Route path="order/*" element={<Order />} />
-          <Route path="page" element={<Pages />} />
-          <Route path="page/create" element={<Page />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="settings/shipping" element={<ShippingSettings />} />
-          <Route path="settings/generic" element={<GenericSettings />} />
-          <Route path="settings/discount" element={<DiscountSettings />} />
-          <Route
-            path="settings/payment-method"
-            element={<PaymentMethodSettings />}
-          />
-        </Routes>
-      </Suspense>
-    </ThemeProvider>
-  );
-};
+const App: React.FC = () => (
+  <ThemeProvider theme={theme}>
+    <Suspense fallback={renderLoader()}>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="account" element={<Account />} />
+        <Route path="catalog/*" element={<Catalog />} />
+        <Route path="order" element={<Orders />} />
+        <Route path="order/*" element={<Order />} />
+        <Route path="page" element={<Pages />} />
+        <Route path="page/create" element={<Page />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="settings/shipping" element={<ShippingSettings />} />
+        <Route path="settings/generic" element={<GenericSettings />} />
+        <Route path="settings/discount" element={<DiscountSettings />} />
+        <Route
+          path="settings/payment-method"
+          element={<PaymentMethodSettings />}
+        />
+      </Routes>
+    </Suspense>
+  </ThemeProvider>
+);
 
 export default App;

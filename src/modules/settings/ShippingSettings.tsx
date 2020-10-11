@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Heading, IconButton, Text } from 'theme-ui';
 import Layout from '../../components/Layout';
 
-const Shipping = () => {
+const Shipping: React.FC = () => {
   const data = Array(4).fill({
     name: 'PostNord',
     price: '299,90 NOK',
@@ -23,7 +23,7 @@ const Shipping = () => {
     <Layout>
       <Box sx={{ p: 5 }}>
         <Heading>Leveringsmetoder</Heading>
-        <Text sx={{mb: 4}}>
+        <Text sx={{ mb: 4 }}>
           Hvilke leveringsmetoder vil du tilby? Her kan du administrere,
           sortere, legge til eller slette leveringsmetoder som kundene dine kan
           bruke.

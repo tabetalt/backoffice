@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, IconButton } from 'theme-ui';
 import Layout from '../../components/Layout';
 
-const Products = () => {
+const Products: React.FC = () => {
   const data = Array(10).fill({
     productName: 'Testproduktnavn',
     price: '299,90 NOK',

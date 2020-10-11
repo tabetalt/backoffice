@@ -3,7 +3,7 @@ import { Badge, Box, Button, Flex, Heading, Link, Text } from 'theme-ui';
 import { icons, Table } from '@tabetalt/kit';
 import Layout from '../../components/Layout';
 
-const Order = () => (
+const Order: React.FC = () => (
   <Layout>
     <Box sx={{ p: 5 }}>
       <Flex sx={{ width: '100%' }}>
@@ -67,7 +67,12 @@ const Order = () => (
               ]}
             />
           </Box>
-          <Box sx={{ mt: 3, '> div': { '> div': { flex: 5, textAlign: 'right' } } }}>
+          <Box
+            sx={{
+              mt: 3,
+              '> div': { '> div': { flex: 5, textAlign: 'right' } },
+            }}
+          >
             <Flex>
               <Text>Delsum</Text>
               <Text>899,70 NOK</Text>
@@ -88,7 +93,7 @@ const Order = () => (
               <Text>Pris inkl. MVA</Text>
               <Text>1 060,70 NOK</Text>
             </Flex>
-            <Flex sx={{ pt: 3, '> div': { fontSize: 2 }}}>
+            <Flex sx={{ pt: 3, '> div': { fontSize: 2 } }}>
               <Text>Totalt</Text>
               <Text>1 060,70 NOK</Text>
             </Flex>

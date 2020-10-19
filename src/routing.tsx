@@ -33,8 +33,10 @@ export default [
   },
   {
     path: 'page/*',
-    element: <Pages />,
-    children: [{ path: 'create', element: <Page /> }],
+    children: [
+      { path: '', element: <Pages /> },
+      { path: 'create', element: <Page /> },
+    ],
   },
   { path: 'settings/*', element: <Settings /> },
   { path: '*', element: <NotFound /> },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, useParams, NavLink } from 'react-router-dom';
+import { useRoutes, useParams, NavLink } from 'react-router-dom';
 import { Box, Heading } from 'theme-ui';
 import Layout from '../../../components/Layout';
 import ProductBasicOptions from './components/ProductBasicOptions';
@@ -56,10 +56,21 @@ const product = {
 
 export type ProductAttr = typeof product;
 
-export const Product: React.FC = () => {
+const Product: React.FC = () => {
+  const routes = useRoutes([
+    { path: '', element: <ProductBasicOptions product={product} /> },
+    { path: 'description', element: <ProductDescription product={product} /> },
+    { path: 'inventory', element: <ProductInventory product={product} /> },
+    { path: 'variants', element: <ProductVariants product={product} /> },
+    {
+      path: 'label-campaign',
+      element: <ProductLabelCampaign product={product} />,
+    },
+  ]);
+
   const { productId } = useParams();
   product.id = productId;
-  const baseUrl = `/catalog/product/${productId}`;
+
   return (
     <Layout>
       <Box sx={{ p: 5 }}>
@@ -77,32 +88,16 @@ export const Product: React.FC = () => {
             },
           }}
         >
-          <NavLink to={baseUrl}>Grunnleggende</NavLink>
-          <NavLink to={`${baseUrl}/description`}>Beskrivelse</NavLink>
-          <NavLink to={`${baseUrl}/inventory`}>Lagerbeholdning</NavLink>
-          <NavLink to={`${baseUrl}/variants`}>Varianter</NavLink>
-          <NavLink to={`${baseUrl}/label-campaign`}>Etikett og salg</NavLink>
+          <NavLink to="">Grunnleggende</NavLink>
+          <NavLink to="description">Beskrivelse</NavLink>
+          <NavLink to="inventory">Lagerbeholdning</NavLink>
+          <NavLink to="variants">Varianter</NavLink>
+          <NavLink to="label-campaign">Etikett og salg</NavLink>
         </Box>
-        <Routes>
-          <Route path="/" element={<ProductBasicOptions product={product} />} />
-          <Route
-            path="/description"
-            element={<ProductDescription product={product} />}
-          />
-          <Route
-            path="/inventory"
-            element={<ProductInventory product={product} />}
-          />
-          <Route
-            path="/variants"
-            element={<ProductVariants product={product} />}
-          />
-          <Route
-            path="/label-campaign"
-            element={<ProductLabelCampaign product={product} />}
-          />
-        </Routes>
+        {routes}
       </Box>
     </Layout>
   );
 };
+
+export default Product;

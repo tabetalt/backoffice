@@ -10,13 +10,12 @@ import {
   Select,
   Text,
 } from 'theme-ui';
-import Layout from '../../components/Layout';
 
 type GenericSettingsProps = any;
 
 const GenericSettings: React.FC<GenericSettingsProps> = ({ tenant = {} }) => (
-  <Layout>
-    <Box sx={{ m: 5, maxWidth: 820 }}>
+  <>
+    <Box sx={{ maxWidth: 820 }}>
       <Heading>Butikkinformasjon</Heading>
       <Box sx={{ '>div': { mb: 3 } }}>
         <Field label="Navn på butikken" name="title" value={tenant.title} />
@@ -188,7 +187,7 @@ const GenericSettings: React.FC<GenericSettingsProps> = ({ tenant = {} }) => (
         </Box>
       </Flex>
     </Box>
-  </Layout>
+  </>
 );
 
 export default GenericSettings;

@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React from 'react';
 import { Box, Flex, jsx } from 'theme-ui';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export interface HeaderProps {
   children?: React.ReactNode;
@@ -12,7 +12,6 @@ export interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ children, links = [] }) => {
-  debugger;
   return (
     <Flex
       sx={{

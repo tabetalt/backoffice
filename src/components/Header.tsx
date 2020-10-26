@@ -1,20 +1,22 @@
+/** @jsx jsx */
 import React from 'react';
-import { Box, Flex, Button } from 'theme-ui';
-import { Link } from 'react-router-dom';
+import { Box, Flex, jsx } from 'theme-ui';
+import { Link, NavLink } from 'react-router-dom';
 
-const Header: React.FC = () => {
-  const links = [
-    {
-      name: 'Dashbord',
-      to: '/',
-    },
-  ];
+export interface HeaderProps {
+  children?: React.ReactNode;
+  links?: {
+    name: string;
+    to: string;
+  }[];
+}
 
+const Header: React.FC<HeaderProps> = ({ children, links = [] }) => {
+  debugger;
   return (
     <Flex
       sx={{
         backgroundColor: 'gray2',
-        // justifyContent: 'center',
         justifyContent: 'space-between',
       }}
     >
@@ -30,15 +32,20 @@ const Header: React.FC = () => {
         }}
       >
         {(links || []).map((link, i) => (
-          <Link to={link.to} key={i}>
+          <NavLink
+            to={link.to}
+            key={i}
+            activeStyle={{
+              color: '#1D1D1D',
+            }}
+            style={{ color: '#9AA0B5' }}
+            sx={{ marginLeft: i !== 0 ? '20%' : '0%' }}
+          >
             {link.name}
-          </Link>
+          </NavLink>
         ))}
       </Box>
-      <Box sx={{ px: 5, py: 4 }}>
-        <Button variant="outline">Gå til butikken</Button>
-        <Button sx={{ ml: 3 }}>Logg ut</Button>
-      </Box>
+      <Box sx={{ px: 5, py: 4 }}>{children}</Box>
     </Flex>
   );
 };

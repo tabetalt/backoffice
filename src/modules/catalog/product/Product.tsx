@@ -38,20 +38,20 @@ const product = {
     {
       size: 'XL',
       color: 'Lilla',
-      price: '258.00 NOK',
+      price: '',
       stock: '33',
       available: true,
     },
     {
       size: 'Small',
       color: 'Lilla',
-      price: '258.00 NOK',
+      price: '258.00',
       stock: '33',
-      available: true,
+      available: false,
     },
   ],
   labels: ['Bestseller / Nyhet / Få igjen'],
-  compareablePrice: '230 NOK',
+  compareablePrice: '230',
 };
 
 export type ProductAttr = typeof product;

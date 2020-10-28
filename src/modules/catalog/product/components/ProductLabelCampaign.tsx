@@ -1,4 +1,5 @@
-import { Field } from '@tabetalt/kit';
+import { Field, PrefilledInput } from '@tabetalt/kit';
+import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import React from 'react';
 import { Box, Select } from 'theme-ui';
 import { ProductAttr } from '../Product';
@@ -10,10 +11,13 @@ const ProductLabelCampaign: React.FC<{ product: ProductAttr }> = ({
     <Field as={Select} label="Lagervare" name="labels" value={product.labels}>
       <option>{product.labels}</option>
     </Field>
-    <Field
+    <PrefilledInput
       label="Sammenlignbar pris"
       name="compareablePrice"
-      value={product.compareablePrice}
+      prefilledText="NOK"
+      prefilledTextPosition={TextPosition.RIGHT}
+      placeholder="230,00"
+      text={product.compareablePrice}
     />
   </Box>
 );

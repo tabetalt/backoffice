@@ -1,7 +1,21 @@
-import { Table, InputTags } from '@tabetalt/kit';
+import { Table, InputTags, Switch, PrefilledInput } from '@tabetalt/kit';
+import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import React from 'react';
 import { Box, Heading } from 'theme-ui';
 import { ProductAttr } from '../Product';
+
+const PrefiledCell = ({ cell: { value } }: { cell: { value: string } }) => (
+  <PrefilledInput
+    prefilledText="NOK"
+    prefilledTextPosition={TextPosition.RIGHT}
+    placeholder="258,00"
+    text={value}
+  />
+);
+
+const SwitchCell = ({ cell: { value } }: { cell: { value: boolean } }) => (
+  <Switch checked={value} />
+);
 
 const ProductVariants: React.FC<{ product: ProductAttr }> = ({ product }) => (
   <Box>
@@ -57,6 +71,7 @@ const ProductVariants: React.FC<{ product: ProductAttr }> = ({ product }) => (
           {
             Header: 'Pris inkl. MVA',
             accessor: 'price',
+            Cell: PrefiledCell,
           },
           {
             Header: 'Lagerbeholdning',
@@ -65,6 +80,7 @@ const ProductVariants: React.FC<{ product: ProductAttr }> = ({ product }) => (
           {
             Header: 'Tilgjengelig',
             accessor: 'available',
+            Cell: SwitchCell,
           },
         ]}
         data={product.variants}

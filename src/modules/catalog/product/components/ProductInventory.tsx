@@ -1,15 +1,15 @@
-import { Field } from '@tabetalt/kit';
+import { Field, Switch } from '@tabetalt/kit';
 import React from 'react';
-import { Box, Checkbox } from 'theme-ui';
+import { Box } from 'theme-ui';
 import { ProductAttr } from '../Product';
 
 const ProductInventory: React.FC<{ product: ProductAttr }> = ({ product }) => (
   <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
     <Field
-      as={Checkbox}
+      as={Switch}
       label="Lagervare"
       name="stockControl"
-      value={product.stockControl}
+      checked={product.stockControl}
     />
     {product.stockControl && (
       <Field

@@ -1,44 +1,63 @@
-import { Field } from '@tabetalt/kit';
+import { CheckboxList, Field, PrefilledInput, Switch } from '@tabetalt/kit';
+import { CheckboxOption } from '@tabetalt/kit/build/components/CheckboxList/checkbox-list-props';
+import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import React from 'react';
-import { Box, Checkbox, Flex, Label, Select } from 'theme-ui';
+import { Box, Select } from 'theme-ui';
 import { ProductAttr } from '../Product';
 
 export interface CategoriesAttr {
   value: ProductAttr['categories'];
 }
-// TODO: Consider moving this to @tabetalt/kit
-const Categories: React.FC<CategoriesAttr> = ({ value }) => (
-  <Flex sx={{ width: '100%', height: '51' }}>
-    {value.map((c, i) => (
-      <Label key={i}>
-        <Checkbox />
-        {c}
-      </Label>
-    ))}
-  </Flex>
-);
 
 const ProductBasicOptions: React.FC<{ product: ProductAttr }> = ({
   product,
 }) => (
   <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
-    <Field label="Produktnavn" name="name" value={product.name} />
-    <Field label="URL" name="slug" value={product.slug} />
-    <Field label="Pris inkl. MVA" name="price" value={product.price} />
     <Field
-      as={Categories}
+      label="Produktnavn"
+      name="name"
+      placeholder="Strikket genser"
+      value={product.name}
+    />
+    <PrefilledInput
+      label="URL"
+      name="slug"
+      prefilledText="Butikknavn.tabetalt.no/produkt/"
+      prefilledTextPosition={TextPosition.LEFT}
+      placeholder="strikket-genser"
+      text={product.slug}
+    />
+    <PrefilledInput
+      label="Pris inkl. MVA"
+      name="price"
+      prefilledText="NOK"
+      prefilledTextPosition={TextPosition.RIGHT}
+      placeholder="258,00"
+      text={product.price}
+    />
+    <Field
+      as={CheckboxList}
       label="Kategori"
       name="categories"
-      value={product.categories}
+      options={product.categories.map(
+        (value) => ({ value: value, checked: false } as CheckboxOption)
+      )}
     />
     <Field label="Bilder" name="images" value={product.images} />
     <Field
-      as={Checkbox}
+      as={Switch}
       label="Vis på forsiden"
       name="showOnFrontpage"
-      value={product.showOnFrontpage}
+      checked={product.showOnFrontpage}
     />
-    <Field as={Select} label="Status" name="status" value={product.status}>
+    <Field
+      as={Select}
+      label="Status"
+      name="status"
+      defaultValue="Active"
+      value={product.status}
+    >
+      <option>Active</option>
       <option>Inaktiv</option>
     </Field>
   </Box>

@@ -1,9 +1,12 @@
 import { Table, icons } from '@tabetalt/kit';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, IconButton } from 'theme-ui';
 import Layout from '../../components/Layout';
 
 const Products: React.FC = () => {
+  const navigate = useNavigate();
+
   const data = Array(10).fill({
     productName: 'Testproduktnavn',
     price: '299,90 NOK',
@@ -43,7 +46,12 @@ const Products: React.FC = () => {
             <Button variant="outline" sx={{ ml: 3 }}>
               Importer
             </Button>
-            <Button sx={{ ml: 3 }}>Legg til produkt</Button>
+            <Button
+              sx={{ ml: 3 }}
+              onClick={() => navigate('/catalog/product/1/basic')}
+            >
+              Legg til produkt
+            </Button>
           </Box>
         ),
       }}

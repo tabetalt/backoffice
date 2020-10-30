@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ children, links = [] }) => {
   return (
     <Flex
       sx={{
-        backgroundColor: 'gray2',
+        backgroundColor: '#F6F6F9',
         justifyContent: 'space-between',
       }}
     >

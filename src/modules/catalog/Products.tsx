@@ -77,6 +77,10 @@ const Products: React.FC = () => {
               accessor: 'stats',
             },
             {
+              Header: 'Status',
+              accessor: 'status',
+            },
+            {
               Header: '',
               accessor: 'actions',
             },

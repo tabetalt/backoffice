@@ -9,7 +9,7 @@ const PaymentMethod: React.FC = () => (
       Hvilke betalingsmetoder vil du tilby? Her kan du administrere, sortere,
       legge til eller slette betalingsmetoder som kundene dine kan bruke.
     </Text>
-    <Flex sx={{ bg: 'gray3', p: 4 }}>
+    <Flex sx={{ bg: 'gray3', p: 4, border: '2px solid #9AA0B5' }}>
       <Box sx={{ flexGrow: 1 }}>
         <Heading>Manuell fakturering</Heading>
         <Text>

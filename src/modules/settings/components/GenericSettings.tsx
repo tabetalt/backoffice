@@ -1,4 +1,5 @@
-import { Field } from '@tabetalt/kit';
+import { Field, LabeledSelect, PrefilledInput } from '@tabetalt/kit';
+import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import React from 'react';
 import {
   Box,
@@ -16,14 +17,43 @@ type GenericSettingsProps = any;
 const GenericSettings: React.FC<GenericSettingsProps> = ({ tenant = {} }) => (
   <>
     <Box sx={{ maxWidth: 820 }}>
-      <Heading>Butikkinformasjon</Heading>
+      <Heading sx={{ mb: '44px' }}>Butikkinformasjon</Heading>
       <Box sx={{ '>div': { mb: 3 } }}>
-        <Field label="Navn på butikken" name="title" value={tenant.title} />
-        <Field label="Butikkens URL" name="url" value={tenant.url} />
-        <Field as={Select} label="Språk" name="lang">
+        <Field
+          label="Navn på butikken"
+          placeholder="Butikknavn"
+          name="title"
+          value={tenant.title}
+        />
+        <Flex sx={{ alignItems: 'center' }}>
+          <Box sx={{ flexGrow: 4 }}>
+            <PrefilledInput
+              label="Butikkens URL"
+              name="url"
+              prefilledText=".tabetalt.no"
+              prefilledTextPosition={TextPosition.RIGHT}
+              placeholder="butikknavnet"
+              text={tenant.url}
+            />
+          </Box>
+          <Button
+            sx={{ ml: '12px', height: '45px', flexGrow: 1 }}
+            variant="outline"
+          >
+            Legg til eget domene
+          </Button>
+        </Flex>
+        <LabeledSelect label="Språk og valuta" name="lang">
           <option>Norsk</option>
-        </Field>
-        <Field label="MVA-sats" name="vatSats" value={tenant.vatSats} />
+        </LabeledSelect>
+        <PrefilledInput
+          label="MVA-sats"
+          name="vatSats"
+          prefilledText="%"
+          prefilledTextPosition={TextPosition.RIGHT}
+          placeholder="XX"
+          text={tenant.vatSats}
+        />
         <Flex sx={{ alignItems: 'center' }}>
           <Label htmlFor="" sx={{ width: 'auto', minWidth: '8.75rem' }}>
             Pris og valuta
@@ -39,25 +69,33 @@ const GenericSettings: React.FC<GenericSettingsProps> = ({ tenant = {} }) => (
               <option>NOK</option>
             </Select>
           </Box>
-          {/* <Field label="Språk" name="lang" placeholder="Velg språk" as={Select}>
-            <option>Hello</option>
-          </Field> */}
         </Flex>
       </Box>
-      <Heading>Kontaktinformasjon</Heading>
-      <Text sx={{ mb: 3 }}>
+      <Heading sx={{ mt: '60px' }}>Kontaktinformasjon</Heading>
+      <Text sx={{ mb: 3, mt: '6px', color: '#9AA0B5' }}>
         Denne informasjonen vises i nettbutikken, samt på kvitteringer og
         ordrebekreftelser.
       </Text>
       <Box sx={{ '>div': { mb: 3, mt: 3 } }}>
+        <Flex sx={{ alignItems: 'center', mt: '26px' }}>
+          <Input placeholder="Hent fra Brønnøysund" value={tenant.name} />
+          <Button
+            sx={{ ml: '12px', width: '90px', height: '45px' }}
+            variant="outline"
+          >
+            Søk
+          </Button>
+        </Flex>
         <Field
           label="Firmanavn"
           name="companyName"
+          placeholder="Butikknavn"
           value={tenant.companyName}
         />
         <Field
           label="Gateadresse"
           name="companyAddress"
+          placeholder="Adresse"
           value={tenant.companyAddress}
         />
         <Flex sx={{ alignItems: 'center' }}>
@@ -92,8 +130,8 @@ const GenericSettings: React.FC<GenericSettingsProps> = ({ tenant = {} }) => (
           value={tenant.email}
         />
       </Box>
-      <Heading>Angrerettskjema</Heading>
-      <Text sx={{ mb: 3 }}>
+      <Heading sx={{ mt: '60px' }}>Angrerettskjema</Heading>
+      <Text sx={{ mb: 3, mt: '6px', color: '#9AA0B5' }}>
         Angrerettsskjemaet vil etter opplastning bli vedlagt med
         ordrebekreftelsen til kunden. Husk å legg inn din virksomhets
         informasjon på skjemaet. Du kan laste ned standard norsk
@@ -101,36 +139,69 @@ const GenericSettings: React.FC<GenericSettingsProps> = ({ tenant = {} }) => (
         rettigheter og angrerettsskjema.
       </Text>
       <Box sx={{ '>div': { mb: 3 } }}>
-        <Field
-          label="Last opp"
-          name="angrerettskjema"
-          value={tenant.angrerettskjema}
-        />
+        <Flex sx={{ alignItems: 'center' }}>
+          <Box sx={{ ml: '12px', height: '45px', flexGrow: 3 }}>
+            <Field
+              label="Last opp"
+              name="angrerettskjema"
+              value={tenant.angrerettskjema}
+            />
+          </Box>
+          <Button sx={{ ml: '12px', height: '45px', flexGrow: 1 }}>
+            Last opp
+          </Button>
+        </Flex>
       </Box>
-      <Heading>Sosiale Medier</Heading>
-      <Text sx={{ mb: 3 }}>
+      <Heading sx={{ mt: '45px' }}>Sosiale Medier</Heading>
+      <Text sx={{ mb: 3, mt: '6px', color: '#9AA0B5' }}>
         Denne informasjonen vises i footer i nettbutikken.
       </Text>
       <Box sx={{ '>div': { mb: 3 } }}>
-        <Field label="Facebook" name="facebook" value={tenant.facebook} />
-        <Field label="Twitter" name="twitter" value={tenant.twitter} />
-        <Field label="Google +" name="googlePlus" value={tenant.googlePlus} />
-        <Field label="Instagram" name="instagram" value={tenant.instagram} />
-        <Field label="LinkedIn" name="linkedin" value={tenant.linkedin} />
+        <Field
+          label="Facebook"
+          name="facebook"
+          placeholder="Din Facebook-side"
+          value={tenant.facebook}
+        />
+        <Field
+          label="Twitter"
+          name="twitter"
+          placeholder="Twitter konto"
+          value={tenant.twitter}
+        />
+        <Field
+          label="Google +"
+          name="googlePlus"
+          placeholder="Din Google+ side ID"
+          value={tenant.googlePlus}
+        />
+        <Field
+          label="Instagram"
+          name="instagram"
+          placeholder="Din Instagram konto"
+          value={tenant.instagram}
+        />
+        <Field
+          label="LinkedIn"
+          name="linkedin"
+          placeholder="Din LinkedIn konto"
+          value={tenant.linkedin}
+        />
       </Box>
-      <Heading>Google Analytics</Heading>
-      <Text sx={{ mb: 3 }}>
+      <Heading sx={{ mt: '51px' }}>Google Analytics</Heading>
+      <Text sx={{ mb: 3, mt: '6px', color: '#9AA0B5' }}>
         Koble nettbutikken din opp mot Google Analytics.
       </Text>
       <Box sx={{ '>div': { mb: 3 } }}>
         <Field
           label="Tracking-ID"
           name="trackingId"
+          placeholder="Butikknavn"
           value={tenant.trackingId}
         />
       </Box>
     </Box>
-    <Box sx={{ border: '1px solid', m: 5, p: 5, borderColor: 'error' }}>
+    <Box sx={{ border: '1px solid', p: 5, borderColor: 'error' }}>
       <Heading sx={{ fontWeight: 'normal', mb: 4 }}>FARESONEN</Heading>
       <Flex>
         <Box sx={{ flex: 1 }}>

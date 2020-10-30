@@ -39,7 +39,7 @@ const Sidebar: React.FC = () => {
         <NavLink to="/page">
           <icons.ListIcon /> Sider
         </NavLink>
-        <NavLink to="/settings">
+        <NavLink to="/settings/generic">
           <icons.SettingsIcon /> Innstillinger
         </NavLink>
         <NavLink to="/support">

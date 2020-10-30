@@ -1,8 +1,14 @@
-import { CheckboxList, Field, PrefilledInput, Switch } from '@tabetalt/kit';
+import {
+  CheckboxList,
+  Field,
+  LabeledSelect,
+  PrefilledInput,
+  Switch,
+} from '@tabetalt/kit';
 import { CheckboxOption } from '@tabetalt/kit/build/components/CheckboxList/checkbox-list-props';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import React from 'react';
-import { Box, Select } from 'theme-ui';
+import { Box } from 'theme-ui';
 import { ProductAttr } from '../Product';
 
 export interface CategoriesAttr {
@@ -50,8 +56,7 @@ const ProductBasicOptions: React.FC<{ product: ProductAttr }> = ({
       name="showOnFrontpage"
       checked={product.showOnFrontpage}
     />
-    <Field
-      as={Select}
+    <LabeledSelect
       label="Status"
       name="status"
       defaultValue="Active"
@@ -59,7 +64,7 @@ const ProductBasicOptions: React.FC<{ product: ProductAttr }> = ({
     >
       <option>Active</option>
       <option>Inaktiv</option>
-    </Field>
+    </LabeledSelect>
   </Box>
 );
 

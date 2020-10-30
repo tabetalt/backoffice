@@ -1,16 +1,16 @@
-import { Field, PrefilledInput } from '@tabetalt/kit';
+import { LabeledSelect, PrefilledInput } from '@tabetalt/kit';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import React from 'react';
-import { Box, Select } from 'theme-ui';
+import { Box } from 'theme-ui';
 import { ProductAttr } from '../Product';
 
 const ProductLabelCampaign: React.FC<{ product: ProductAttr }> = ({
   product,
 }) => (
   <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
-    <Field as={Select} label="Lagervare" name="labels" value={product.labels}>
+    <LabeledSelect label="Lagervare" name="labels" value={product.labels}>
       <option>{product.labels}</option>
-    </Field>
+    </LabeledSelect>
     <PrefilledInput
       label="Sammenlignbar pris"
       name="compareablePrice"

@@ -7,7 +7,7 @@ const Sidebar: React.FC = () => {
   return (
     <Flex
       sx={{
-        backgroundColor: 'gray1',
+        backgroundColor: 'gray2',
         minWidth: '310px',
         maxWidth: '310px',
         translate: 'all 0.3',

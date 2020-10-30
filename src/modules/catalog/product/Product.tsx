@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRoutes, useParams, NavLink } from 'react-router-dom';
-import { Box, Heading } from 'theme-ui';
+import { Box, Button, Heading } from 'theme-ui';
 import Layout from '../../../components/Layout';
 import ProductBasicOptions from './components/ProductBasicOptions';
 import ProductDescription from './components/ProductDescription';
@@ -12,8 +12,8 @@ const product = {
   id: '1337',
   name: 'Strikket genser',
   slug: 'strikket-genser',
-  price: '280,00 NOK',
-  categories: ['Alle produkter', 'Gensere'],
+  price: '280,00',
+  categories: ['Alle produkter', 'Hekleoppskrifter', 'Gensere'],
   images: ['https://via.placeholder.com/150'],
   showOnFrontpage: true,
   status: 'Inaktiv',
@@ -38,27 +38,27 @@ const product = {
     {
       size: 'XL',
       color: 'Lilla',
-      price: '258.00 NOK',
+      price: '',
       stock: '33',
       available: true,
     },
     {
       size: 'Small',
       color: 'Lilla',
-      price: '258.00 NOK',
+      price: '258.00',
       stock: '33',
-      available: true,
+      available: false,
     },
   ],
   labels: ['Bestseller / Nyhet / Få igjen'],
-  compareablePrice: '230 NOK',
+  compareablePrice: '230',
 };
 
 export type ProductAttr = typeof product;
 
 const Product: React.FC = () => {
   const routes = useRoutes([
-    { path: '', element: <ProductBasicOptions product={product} /> },
+    { path: 'basic', element: <ProductBasicOptions product={product} /> },
     { path: 'description', element: <ProductDescription product={product} /> },
     { path: 'inventory', element: <ProductInventory product={product} /> },
     { path: 'variants', element: <ProductVariants product={product} /> },
@@ -72,7 +72,32 @@ const Product: React.FC = () => {
   product.id = productId;
 
   return (
-    <Layout>
+    <Layout
+      header={{
+        links: [
+          {
+            name: 'Produkter',
+            to: '/catalog/product/1',
+          },
+          {
+            name: 'Kategorier',
+            to: '/catalog/categories',
+          },
+        ],
+        children: (
+          <Box>
+            <Button variant="outline">Kopier</Button>
+            <Button variant="outline" sx={{ ml: 3 }}>
+              Avbryt
+            </Button>
+            <Button variant="outline" sx={{ ml: 3 }}>
+              Lagre utkast
+            </Button>
+            <Button sx={{ ml: 3 }}>Publiser</Button>
+          </Box>
+        ),
+      }}
+    >
       <Box sx={{ p: 5 }}>
         <Heading>{product.name}</Heading>
         <Box
@@ -88,11 +113,51 @@ const Product: React.FC = () => {
             },
           }}
         >
-          <NavLink to="">Grunnleggende</NavLink>
-          <NavLink to="description">Beskrivelse</NavLink>
-          <NavLink to="inventory">Lagerbeholdning</NavLink>
-          <NavLink to="variants">Varianter</NavLink>
-          <NavLink to="label-campaign">Etikett og salg</NavLink>
+          <NavLink
+            activeStyle={{
+              color: '#1D1D1D',
+            }}
+            style={{ color: '#9AA0B5' }}
+            to="basic"
+          >
+            Grunnleggende
+          </NavLink>
+          <NavLink
+            activeStyle={{
+              color: '#1D1D1D',
+            }}
+            style={{ color: '#9AA0B5' }}
+            to="description"
+          >
+            Beskrivelse
+          </NavLink>
+          <NavLink
+            activeStyle={{
+              color: '#1D1D1D',
+            }}
+            style={{ color: '#9AA0B5' }}
+            to="inventory"
+          >
+            Lagerbeholdning
+          </NavLink>
+          <NavLink
+            activeStyle={{
+              color: '#1D1D1D',
+            }}
+            style={{ color: '#9AA0B5' }}
+            to="variants"
+          >
+            Varianter
+          </NavLink>
+          <NavLink
+            activeStyle={{
+              color: '#1D1D1D',
+            }}
+            style={{ color: '#9AA0B5' }}
+            to="label-campaign"
+          >
+            Etikett og salg
+          </NavLink>
         </Box>
         {routes}
       </Box>

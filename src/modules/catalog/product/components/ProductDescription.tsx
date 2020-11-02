@@ -1,26 +1,44 @@
-import { Field } from '@tabetalt/kit';
 import React from 'react';
+import { Editor, Field } from '@tabetalt/kit';
 import { Box } from 'theme-ui';
 import { ProductAttr } from '../Product';
 
 const ProductDescription: React.FC<{ product: ProductAttr }> = ({
   product,
 }) => (
-  <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
+  <Box sx={{ width: '911px', '> div': { mb: 3 } }}>
     <Field
+      as={Editor}
       label="Kort beskrivelse"
       name="shortDescription"
-      value={product.shortDescription}
+      text={[
+        {
+          type: 'paragraph',
+          children: [{ text: '' }],
+        },
+      ]}
     />
     <Field
+      as={Editor}
       label="Produktbeskrivelse"
       name="description"
-      value={product.description}
+      text={[
+        {
+          type: 'paragraph',
+          children: [{ text: '' }],
+        },
+      ]}
     />
     <Field
+      as={Editor}
       label="Teknisk beskrivelse"
       name="technicalDescription"
-      value={product.technicalDescription}
+      text={[
+        {
+          type: 'paragraph',
+          children: [{ text: '' }],
+        },
+      ]}
     />
   </Box>
 );

@@ -1,9 +1,12 @@
 import { Table, icons } from '@tabetalt/kit';
 import React from 'react';
-import { Box, IconButton } from 'theme-ui';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, IconButton } from 'theme-ui';
 import Layout from '../../components/Layout';
 
 const Products: React.FC = () => {
+  const navigate = useNavigate();
+
   const data = Array(10).fill({
     productName: 'Testproduktnavn',
     price: '299,90 NOK',
@@ -25,7 +28,34 @@ const Products: React.FC = () => {
     ),
   });
   return (
-    <Layout>
+    <Layout
+      header={{
+        links: [
+          {
+            name: 'Produkter',
+            to: '/catalog/products',
+          },
+          {
+            name: 'Kategorier',
+            to: '/catalog/categories',
+          },
+        ],
+        children: (
+          <Box>
+            <Button variant="outline">Eksporter</Button>
+            <Button variant="outline" sx={{ ml: 3 }}>
+              Importer
+            </Button>
+            <Button
+              sx={{ ml: 3 }}
+              onClick={() => navigate('/catalog/product/1/basic')}
+            >
+              Legg til produkt
+            </Button>
+          </Box>
+        ),
+      }}
+    >
       <Box sx={{ p: 5 }}>
         <Table
           columns={[
@@ -45,6 +75,10 @@ const Products: React.FC = () => {
             {
               Header: 'Statistikk',
               accessor: 'stats',
+            },
+            {
+              Header: 'Status',
+              accessor: 'status',
             },
             {
               Header: '',

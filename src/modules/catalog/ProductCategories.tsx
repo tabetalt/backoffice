@@ -1,6 +1,6 @@
 import { Table, icons } from '@tabetalt/kit';
 import React from 'react';
-import { Box, IconButton } from 'theme-ui';
+import { Box, Button, IconButton } from 'theme-ui';
 import Layout from '../../components/Layout';
 
 const Categories: React.FC = () => {
@@ -23,7 +23,26 @@ const Categories: React.FC = () => {
     ),
   });
   return (
-    <Layout>
+    <Layout
+      header={{
+        links: [
+          {
+            name: 'Produkter',
+            to: '/catalog/products',
+          },
+          {
+            name: 'Kategorier',
+            to: '/catalog/categories',
+          },
+        ],
+        children: (
+          <Box>
+            <Button variant="outline">Rediger navigasjon</Button>
+            <Button sx={{ ml: 3 }}>Legg til ny kategori</Button>
+          </Box>
+        ),
+      }}
+    >
       <Box sx={{ p: 5 }}>
         <Table
           columns={[

@@ -1,0 +1,10 @@
+overwrite: true
+schema: "http://localhost:8080" # <-- Could be replace with official URL (or added as a resource)
+documents: "src/**/*.graphql"
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      - "fragment-matcher"

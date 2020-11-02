@@ -1,7 +1,7 @@
 import React from 'react';
 import { PartialRouteObject } from 'react-router';
-import { NavLink, useRoutes } from 'react-router-dom';
-import { Box } from 'theme-ui';
+import { useRoutes } from 'react-router-dom';
+import { Box, Button } from 'theme-ui';
 import Layout from '../../components/Layout';
 import ShippingSettings from './components/ShippingSettings';
 import GenericSettings from './components/GenericSettings';
@@ -22,29 +22,44 @@ const Settings: React.FC = () => {
   ] as PartialRouteObject[]);
 
   return (
-    <Layout>
-      <Box sx={{ p: 5 }}>
-        <Box
-          sx={{
-            mt: 3,
-            mb: 5,
-            '>a': {
-              mr: 4,
-              color: 'muted',
-              fontWeight: 'normal',
-              textDecoration: 'none',
-              '&.active': { color: 'text' },
-            },
-          }}
-        >
-          <NavLink to="generic">Generelt</NavLink>
-          <NavLink to="layout">Utseende</NavLink>
-          <NavLink to="discount">Rabatter</NavLink>
-          <NavLink to="shipping">Leveringsmetoder</NavLink>
-          <NavLink to="payment-method">Betalingsmetoder</NavLink>
-        </Box>
-        {routes}
-      </Box>
+    <Layout
+      header={{
+        links: [
+          {
+            name: 'Innstillinger',
+            to: '/settings/generic',
+          },
+        ],
+        underLinks: [
+          {
+            name: 'Generelt',
+            to: '/settings/generic',
+          },
+          {
+            name: 'Utseende',
+            to: '/settings/layout',
+          },
+          {
+            name: 'Rabatter',
+            to: '/settings/discount',
+          },
+          {
+            name: 'Leveringsmetoder',
+            to: '/settings/shipping',
+          },
+          {
+            name: 'Betalingsmetoder',
+            to: '/settings/payment-method',
+          },
+        ],
+        children: (
+          <Box>
+            <Button>Lagre endringer</Button>
+          </Box>
+        ),
+      }}
+    >
+      <Box sx={{ p: 5 }}>{routes}</Box>
     </Layout>
   );
 };

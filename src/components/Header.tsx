@@ -9,9 +9,17 @@ export interface HeaderProps {
     name: string;
     to: string;
   }[];
+  underLinks?: {
+    name: string;
+    to: string;
+  }[];
 }
 
-const Header: React.FC<HeaderProps> = ({ children, links = [] }) => {
+const Header: React.FC<HeaderProps> = ({
+  children,
+  links = [],
+  underLinks = [],
+}) => {
   return (
     <Flex
       sx={{
@@ -21,9 +29,8 @@ const Header: React.FC<HeaderProps> = ({ children, links = [] }) => {
     >
       <Box
         sx={{
-          px: 5,
+          px: 4,
           py: 4,
-          fontSize: 2,
           '> a': {
             color: 'text',
             textDecoration: 'none',
@@ -35,12 +42,25 @@ const Header: React.FC<HeaderProps> = ({ children, links = [] }) => {
             to={link.to}
             key={i}
             activeStyle={{
-              color: '#1D1D1D',
+              color: 'text',
             }}
             style={{ color: '#9AA0B5' }}
-            sx={{ marginLeft: i !== 0 ? '20%' : '0%' }}
+            sx={{ fontSize: 2, marginLeft: i !== 0 ? '20%' : '0%' }}
           >
             {link.name}
+          </NavLink>
+        ))}
+        {(underLinks || []).map((underLink, i) => (
+          <NavLink
+            to={underLink.to}
+            key={i}
+            activeStyle={{
+              color: 'text',
+            }}
+            style={{ color: '#9AA0B5' }}
+            sx={{ marginLeft: '8%' }}
+          >
+            {underLink.name}
           </NavLink>
         ))}
       </Box>

@@ -55,6 +55,9 @@ export const FRAGMENT_PRODUCT_SHORT = gql`
 export const FRAGMENT_PRODUCT = gql`
   fragment Product on Product {
     ...ProductShort
+    price {
+      ...Price
+    }
     variants {
       ...ProductVariant
     }

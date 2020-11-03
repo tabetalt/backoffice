@@ -4,9 +4,9 @@ import { FRAGMENT_PRODUCT_CATEGORY } from '.';
 export const MUTATION_CREATE_PRODUCT_CATEGORY = gql`
   mutation CreateProductCategory($input: ProductCategoryInput!) {
     createProductCategory(input: $input) {
-      ...ProductCategoryFields
+      ...ProductCategory
       parentCategory {
-        ...ProductCategoryFields
+        ...ProductCategory
       }
     }
   }
@@ -16,9 +16,9 @@ export const MUTATION_CREATE_PRODUCT_CATEGORY = gql`
 export const MUTATION_UPDATE_PRODUCT_CATEGORY = gql`
   mutation UpdateProductCategory($id: ID!, $input: ProductCategoryInput!) {
     updateProductCategory(id: $id, input: $input) {
-      ...ProductCategoryFields
+      ...ProductCategory
       parentCategory {
-        ...ProductCategoryFields
+        ...ProductCategory
       }
     }
   }
@@ -35,9 +35,9 @@ export const QUERY_PRODUCT_CATEGORIES_WITH_PARENT = gql`
   query GetProductCategories {
     productCategories {
       items {
-        ...ProductCategoryFields
+        ...ProductCategory
         parentCategory {
-          ...ProductCategoryFields
+          ...ProductCategory
         }
       }
     }
@@ -48,9 +48,9 @@ export const QUERY_PRODUCT_CATEGORIES_WITH_PARENT = gql`
 export const QUERY_PRODUCT_CATEGORY_WITH_PARENT = gql`
   query GetProductCategory($id: ID!) {
     productCategory(id: $id) {
-      ...ProductCategoryFields
+      ...ProductCategory
       parentCategory {
-        ...ProductCategoryFields
+        ...ProductCategory
       }
     }
   }

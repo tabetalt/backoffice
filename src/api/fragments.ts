@@ -15,7 +15,7 @@ export const FRAGMENT_PRICE = gql`
 `;
 
 export const FRAGMENT_PRODUCT_VARIANT = gql`
-  fragment ProductVariantFileds on ProductVariant {
+  fragment ProductVariant on ProductVariant {
     id
   }
 `;
@@ -27,7 +27,7 @@ export const FRAGMENT_PRODUCT_ATTRIBUTE = gql`
 `;
 
 export const FRAGMENT_PRODUCT_CATEGORY = gql`
-  fragment ProductCategoryFields on ProductCategory {
+  fragment ProductCategory on ProductCategory {
     id
     tenantId
     title
@@ -54,12 +54,12 @@ export const FRAGMENT_PRODUCT_SHORT = gql`
 
 export const FRAGMENT_PRODUCT = gql`
   fragment Product on Product {
-    ...ProductShort
+    ...ProductShortFields
     price {
       ...Price
     }
     variants {
-      ...ProductVariantFileds
+      ...ProductVariant
     }
     attributes {
       ...ProductAttribute

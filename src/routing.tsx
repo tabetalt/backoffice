@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 
 // Modules
 const Account = lazy(() => import('./modules/account/Account'));
-const Products = lazy(() => import('./modules/catalog/Products'));
+const Products = lazy(() => import('./modules/catalog/products/Products'));
 const Product = lazy(() => import('./modules/catalog/product/Product'));
 const ProductCategories = lazy(
   () => import('./modules/catalog/ProductCategories')

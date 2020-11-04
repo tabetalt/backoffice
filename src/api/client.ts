@@ -1,6 +1,13 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { TABETALT_API_URI } from '../config';
 
-export const client = new ApolloClient({
-  uri: 'http://localhost:3000',
-  cache: new InMemoryCache(),
+console.log(TABETALT_API_URI);
+const link = createHttpLink({
+  uri: TABETALT_API_URI,
 });
+
+const cache = new InMemoryCache();
+
+const gqlClient = new ApolloClient({ link, cache });
+
+export default gqlClient;

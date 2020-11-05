@@ -29,6 +29,10 @@ export const FRAGMENT_PRODUCT_ATTRIBUTE_FIELDS = gql`
 export const FRAGMENT_PRODUCT_CATEGORY_FIELDS = gql`
   fragment ProductCategory on ProductCategory {
     id
+    title
+    status
+    parentCategoryId
+    menuNavigation
   }
 `;
 

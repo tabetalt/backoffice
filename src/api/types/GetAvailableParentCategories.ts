@@ -8,13 +8,13 @@
 // ====================================================
 
 export interface GetAvailableParentCategories_productCategories_items {
-  __typename: 'ProductCategory';
+  __typename: "ProductCategory";
   id: string;
   title: string | null;
 }
 
 export interface GetAvailableParentCategories_productCategories {
-  __typename: 'ProductCategoriesResponse';
+  __typename: "ProductCategoriesResponse";
   items: (GetAvailableParentCategories_productCategories_items | null)[] | null;
 }
 

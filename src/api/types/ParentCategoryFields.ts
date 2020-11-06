@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface ParentCategoryFields {
-  __typename: 'ProductCategory';
+  __typename: "ProductCategory";
   id: string;
   title: string | null;
 }

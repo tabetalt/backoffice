@@ -3,14 +3,14 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductCategoryInput, ProductCategoryStatus } from './globalTypes';
+import { ProductCategoryInput, ProductCategoryStatus } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: CreateProductCategory
 // ====================================================
 
 export interface CreateProductCategory_createProductCategory_parentCategory {
-  __typename: 'ProductCategory';
+  __typename: "ProductCategory";
   id: string;
   tenantId: number;
   title: string | null;
@@ -20,7 +20,7 @@ export interface CreateProductCategory_createProductCategory_parentCategory {
 }
 
 export interface CreateProductCategory_createProductCategory {
-  __typename: 'ProductCategory';
+  __typename: "ProductCategory";
   id: string;
   tenantId: number;
   title: string | null;

@@ -54,10 +54,10 @@ export const FRAGMENT_PRODUCT_SHORT = gql`
 
 export const FRAGMENT_PRODUCT = gql`
   fragment Product on Product {
-    ...ProductShortFields
-    price {
-      ...Price
-    }
+    ...ProductShort
+    #price {
+    #  ...Price
+    #}
     variants {
       ...ProductVariant
     }
@@ -65,7 +65,7 @@ export const FRAGMENT_PRODUCT = gql`
       ...ProductAttribute
     }
     categories {
-      ...ProductCategoryFields
+      ...ProductCategory
     }
     tenant {
       ...Tenant

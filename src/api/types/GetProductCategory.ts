@@ -3,14 +3,14 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductCategoryStatus } from './globalTypes';
+import { ProductCategoryStatus } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: GetProductCategory
 // ====================================================
 
 export interface GetProductCategory_productCategory_parentCategory {
-  __typename: 'ProductCategory';
+  __typename: "ProductCategory";
   id: string;
   tenantId: number;
   title: string | null;
@@ -20,7 +20,7 @@ export interface GetProductCategory_productCategory_parentCategory {
 }
 
 export interface GetProductCategory_productCategory {
-  __typename: 'ProductCategory';
+  __typename: "ProductCategory";
   id: string;
   tenantId: number;
   title: string | null;

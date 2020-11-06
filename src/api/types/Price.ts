@@ -8,8 +8,8 @@
 // ====================================================
 
 export interface Price {
-  __typename: 'Price';
-  vatAmount: number;
+  __typename: "Price";
+  vatAmount: number | null;
   grossAmount: number;
   netAmount: string;
 }

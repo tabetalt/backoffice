@@ -21,7 +21,7 @@ const columns = [
         prefilledText="NOK"
         prefilledTextPosition={TextPosition.RIGHT}
         placeholder="258,00"
-        text={value}
+        value={value}
       />
     ),
   },

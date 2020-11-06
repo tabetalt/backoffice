@@ -3,31 +3,24 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus, ProductCategoryStatus } from './globalTypes';
+import { ProductStatus, ProductCategoryStatus } from "./globalTypes";
 
 // ====================================================
 // GraphQL fragment: Product
 // ====================================================
 
-export interface Product_price {
-  __typename: 'Price';
-  vatAmount: number;
-  grossAmount: number;
-  netAmount: string;
-}
-
 export interface Product_variants {
-  __typename: 'ProductVariant';
+  __typename: "ProductVariant";
   id: string;
 }
 
 export interface Product_attributes {
-  __typename: 'ProductAttribute';
+  __typename: "ProductAttribute";
   id: string;
 }
 
 export interface Product_categories {
-  __typename: 'ProductCategory';
+  __typename: "ProductCategory";
   id: string;
   tenantId: number;
   title: string | null;
@@ -37,12 +30,12 @@ export interface Product_categories {
 }
 
 export interface Product_tenant {
-  __typename: 'Tenant';
+  __typename: "Tenant";
   id: string;
 }
 
 export interface Product {
-  __typename: 'Product';
+  __typename: "Product";
   id: string;
   status: ProductStatus;
   title: string;
@@ -53,7 +46,6 @@ export interface Product {
   technicalDescription: string | null;
   isAvailable: boolean | null;
   count: number | null;
-  price: Product_price;
   variants: (Product_variants | null)[] | null;
   attributes: (Product_attributes | null)[] | null;
   categories: (Product_categories | null)[];

@@ -31,7 +31,7 @@ const ProductBasicOptions: React.FC<{ product: ProductAttr }> = ({
       prefilledText="Butikknavn.tabetalt.no/produkt/"
       prefilledTextPosition={TextPosition.LEFT}
       placeholder="strikket-genser"
-      text={product.slug}
+      value={product.slug}
     />
     <PrefilledInput
       label="Pris inkl. MVA"
@@ -39,7 +39,7 @@ const ProductBasicOptions: React.FC<{ product: ProductAttr }> = ({
       prefilledText="NOK"
       prefilledTextPosition={TextPosition.RIGHT}
       placeholder="258,00"
-      text={product.price}
+      value={product.price}
     />
     <Field
       as={CheckboxList}

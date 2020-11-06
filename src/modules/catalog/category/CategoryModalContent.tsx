@@ -13,10 +13,10 @@ import {
   ProductCategoryInput,
   ProductCategoryStatus,
 } from '../../../api/types/globalTypes';
-import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
+import { ProductCategory } from '../../../api/types/ProductCategory';
 
 export const CategoryModalContent: React.FC<{
-  currentCategory: ProductCategoryFields | null;
+  currentCategory: ProductCategory | null;
   onRequestClose: () => void;
 }> = ({ currentCategory, onRequestClose }) => {
   const { data } = useQuery<GetProductCategories>(
@@ -25,7 +25,7 @@ export const CategoryModalContent: React.FC<{
   const [updateCategory] = useMutation(MUTATION_UPDATE_PRODUCT_CATEGORY);
   const [createCategory] = useMutation(MUTATION_CREATE_PRODUCT_CATEGORY);
 
-  const onSubmit = (values: ProductCategoryFields) => {
+  const onSubmit = (values: ProductCategory) => {
     const parentId =
       values.parentCategoryId && Number(values.parentCategoryId) !== 0
         ? Number(values.parentCategoryId)
@@ -63,7 +63,7 @@ export const CategoryModalContent: React.FC<{
         parentCategoryId: null,
         showInMainMenu: false,
         tenantId: 1,
-      } as ProductCategoryFields);
+      } as ProductCategory);
 
   const formik = useFormik({
     initialValues,

@@ -3,14 +3,14 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus } from "./globalTypes";
+import { ProductStatus } from './globalTypes';
 
 // ====================================================
 // GraphQL query operation: GetProducts
 // ====================================================
 
 export interface GetProducts_products_items {
-  __typename: "Product";
+  __typename: 'Product';
   id: string;
   status: ProductStatus;
   title: string;
@@ -24,7 +24,7 @@ export interface GetProducts_products_items {
 }
 
 export interface GetProducts_products {
-  __typename: "ProductsResponse";
+  __typename: 'ProductsResponse';
   items: (GetProducts_products_items | null)[] | null;
 }
 

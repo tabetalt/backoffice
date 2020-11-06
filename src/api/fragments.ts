@@ -32,14 +32,7 @@ export const FRAGMENT_PRODUCT_CATEGORY = gql`
     title
     status
     parentCategoryId
-    menuNavigation
-  }
-`;
-
-export const FRAGMENT_PARENT_PRODUCT_CATEGORY = gql`
-  fragment ParentCategoryFields on ProductCategory {
-    id
-    title
+    showInMainMenu
   }
 `;
 

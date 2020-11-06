@@ -4,11 +4,13 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: ParentCategoryFields
+// GraphQL mutation operation: DeleteProductCategory
 // ====================================================
 
-export interface ParentCategoryFields {
-  __typename: "ProductCategory";
+export interface DeleteProductCategory {
+  deleteProductCategory: boolean | null;
+}
+
+export interface DeleteProductCategoryVariables {
   id: string;
-  title: string | null;
 }

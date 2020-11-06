@@ -2,9 +2,8 @@ import { useQuery } from '@apollo/client';
 import { LabeledSelect, Switch, Field } from '@tabetalt/kit';
 import React from 'react';
 import { Box, Button } from 'theme-ui';
-import { QUERY_GET_AVAILABLE_PARENT_CATEGORIES } from '../../../api';
+import { QUERY_PRODUCT_CATEGORIES_WITH_PARENT } from '../../../api';
 import { ProductCategoryStatus } from '../../../api/types/globalTypes';
-import { ParentCategoryFields } from '../../../api/types/ParentCategoryFields';
 import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
 
 // TODO: add parent list of components
@@ -13,14 +12,15 @@ export const CategoryModalContent: React.FC<{
   category: ProductCategoryFields | null;
   onRequestClose: () => void;
 }> = ({ category, onRequestClose }) => {
-  const { data } = useQuery(QUERY_GET_AVAILABLE_PARENT_CATEGORIES);
+  const { data } = useQuery(QUERY_PRODUCT_CATEGORIES_WITH_PARENT);
 
   let availableParentList = undefined;
   if (data) {
     availableParentList = data.productCategories.items.map(
-      (item: ParentCategoryFields) => (
-        <option key={item.id}>{item.title}</option>
-      )
+      (item: ProductCategoryFields) =>
+        ((category && category.id !== item.id) || !category) && (
+          <option key={item.id}>{item.title}</option>
+        )
     );
   }
 
@@ -44,7 +44,7 @@ export const CategoryModalContent: React.FC<{
         as={Switch}
         label="Hovedmeny"
         name="navigation"
-        checked={category?.menuNavigation}
+        checked={category?.showInMainMenu}
       />
       <LabeledSelect
         label="Status"

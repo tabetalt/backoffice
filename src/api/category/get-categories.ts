@@ -1,11 +1,14 @@
 import { gql } from '@apollo/client';
-import { FRAGMENT_PRODUCT_CATEGORY } from '../fragments';
+import { FRAGMENT_PRODUCT_CATEGORY } from '..';
 
-export const QUERY_GET_CATEGORIES = gql`
-  query GetCategories {
+export const QUERY_PRODUCT_CATEGORIES_WITH_PARENT = gql`
+  query GetProductCategories {
     productCategories {
       items {
         ...ProductCategoryFields
+        parentCategory {
+          ...ProductCategoryFields
+        }
       }
     }
   }

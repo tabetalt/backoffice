@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { Modal, LoaderIcon } from '@tabetalt/kit';
 import React, { useState } from 'react';
 import { Box, Button } from 'theme-ui';
-import { QUERY_GET_CATEGORIES } from '../../../api/category/get-categories';
+import { QUERY_PRODUCT_CATEGORIES_WITH_PARENT } from '../../../api';
 import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
 import Layout from '../../../components/Layout';
 import CategoriesListing from './CategoriesListing';
@@ -14,7 +14,10 @@ const Categories: React.FC = () => {
     currentCategory,
     setCurrentCategory,
   ] = useState<ProductCategoryFields | null>(null);
-  const { data, loading, error } = useQuery(QUERY_GET_CATEGORIES);
+  const { data, loading, error } = useQuery(
+    QUERY_PRODUCT_CATEGORIES_WITH_PARENT
+  );
+  console.log(data);
 
   let content = null;
   if (loading) {

@@ -3,45 +3,45 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus, ProductCategoryStatus } from "./globalTypes";
+import { ProductStatus, ProductCategoryStatus } from './globalTypes';
 
 // ====================================================
 // GraphQL fragment: Product
 // ====================================================
 
 export interface Product_price {
-  __typename: "Price";
+  __typename: 'Price';
   vatAmount: number;
   grossAmount: number;
   netAmount: string;
 }
 
 export interface Product_variants {
-  __typename: "ProductVariant";
+  __typename: 'ProductVariant';
   id: string;
 }
 
 export interface Product_attributes {
-  __typename: "ProductAttribute";
+  __typename: 'ProductAttribute';
   id: string;
 }
 
 export interface Product_categories {
-  __typename: "ProductCategory";
+  __typename: 'ProductCategory';
   id: string;
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;
-  menuNavigation: boolean | null;
+  showInMainMenu: boolean | null;
 }
 
 export interface Product_tenant {
-  __typename: "Tenant";
+  __typename: 'Tenant';
   id: string;
 }
 
 export interface Product {
-  __typename: "Product";
+  __typename: 'Product';
   id: string;
   status: ProductStatus;
   title: string;

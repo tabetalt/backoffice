@@ -8,6 +8,6 @@
 // ====================================================
 
 export interface ProductVariantFileds {
-  __typename: "ProductVariant";
+  __typename: 'ProductVariant';
   id: string;
 }

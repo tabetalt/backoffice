@@ -16,6 +16,7 @@ export const QUERY_GET_PRODUCTS = gql`
   ${FRAGMENT_PRICE}
 `;
 
+
 export const QUERY_GET_PRODUCT = gql`
   query GetProduct($id: Int!) {
     product(id: $id) {

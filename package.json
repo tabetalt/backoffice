@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@apollo/client": "^3.2.5",
-    "@tabetalt/kit": "^1.8.0",
+    "@tabetalt/kit": "^1.19.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -26,6 +26,7 @@
     "typescript": "^4.0.2"
   },
   "scripts": {
+    "prestart": "yarn codegen",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
@@ -33,8 +34,8 @@
     "lint": "eslint \"src/**/*.ts{,x}\"",
     "eject": "react-scripts eject",
     "pretty": "prettier --write ./src",
-    "precodegen": "apollo schema:download --endpoint=http://localhost:3000/graphql",
-    "codegen": "apollo codegen:generate src/api/types --addTypename --target=typescript --outputFlat --localSchemaFile=schema.json"
+    "precodegen": "apollo schema:download --endpoint=http://localhost:3000/graphql src/api/schema.json",
+    "codegen": "rimraf \"src/api/types/*\" && apollo codegen:generate src/api/types --addTypename --target=typescript --outputFlat --localSchemaFile=src/api/schema.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -52,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-table": "^7.0.25",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
     "eslint-config-prettier": "^6.12.0",
@@ -59,7 +61,8 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.4",
     "husky": "^4.3.0",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2"
   },
   "husky": {
     "hooks": {

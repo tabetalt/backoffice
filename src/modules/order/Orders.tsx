@@ -4,6 +4,37 @@ import Layout from '../../components/Layout';
 import { Badge, Box, Button } from 'theme-ui';
 import { useNavigate } from 'react-router-dom';
 
+const columns = [
+  {
+    Header: 'Ordre',
+    accessor: 'orderNumber',
+  },
+  {
+    Header: 'Dato',
+    accessor: 'orderDate',
+  },
+  {
+    Header: 'Kunde',
+    accessor: 'customer',
+  },
+  {
+    Header: 'Ordrestatus',
+    accessor: 'orderStatus',
+  },
+  {
+    Header: 'Betaling',
+    accessor: 'paymentStatus',
+  },
+  {
+    Header: 'Totalsum',
+    accessor: 'total',
+  },
+  {
+    Header: '',
+    accessor: 'actions',
+  },
+];
+
 const Orders: React.FC = () => {
   const navigate = useNavigate();
   const data = Array(10).fill({
@@ -24,39 +55,7 @@ const Orders: React.FC = () => {
   return (
     <Layout>
       <Box sx={{ p: 5 }}>
-        <Table
-          columns={[
-            {
-              Header: 'Ordre',
-              accessor: 'orderNumber',
-            },
-            {
-              Header: 'Dato',
-              accessor: 'orderDate',
-            },
-            {
-              Header: 'Kunde',
-              accessor: 'customer',
-            },
-            {
-              Header: 'Ordrestatus',
-              accessor: 'orderStatus',
-            },
-            {
-              Header: 'Betaling',
-              accessor: 'paymentStatus',
-            },
-            {
-              Header: 'Totalsum',
-              accessor: 'total',
-            },
-            {
-              Header: '',
-              accessor: 'actions',
-            },
-          ]}
-          data={data}
-        />
+        <Table options={{ columns, data }} />
       </Box>
     </Layout>
   );

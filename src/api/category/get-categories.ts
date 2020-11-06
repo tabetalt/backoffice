@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { FRAGMENT_PRODUCT_CATEGORY_FIELDS } from '../fragments';
+import { FRAGMENT_PRODUCT_CATEGORY } from '../fragments';
 
 export const QUERY_GET_CATEGORIES = gql`
   query GetCategories {
@@ -9,5 +9,5 @@ export const QUERY_GET_CATEGORIES = gql`
       }
     }
   }
-  ${FRAGMENT_PRODUCT_CATEGORY_FIELDS}
+  ${FRAGMENT_PRODUCT_CATEGORY}
 `;

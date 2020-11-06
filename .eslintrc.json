@@ -21,7 +21,8 @@
       {
         "singleQuote": true
       }
-    ]
+    ],
+    "react/display-name": 0
   },
   "settings": {
     "react": {

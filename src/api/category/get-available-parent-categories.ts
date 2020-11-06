@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { FRAGMENT_PARENT_PRODUCT_CATEGORY_FIELDS } from '../fragments';
+import { FRAGMENT_PARENT_PRODUCT_CATEGORY } from '../fragments';
 
 export const QUERY_GET_AVAILABLE_PARENT_CATEGORIES = gql`
   query GetAvailableParentCategories {
@@ -9,5 +9,5 @@ export const QUERY_GET_AVAILABLE_PARENT_CATEGORIES = gql`
       }
     }
   }
-  ${FRAGMENT_PARENT_PRODUCT_CATEGORY_FIELDS}
+  ${FRAGMENT_PARENT_PRODUCT_CATEGORY}
 `;

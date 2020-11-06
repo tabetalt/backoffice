@@ -20,7 +20,7 @@ const ProductLabelCampaign: React.FC<{ product?: any }> = ({
       prefilledText="NOK"
       prefilledTextPosition={TextPosition.RIGHT}
       placeholder="230,00"
-      // text={product.compareablePrice}
+      value={product.compareablePrice}
     />
   </Box>
 );

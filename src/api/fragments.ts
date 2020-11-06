@@ -1,39 +1,39 @@
 import { gql } from '@apollo/client';
 
-export const FRAGMENT_TENANT_FIELDS = gql`
-  fragment TenantFields on Tenant {
+export const FRAGMENT_TENANT = gql`
+  fragment Tenant on Tenant {
     id
   }
 `;
 
-export const FRAGMENT_PRICE_FIELDS = gql`
-  fragment PriceFields on Price {
+export const FRAGMENT_PRICE = gql`
+  fragment Price on Price {
     vatAmount
     grossAmount
     netAmount
   }
 `;
 
-export const FRAGMENT_PRODUCT_VARIANT_FIELDS = gql`
+export const FRAGMENT_PRODUCT_VARIANT = gql`
   fragment ProductVariantFileds on ProductVariant {
     id
   }
 `;
 
-export const FRAGMENT_PRODUCT_ATTRIBUTE_FIELDS = gql`
-  fragment ProductAttributeFields on ProductAttribute {
+export const FRAGMENT_PRODUCT_ATTRIBUTE = gql`
+  fragment ProductAttribute on ProductAttribute {
     id
   }
 `;
 
-export const FRAGMENT_PRODUCT_CATEGORY_FIELDS = gql`
+export const FRAGMENT_PRODUCT_CATEGORY = gql`
   fragment ProductCategory on ProductCategory {
     id
   }
 `;
 
-export const FRAGMENT_PRODUCT_FIELDS_SHORT = gql`
-  fragment ProductFieldsShort on Product {
+export const FRAGMENT_PRODUCT_SHORT = gql`
+  fragment ProductShort on Product {
     id
     status
     title
@@ -47,29 +47,29 @@ export const FRAGMENT_PRODUCT_FIELDS_SHORT = gql`
   }
 `;
 
-export const FRAGMENT_PRODUCT_FIELDS = gql`
-  fragment ProductFields on Product {
-    ...ProductFieldsShort
+export const FRAGMENT_PRODUCT = gql`
+  fragment Product on Product {
+    ...ProductShort
     price {
-      ...PriceFields
+      ...Price
     }
     variants {
       ...ProductVariantFileds
     }
     attributes {
-      ...ProductAttributeFields
+      ...ProductAttribute
     }
     categories {
       ...ProductCategory
     }
     tenant {
-      ...TenantFields
+      ...Tenant
     }
   }
-  ${FRAGMENT_PRODUCT_FIELDS_SHORT}
-  ${FRAGMENT_PRICE_FIELDS}
-  ${FRAGMENT_PRODUCT_VARIANT_FIELDS}
-  ${FRAGMENT_PRODUCT_ATTRIBUTE_FIELDS}
-  ${FRAGMENT_PRODUCT_CATEGORY_FIELDS}
-  ${FRAGMENT_TENANT_FIELDS}
+  ${FRAGMENT_PRODUCT_SHORT}
+  ${FRAGMENT_PRICE}
+  ${FRAGMENT_PRODUCT_VARIANT}
+  ${FRAGMENT_PRODUCT_ATTRIBUTE}
+  ${FRAGMENT_PRODUCT_CATEGORY}
+  ${FRAGMENT_TENANT}
 `;

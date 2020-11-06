@@ -3,6 +3,29 @@ import React from 'react';
 import { Box, IconButton } from 'theme-ui';
 import Layout from '../../components/Layout';
 
+const columns = [
+  {
+    Header: 'Sidenavn',
+    accessor: 'name',
+  },
+  {
+    Header: 'Lenke',
+    accessor: 'link',
+  },
+  {
+    Header: 'Vises i meny',
+    accessor: 'navigation',
+  },
+  {
+    Header: 'Status',
+    accessor: 'status',
+  },
+  {
+    Header: '',
+    accessor: 'actions',
+  },
+];
+
 const Pages: React.FC = () => {
   const data = Array(10).fill({
     name: 'Om oss',
@@ -26,32 +49,7 @@ const Pages: React.FC = () => {
   return (
     <Layout>
       <Box sx={{ p: 5 }}>
-        <Table
-          columns={[
-            {
-              Header: 'Sidenavn',
-              accessor: 'name',
-              minWidth: '50%',
-            },
-            {
-              Header: 'Lenke',
-              accessor: 'link',
-            },
-            {
-              Header: 'Vises i meny',
-              accessor: 'navigation',
-            },
-            {
-              Header: 'Status',
-              accessor: 'status',
-            },
-            {
-              Header: '',
-              accessor: 'actions',
-            },
-          ]}
-          data={data}
-        />
+        <Table options={{ columns, data }} />
       </Box>
     </Layout>
   );

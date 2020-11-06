@@ -18,6 +18,24 @@ const Shipping: React.FC = () => {
       </Box>
     ),
   });
+  const columns = [
+    {
+      Header: 'Leveringsmetode',
+      accessor: 'name',
+    },
+    {
+      Header: 'Pris',
+      accessor: 'price',
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+    },
+    {
+      Header: '',
+      accessor: 'actions',
+    },
+  ];
   return (
     <Box>
       <Heading>Leveringsmetoder</Heading>
@@ -25,28 +43,7 @@ const Shipping: React.FC = () => {
         Hvilke leveringsmetoder vil du tilby? Her kan du administrere, sortere,
         legge til eller slette leveringsmetoder som kundene dine kan bruke.
       </Text>
-      <Table
-        columns={[
-          {
-            Header: 'Leveringsmetode',
-            accessor: 'name',
-            minWidth: '50%',
-          },
-          {
-            Header: 'Pris',
-            accessor: 'price',
-          },
-          {
-            Header: 'Status',
-            accessor: 'status',
-          },
-          {
-            Header: '',
-            accessor: 'actions',
-          },
-        ]}
-        data={data}
-      />
+      <Table options={{ columns, data }} />
     </Box>
   );
 };

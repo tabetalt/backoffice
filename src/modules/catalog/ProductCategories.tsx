@@ -3,6 +3,25 @@ import React from 'react';
 import { Box, Button, IconButton } from 'theme-ui';
 import Layout from '../../components/Layout';
 
+const columns = [
+  {
+    Header: 'Kategori',
+    accessor: 'name',
+  },
+  {
+    Header: 'Undergruppe av',
+    accessor: 'parent',
+  },
+  {
+    Header: 'Vis i meny',
+    accessor: 'navigation',
+  },
+  {
+    Header: '',
+    accessor: 'actions',
+  },
+];
+
 const Categories: React.FC = () => {
   const data = Array(10).fill({
     name: 'Alle produkter',
@@ -44,28 +63,7 @@ const Categories: React.FC = () => {
       }}
     >
       <Box sx={{ p: 5 }}>
-        <Table
-          columns={[
-            {
-              Header: 'Kategori',
-              accessor: 'name',
-              minWidth: '50%',
-            },
-            {
-              Header: 'Undergruppe av',
-              accessor: 'parent',
-            },
-            {
-              Header: 'Vis i meny',
-              accessor: 'navigation',
-            },
-            {
-              Header: '',
-              accessor: 'actions',
-            },
-          ]}
-          data={data}
-        />
+        <Table options={{ columns, data }} />
       </Box>
     </Layout>
   );

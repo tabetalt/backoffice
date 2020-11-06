@@ -1,18 +1,25 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { LabeledSelect, Switch, Field } from '@tabetalt/kit';
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Button } from 'theme-ui';
-import { QUERY_PRODUCT_CATEGORIES_WITH_PARENT } from '../../../api';
+import {
+  MUTATION_CREATE_PRODUCT_CATEGORY,
+  MUTATION_UPDATE_PRODUCT_CATEGORY,
+  QUERY_PRODUCT_CATEGORIES_WITH_PARENT,
+} from '../../../api';
 import { ProductCategoryStatus } from '../../../api/types/globalTypes';
 import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
 
-// TODO: add parent list of components
-// TODO: add navigation field
 export const CategoryModalContent: React.FC<{
-  category: ProductCategoryFields | null;
+  currentCategory: ProductCategoryFields | null;
   onRequestClose: () => void;
-}> = ({ category, onRequestClose }) => {
+}> = ({ currentCategory, onRequestClose }) => {
   const { data } = useQuery(QUERY_PRODUCT_CATEGORIES_WITH_PARENT);
+  const [category, setCategory] = useState<ProductCategoryFields | null>(
+    currentCategory
+  );
+  const [updateCategory] = useMutation(MUTATION_UPDATE_PRODUCT_CATEGORY);
+  const [createCategory] = useMutation(MUTATION_CREATE_PRODUCT_CATEGORY);
 
   let availableParentList = undefined;
   if (data) {
@@ -23,6 +30,22 @@ export const CategoryModalContent: React.FC<{
         )
     );
   }
+
+  const onRequestSave = () => {
+    if (currentCategory && category) {
+      updateCategory({
+        variables: category,
+        refetchQueries: [{ query: QUERY_PRODUCT_CATEGORIES_WITH_PARENT }],
+      });
+    } else if (category) {
+      createCategory({
+        variables: category,
+        refetchQueries: [{ query: QUERY_PRODUCT_CATEGORIES_WITH_PARENT }],
+      });
+    }
+
+    onRequestClose();
+  };
 
   return (
     <Box sx={{ maxWidth: 820, '> div': { mb: 3 }, mt: '32px' }}>
@@ -57,7 +80,9 @@ export const CategoryModalContent: React.FC<{
         ))}
       </LabeledSelect>
       <Box>
-        <Button sx={{ mt: '188px', width: '130px' }}>Lagre</Button>
+        <Button sx={{ mt: '188px', width: '130px' }} onClick={onRequestSave}>
+          Lagre
+        </Button>
         <Button
           variant="outline"
           sx={{ ml: 3, width: '130px' }}

@@ -17,7 +17,6 @@ const Categories: React.FC = () => {
   const { data, loading, error } = useQuery(
     QUERY_PRODUCT_CATEGORIES_WITH_PARENT
   );
-  console.log(data);
 
   let content = null;
   if (loading) {
@@ -72,7 +71,7 @@ const Categories: React.FC = () => {
           header="Ny kategori"
         >
           <CategoryModalContent
-            category={currentCategory}
+            currentCategory={currentCategory}
             onRequestClose={() => {
               setOpenModal(false);
               setCurrentCategory(null);

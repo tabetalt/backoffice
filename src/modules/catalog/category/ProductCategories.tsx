@@ -2,8 +2,8 @@ import { useQuery } from '@apollo/client';
 import { Modal, LoaderIcon } from '@tabetalt/kit';
 import React, { useState } from 'react';
 import { Box, Button } from 'theme-ui';
-import { QUERY_GET_CATEGORIES } from '../../../api/category/categories';
-import { ProductCategory } from '../../../api/types/ProductCategory';
+import { QUERY_GET_CATEGORIES } from '../../../api/category/get-categories';
+import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
 import Layout from '../../../components/Layout';
 import CategoriesListing from './CategoriesListing';
 import { CategoryModalContent } from './CategoryModalContent';
@@ -13,7 +13,7 @@ const Categories: React.FC = () => {
   const [
     currentCategory,
     setCurrentCategory,
-  ] = useState<ProductCategory | null>(null);
+  ] = useState<ProductCategoryFields | null>(null);
   const { data, loading, error } = useQuery(QUERY_GET_CATEGORIES);
 
   let content = null;
@@ -68,7 +68,13 @@ const Categories: React.FC = () => {
           onRequestClose={() => setOpenModal(false)}
           header="Ny kategori"
         >
-          <CategoryModalContent category={currentCategory} />
+          <CategoryModalContent
+            category={currentCategory}
+            onRequestClose={() => {
+              setOpenModal(false);
+              setCurrentCategory(null);
+            }}
+          />
         </Modal>
       </Box>
     </Layout>

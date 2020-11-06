@@ -6,13 +6,14 @@
 import { ProductCategoryStatus } from './globalTypes';
 
 // ====================================================
-// GraphQL fragment: ProductCategory
+// GraphQL fragment: ProductCategoryFields
 // ====================================================
 
-export interface ProductCategory {
+export interface ProductCategoryFields {
   __typename: 'ProductCategory';
   id: string;
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;
+  menuNavigation: boolean | null;
 }

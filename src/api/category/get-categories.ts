@@ -5,7 +5,7 @@ export const QUERY_GET_CATEGORIES = gql`
   query GetCategories {
     productCategories {
       items {
-        ...ProductCategory
+        ...ProductCategoryFields
       }
     }
   }

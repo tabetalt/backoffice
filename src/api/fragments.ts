@@ -27,12 +27,19 @@ export const FRAGMENT_PRODUCT_ATTRIBUTE_FIELDS = gql`
 `;
 
 export const FRAGMENT_PRODUCT_CATEGORY_FIELDS = gql`
-  fragment ProductCategory on ProductCategory {
+  fragment ProductCategoryFields on ProductCategory {
     id
     title
     status
     parentCategoryId
     menuNavigation
+  }
+`;
+
+export const FRAGMENT_PARENT_PRODUCT_CATEGORY_FIELDS = gql`
+  fragment ParentCategoryFields on ProductCategory {
+    id
+    title
   }
 `;
 
@@ -64,7 +71,7 @@ export const FRAGMENT_PRODUCT_FIELDS = gql`
       ...ProductAttributeFields
     }
     categories {
-      ...ProductCategory
+      ...ProductCategoryFields
     }
     tenant {
       ...TenantFields

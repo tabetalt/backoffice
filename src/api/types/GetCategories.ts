@@ -15,6 +15,7 @@ export interface GetCategories_productCategories_items {
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;
+  menuNavigation: boolean | null;
 }
 
 export interface GetCategories_productCategories {

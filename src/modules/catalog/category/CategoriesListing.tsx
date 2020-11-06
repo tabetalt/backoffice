@@ -1,14 +1,14 @@
 import React from 'react';
 import { icons, Table } from '@tabetalt/kit';
 import { Box, IconButton } from 'theme-ui';
-import { ProductCategory } from '../../../api/types/ProductCategory';
+import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
 
 export interface CategoriesListingProps {
-  data: ProductCategory[];
+  data: ProductCategoryFields[];
   openModal: boolean;
   setOpenModal: (value: React.SetStateAction<boolean>) => void;
   setCurrentCategory: (
-    value: React.SetStateAction<ProductCategory | null>
+    value: React.SetStateAction<ProductCategoryFields | null>
   ) => void;
 }
 

@@ -32,6 +32,7 @@ export interface ProductFields_categories {
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;
+  menuNavigation: boolean | null;
 }
 
 export interface ProductFields_tenant {

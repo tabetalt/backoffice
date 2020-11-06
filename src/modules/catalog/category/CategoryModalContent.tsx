@@ -1,14 +1,29 @@
+import { useQuery } from '@apollo/client';
 import { LabeledSelect, Switch, Field } from '@tabetalt/kit';
 import React from 'react';
 import { Box, Button } from 'theme-ui';
+import { QUERY_GET_AVAILABLE_PARENT_CATEGORIES } from '../../../api';
 import { ProductCategoryStatus } from '../../../api/types/globalTypes';
-import { ProductCategory } from '../../../api/types/ProductCategory';
+import { ParentCategoryFields } from '../../../api/types/ParentCategoryFields';
+import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
 
 // TODO: add parent list of components
 // TODO: add navigation field
 export const CategoryModalContent: React.FC<{
-  category: ProductCategory | null;
-}> = ({ category }) => {
+  category: ProductCategoryFields | null;
+  onRequestClose: () => void;
+}> = ({ category, onRequestClose }) => {
+  const { data } = useQuery(QUERY_GET_AVAILABLE_PARENT_CATEGORIES);
+
+  let availableParentList = undefined;
+  if (data) {
+    availableParentList = data.productCategories.items.map(
+      (item: ParentCategoryFields) => (
+        <option key={item.id}>{item.title}</option>
+      )
+    );
+  }
+
   return (
     <Box sx={{ maxWidth: 820, '> div': { mb: 3 }, mt: '32px' }}>
       <Field
@@ -23,14 +38,13 @@ export const CategoryModalContent: React.FC<{
         defaultValue="Oppskrifter"
         value={category?.parentCategoryId ? category.parentCategoryId : ''}
       >
-        <option>Oppskrifter</option>
-        <option>ingen</option>
+        {availableParentList}
       </LabeledSelect>
       <Field
         as={Switch}
         label="Hovedmeny"
         name="navigation"
-        // checked={category?.menuNavigation}
+        checked={category?.menuNavigation}
       />
       <LabeledSelect
         label="Status"
@@ -44,7 +58,11 @@ export const CategoryModalContent: React.FC<{
       </LabeledSelect>
       <Box>
         <Button sx={{ mt: '188px', width: '130px' }}>Lagre</Button>
-        <Button variant="outline" sx={{ ml: 3, width: '130px' }}>
+        <Button
+          variant="outline"
+          sx={{ ml: 3, width: '130px' }}
+          onClick={onRequestClose}
+        >
           Avbryt
         </Button>
       </Box>

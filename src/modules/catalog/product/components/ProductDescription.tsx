@@ -1,9 +1,9 @@
 import React from 'react';
 import { Editor, Field } from '@tabetalt/kit';
 import { Box } from 'theme-ui';
-import { ProductAttr } from '../Product';
+import { ProductAttr } from '../ProductUpdate';
 
-const ProductDescription: React.FC<{ product: ProductAttr }> = ({
+const ProductDescription: React.FC<{ product?: ProductAttr }> = ({
   product,
 }) => (
   <Box sx={{ width: '911px', '> div': { mb: 3 } }}>

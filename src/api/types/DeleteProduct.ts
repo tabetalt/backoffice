@@ -4,10 +4,13 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: ProductVariantFileds
+// GraphQL mutation operation: DeleteProduct
 // ====================================================
 
-export interface ProductVariantFileds {
-  __typename: "ProductVariant";
+export interface DeleteProduct {
+  deleteProduct: boolean | null;
+}
+
+export interface DeleteProductVariables {
   id: string;
 }

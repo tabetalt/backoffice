@@ -4,12 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: Price
+// GraphQL fragment: ProductVariant
 // ====================================================
 
-export interface Price {
-  __typename: "Price";
-  vatAmount: number | null;
-  grossAmount: number;
-  netAmount: string;
+export interface ProductVariant {
+  __typename: "ProductVariant";
+  id: string;
 }

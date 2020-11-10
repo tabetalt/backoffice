@@ -3,7 +3,12 @@ import React, { lazy } from 'react';
 // Modules
 const Account = lazy(() => import('./modules/account/Account'));
 const Products = lazy(() => import('./modules/catalog/products/Products'));
-const Product = lazy(() => import('./modules/catalog/product/Product'));
+const ProductCreate = lazy(
+  () => import('./modules/catalog/product/ProductCreate')
+);
+const ProductUpdate = lazy(
+  () => import('./modules/catalog/product/ProductUpdate')
+);
 const ProductCategories = lazy(
   () => import('./modules/catalog/ProductCategories')
 );
@@ -22,7 +27,8 @@ export default [
     path: 'catalog/*',
     children: [
       { path: 'products', element: <Products /> },
-      { path: 'product/:productId/*', element: <Product /> },
+      { path: 'product/new/*', element: <ProductCreate /> },
+      { path: 'product/:productId/*', element: <ProductUpdate /> },
       { path: 'categories', element: <ProductCategories /> },
     ],
   },

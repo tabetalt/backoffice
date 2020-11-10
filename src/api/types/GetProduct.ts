@@ -6,30 +6,10 @@
 import { ProductStatus } from "./globalTypes";
 
 // ====================================================
-// GraphQL fragment: Product
+// GraphQL query operation: GetProduct
 // ====================================================
 
-export interface Product_variants {
-  __typename: "ProductVariant";
-  id: string;
-}
-
-export interface Product_attributes {
-  __typename: "ProductAttribute";
-  id: string;
-}
-
-export interface Product_categories {
-  __typename: "ProductCategory";
-  id: string;
-}
-
-export interface Product_tenant {
-  __typename: "Tenant";
-  id: string;
-}
-
-export interface Product {
+export interface GetProduct_product {
   __typename: "Product";
   id: string;
   status: ProductStatus;
@@ -41,8 +21,12 @@ export interface Product {
   technicalDescription: string | null;
   isAvailable: boolean | null;
   count: number | null;
-  variants: (Product_variants | null)[] | null;
-  attributes: (Product_attributes | null)[] | null;
-  categories: (Product_categories | null)[];
-  tenant: Product_tenant;
+}
+
+export interface GetProduct {
+  product: GetProduct_product | null;
+}
+
+export interface GetProductVariables {
+  id: string;
 }

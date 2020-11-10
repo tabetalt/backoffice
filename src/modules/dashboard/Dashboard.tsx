@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button } from 'theme-ui';
-import Layout from '../../components/Layout';
+import Layout from '../../components/layout/Layout';
 
 const Dashboard: React.FC = () => (
   <Layout

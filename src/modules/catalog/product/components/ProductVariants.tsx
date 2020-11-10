@@ -2,7 +2,7 @@ import { Table, InputTags, Switch, PrefilledInput } from '@tabetalt/kit';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import React from 'react';
 import { Box, Heading } from 'theme-ui';
-import { ProductAttr } from '../Product';
+import { ProductAttr } from '../ProductUpdate';
 
 const columns = [
   {
@@ -38,7 +38,7 @@ const columns = [
   },
 ];
 
-const ProductVariants: React.FC<{ product: ProductAttr }> = ({ product }) => (
+const ProductVariants: React.FC<{ product?: ProductAttr }> = ({ product }) => (
   <Box>
     <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
       <Heading as="h4" sx={{ mb: '17px' }}>
@@ -79,7 +79,7 @@ const ProductVariants: React.FC<{ product: ProductAttr }> = ({ product }) => (
       <Heading as="h4" sx={{ mb: '30px' }}>
         Variantinnstillinger
       </Heading>
-      <Table options={{ columns, data: product.variants }} />
+      <Table options={{ columns, data: product ? product.variants : [] }} />
     </Box>
   </Box>
 );

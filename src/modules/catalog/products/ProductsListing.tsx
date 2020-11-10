@@ -17,16 +17,16 @@ const ProductsListingActions = ({ product }: { product: Product }) => {
     refetchQueries: [{ query: QUERY_GET_PRODUCTS }],
   });
 
-  const onRemove = useCallback(() => {
+  const onRemove = useCallback(async () => {
     if (!window.confirm('Are you sure?')) return;
-    deleteProduct({ variables: { id: productId } });
+    await deleteProduct({ variables: { id: productId } });
   }, [productId, deleteProduct]);
 
-  const onOpen = () => navigate(`/catalog/product/${productId}`);
+  const onOpen = () => navigate(`/catalog/product/${productId}/basic`);
 
   return (
     <Box sx={{ textAlign: 'right' }}>
-      <IconButton aria-label="Open" onClick={() => onOpen} disabled={loading}>
+      <IconButton aria-label="Open" onClick={onOpen} disabled={loading}>
         <OpenIcon />
       </IconButton>
       <IconButton aria-label="Remove" onClick={onRemove} disabled={loading}>

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Box, Button } from 'theme-ui';
 import { QUERY_PRODUCT_CATEGORIES_WITH_PARENT } from '../../../api';
 import { GetProductCategories_productCategories_items } from '../../../api/types/GetProductCategories';
-import Layout from '../../../components/Layout';
+import Layout from '../../../components/layout/Layout';
 import CategoriesListing from './CategoriesListing';
 import { CategoryModalContent } from './CategoryModalContent';
 

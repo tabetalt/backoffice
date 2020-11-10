@@ -29,6 +29,7 @@ export interface Product_attributes {
 export interface Product_categories {
   __typename: 'ProductCategory';
   id: string;
+  tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;

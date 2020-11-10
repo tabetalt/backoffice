@@ -19,6 +19,14 @@ export enum ProductStatus {
   PRODUCT_STATUS_UNSPECIFIED = 'PRODUCT_STATUS_UNSPECIFIED',
 }
 
+export interface ProductCategoryInput {
+  title?: string | null;
+  showInMainMenu?: boolean | null;
+  status: ProductCategoryStatus;
+  parentCategoryId?: number | null;
+  tenantId: number;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

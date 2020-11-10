@@ -3,7 +3,7 @@ import { Modal, LoaderIcon } from '@tabetalt/kit';
 import React, { useState } from 'react';
 import { Box, Button } from 'theme-ui';
 import { QUERY_PRODUCT_CATEGORIES_WITH_PARENT } from '../../../api';
-import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
+import { GetProductCategories_productCategories_items } from '../../../api/types/GetProductCategories';
 import Layout from '../../../components/Layout';
 import CategoriesListing from './CategoriesListing';
 import { CategoryModalContent } from './CategoryModalContent';
@@ -13,7 +13,7 @@ const Categories: React.FC = () => {
   const [
     currentCategory,
     setCurrentCategory,
-  ] = useState<ProductCategoryFields | null>(null);
+  ] = useState<GetProductCategories_productCategories_items | null>(null);
   const { data, loading, error } = useQuery(
     QUERY_PRODUCT_CATEGORIES_WITH_PARENT
   );

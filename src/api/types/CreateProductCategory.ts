@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductCategoryStatus } from './globalTypes';
+import { ProductCategoryInput, ProductCategoryStatus } from './globalTypes';
 
 // ====================================================
 // GraphQL mutation operation: CreateProductCategory
@@ -12,6 +12,7 @@ import { ProductCategoryStatus } from './globalTypes';
 export interface CreateProductCategory_createProductCategory_parentCategory {
   __typename: 'ProductCategory';
   id: string;
+  tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;
@@ -21,6 +22,7 @@ export interface CreateProductCategory_createProductCategory_parentCategory {
 export interface CreateProductCategory_createProductCategory {
   __typename: 'ProductCategory';
   id: string;
+  tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;
@@ -33,8 +35,5 @@ export interface CreateProductCategory {
 }
 
 export interface CreateProductCategoryVariables {
-  status: ProductCategoryStatus;
-  title?: string | null;
-  parentCategoryId?: number | null;
-  showInMainMenu?: boolean | null;
+  input: ProductCategoryInput;
 }

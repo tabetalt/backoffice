@@ -11,7 +11,6 @@ import { QUERY_GET_PRODUCTS } from '../../../api';
 const Products: React.FC = () => {
   const navigate = useNavigate();
   const { data, loading, error } = useQuery(QUERY_GET_PRODUCTS);
-  console.log({ data, loading, error });
 
   let content = null;
   if (loading) {

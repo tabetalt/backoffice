@@ -12,6 +12,7 @@ import { ProductCategoryStatus } from './globalTypes';
 export interface ProductCategoryFields {
   __typename: 'ProductCategory';
   id: string;
+  tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;

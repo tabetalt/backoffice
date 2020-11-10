@@ -1,17 +1,19 @@
 import React from 'react';
 import { icons, Table } from '@tabetalt/kit';
-import { Box, IconButton } from 'theme-ui';
-import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
+import { Box, IconButton, Label } from 'theme-ui';
 import { useMutation } from '@apollo/client';
-import { MUTATION_DELETE_PRODUCT_CATEGORY } from '../../../api/category/delete-category';
-import { QUERY_PRODUCT_CATEGORIES_WITH_PARENT } from '../../../api';
+import {
+  MUTATION_DELETE_PRODUCT_CATEGORY,
+  QUERY_PRODUCT_CATEGORIES_WITH_PARENT,
+} from '../../../api';
+import { GetProductCategories_productCategories_items } from '../../../api/types/GetProductCategories';
 
 export interface CategoriesListingProps {
-  data: ProductCategoryFields[];
+  data: GetProductCategories_productCategories_items[];
   openModal: boolean;
   setOpenModal: (value: React.SetStateAction<boolean>) => void;
   setCurrentCategory: (
-    value: React.SetStateAction<ProductCategoryFields | null>
+    value: React.SetStateAction<GetProductCategories_productCategories_items | null>
   ) => void;
 }
 
@@ -23,11 +25,12 @@ const CategoriesListing: React.FC<CategoriesListingProps> = ({
 }) => {
   const [deleteCategory] = useMutation(MUTATION_DELETE_PRODUCT_CATEGORY);
 
-  const actions = ({ row }: { row: { [key: string]: any } }) => (
+  const actions = ({
+    row,
+  }: {
+    row: { original: GetProductCategories_productCategories_items };
+  }) => (
     <Box sx={{ textAlign: 'right' }}>
-      <IconButton>
-        <icons.OpenIcon />
-      </IconButton>
       <IconButton
         onClick={() => {
           deleteCategory({
@@ -51,6 +54,27 @@ const CategoriesListing: React.FC<CategoriesListingProps> = ({
       </IconButton>
     </Box>
   );
+
+  const menuText = ({ row }: { row: { [key: string]: any } }) => (
+    <Box>
+      <Label
+        sx={{ color: row.original.showInMainMenu ? '#1B202E' : '#9AA0B5' }}
+      >
+        Hovedmeny
+      </Label>
+    </Box>
+  );
+
+  const parentCategoryTitle = ({
+    row,
+  }: {
+    row: { original: GetProductCategories_productCategories_items };
+  }) => (
+    <Box>
+      <Label>{row.original.parentCategory?.title}</Label>
+    </Box>
+  );
+
   return (
     <Table
       options={{
@@ -61,11 +85,13 @@ const CategoriesListing: React.FC<CategoriesListingProps> = ({
           },
           {
             Header: 'Undergruppe av',
-            accessor: 'parentCategory.title',
+            accessor: 'parentCategory',
+            Cell: parentCategoryTitle,
           },
           {
             Header: 'Vis i meny',
             accessor: 'showInMainMenu',
+            Cell: menuText,
           },
           {
             Header: '',

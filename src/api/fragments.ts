@@ -29,6 +29,7 @@ export const FRAGMENT_PRODUCT_ATTRIBUTE = gql`
 export const FRAGMENT_PRODUCT_CATEGORY = gql`
   fragment ProductCategoryFields on ProductCategory {
     id
+    tenantId
     title
     status
     parentCategoryId

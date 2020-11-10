@@ -12,6 +12,7 @@ import { ProductCategoryStatus } from './globalTypes';
 export interface GetProductCategory_productCategory_parentCategory {
   __typename: 'ProductCategory';
   id: string;
+  tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;
@@ -21,6 +22,7 @@ export interface GetProductCategory_productCategory_parentCategory {
 export interface GetProductCategory_productCategory {
   __typename: 'ProductCategory';
   id: string;
+  tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;
   parentCategoryId: number | null;

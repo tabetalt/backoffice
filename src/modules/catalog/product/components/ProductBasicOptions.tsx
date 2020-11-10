@@ -117,7 +117,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             placeholder="258,00"
             name="price"
             type="number"
-            value={form.values.price + ''}
+            value={form.values.price}
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />

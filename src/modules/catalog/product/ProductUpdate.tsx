@@ -25,56 +25,6 @@ import {
   UpdateProductVariables,
 } from '../../../api/types/UpdateProduct';
 
-/*
-const product = {
-  id: '1337',
-  name: 'Strikket genser',
-  slug: 'strikket-genser',
-  price: '280,00',
-  categories: ['Alle produkter', 'Hekleoppskrifter', 'Gensere'],
-  images: ['https://via.placeholder.com/150'],
-  showOnFrontpage: true,
-  status: 'Inaktiv',
-  shortDescription: 'Lorem Ipsum',
-  description: 'Lorem Ipsum, sit Amet',
-  technicalDescription: 'Lorem IT Ipsum',
-  stockControl: true,
-  inStockNum: 300,
-  variantGroups: [
-    {
-      name: 'Størrelse',
-      value: 'size',
-      options: ['xl', 'small', 'xs'],
-    },
-    {
-      name: 'Farger',
-      value: 'color',
-      options: ['Lilla', 'Burgunder rød'],
-    },
-  ],
-  variants: [
-    {
-      size: 'XL',
-      color: 'Lilla',
-      price: '',
-      stock: '33',
-      available: true,
-    },
-    {
-      size: 'Small',
-      color: 'Lilla',
-      price: '258.00',
-      stock: '33',
-      available: false,
-    },
-  ],
-  labels: ['Bestseller / Nyhet / Få igjen'],
-  compareablePrice: '230',
-};
-
-export type ProductAttr = typeof product;
-*/
-
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -146,7 +96,7 @@ const ProductUpdate: React.FC = () => {
   if (loading) {
     content = <LoaderIcon sx={{ width: 5, display: 'block', m: '0 auto' }} />;
   } else if (errorGetProduct) {
-    content = <Error message="Error getting product" />; // TODO: improve error message
+    content = <Error message="Error getting product" />;
   } else {
     content = (
       <>

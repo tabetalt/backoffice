@@ -1733,7 +1733,7 @@
     "@svgr/plugin-svgo" "^4.3.1"
     loader-utils "^1.2.3"
 
-"@tabetalt/kit@^1.19.2":
+"@tabetalt/kit@^1.19.5":
   version "1.19.5"
   resolved "https://registry.yarnpkg.com/@tabetalt/kit/-/kit-1.19.5.tgz#d130ee6018be2175eb6c57f58dfdfc0d3b5a4048"
   integrity sha512-Cxfwjy0z4aeAlMejnWk1bsGTPolgCRJy4+J3hoq5aeo5qFWUq6mnyXD6E/pLLYgdbPzAQ3iHAbHJwLk290+dcg==

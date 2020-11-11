@@ -73,10 +73,21 @@ const ProductUpdate: React.FC = () => {
   console.log('ProductUpdate', { data, loading, error });
 
   const routes = useRoutes([
-    { path: 'basic', element: <ProductBasicOptions onSubmit={() => null} /> },
-    { path: 'description', element: <ProductDescription product={product} /> },
-    { path: 'inventory', element: <ProductInventory product={product} /> },
-    { path: 'variants', element: <ProductVariants product={product} /> },
+    {
+      path: 'basic',
+      element: (
+        <ProductBasicOptions onSubmit={() => null} product={data?.product} />
+      ),
+    },
+    {
+      path: 'description',
+      element: <ProductDescription product={data?.product} />,
+    },
+    {
+      path: 'inventory',
+      element: <ProductInventory product={data?.product} />,
+    },
+    { path: 'variants', element: <ProductVariants product={data?.product} /> },
     {
       path: 'label-campaign',
       element: <ProductLabelCampaign product={product} />,

@@ -3,6 +3,34 @@ import { Badge, Box, Button, Flex, Heading, Link, Text } from 'theme-ui';
 import { icons, Table } from '@tabetalt/kit';
 import Layout from '../../components/Layout';
 
+const columns = [
+  {
+    Header: 'Produkt',
+    accessor: 'name',
+  },
+  {
+    Header: 'Pris',
+    accessor: 'price',
+  },
+  {
+    Header: 'Antall',
+    accessor: 'amount',
+  },
+  {
+    Header: 'Totalt',
+    accessor: 'total',
+  },
+];
+
+const data = [
+  {
+    name: 'Testproduktnavn',
+    price: '299,90 NOK',
+    amount: '1',
+    total: '299,90 NOK',
+  },
+];
+
 const Order: React.FC = () => (
   <Layout>
     <Box sx={{ p: 5 }}>
@@ -38,34 +66,7 @@ const Order: React.FC = () => (
             </Box>
           </Flex>
           <Box sx={{ mt: 5 }}>
-            <Table
-              columns={[
-                {
-                  Header: 'Produkt',
-                  accessor: 'name',
-                },
-                {
-                  Header: 'Pris',
-                  accessor: 'price',
-                },
-                {
-                  Header: 'Antall',
-                  accessor: 'amount',
-                },
-                {
-                  Header: 'Totalt',
-                  accessor: 'total',
-                },
-              ]}
-              data={[
-                {
-                  name: 'Testproduktnavn',
-                  price: '299,90 NOK',
-                  amount: '1',
-                  total: '299,90 NOK',
-                },
-              ]}
-            />
+            <Table options={{ columns, data }} />
           </Box>
           <Box
             sx={{

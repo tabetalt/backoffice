@@ -4,18 +4,39 @@ import React from 'react';
 import { Box, Heading } from 'theme-ui';
 import { ProductAttr } from '../Product';
 
-const PrefiledCell = ({ cell: { value } }: { cell: { value: string } }) => (
-  <PrefilledInput
-    prefilledText="NOK"
-    prefilledTextPosition={TextPosition.RIGHT}
-    placeholder="258,00"
-    text={value}
-  />
-);
-
-const SwitchCell = ({ cell: { value } }: { cell: { value: boolean } }) => (
-  <Switch checked={value} />
-);
+const columns = [
+  {
+    Header: 'Størrelse',
+    accessor: 'size',
+  },
+  {
+    Header: 'Farge',
+    accessor: 'color',
+  },
+  {
+    Header: 'Pris inkl. MVA',
+    accessor: 'price',
+    Cell: ({ cell: { value } }: { cell: { value: string } }) => (
+      <PrefilledInput
+        prefilledText="NOK"
+        prefilledTextPosition={TextPosition.RIGHT}
+        placeholder="258,00"
+        text={value}
+      />
+    ),
+  },
+  {
+    Header: 'Lagerbeholdning',
+    accessor: 'stock',
+  },
+  {
+    Header: 'Tilgjengelig',
+    accessor: 'available',
+    Cell: ({ cell: { value } }: { cell: { value: boolean } }) => (
+      <Switch checked={value} />
+    ),
+  },
+];
 
 const ProductVariants: React.FC<{ product: ProductAttr }> = ({ product }) => (
   <Box>
@@ -58,33 +79,7 @@ const ProductVariants: React.FC<{ product: ProductAttr }> = ({ product }) => (
       <Heading as="h4" sx={{ mb: '30px' }}>
         Variantinnstillinger
       </Heading>
-      <Table
-        columns={[
-          {
-            Header: 'Størrelse',
-            accessor: 'size',
-          },
-          {
-            Header: 'Farge',
-            accessor: 'color',
-          },
-          {
-            Header: 'Pris inkl. MVA',
-            accessor: 'price',
-            Cell: PrefiledCell,
-          },
-          {
-            Header: 'Lagerbeholdning',
-            accessor: 'stock',
-          },
-          {
-            Header: 'Tilgjengelig',
-            accessor: 'available',
-            Cell: SwitchCell,
-          },
-        ]}
-        data={product.variants}
-      />
+      <Table options={{ columns, data: product.variants }} />
     </Box>
   </Box>
 );

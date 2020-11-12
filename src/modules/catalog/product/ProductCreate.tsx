@@ -28,7 +28,7 @@ const ProductCreate: React.FC = () => {
       } = await createProduct({ variables: { input } });
       navigate(`/catalog/product/${id}/basic`, { replace: true });
     },
-    [createProduct]
+    [createProduct, navigate]
   );
 
   const onCancel = () => navigate('/catalog/products');

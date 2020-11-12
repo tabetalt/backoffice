@@ -1,8 +1,9 @@
-import { Table, InputTags, Switch, PrefilledInput } from '@tabetalt/kit';
-import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import React from 'react';
 import { Box, Heading } from 'theme-ui';
-import { ProductAttr } from '../ProductUpdate';
+import { FormikHelpers } from 'formik';
+import { Table, InputTags, Switch, PrefilledInput } from '@tabetalt/kit';
+import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
+import { Product } from '../../../../api/types/Product';
 
 const columns = [
   {
@@ -38,7 +39,26 @@ const columns = [
   },
 ];
 
-const ProductVariants: React.FC<{ product?: ProductAttr }> = ({ product }) => (
+interface ProductVariantsProps {
+  product?: Product;
+  onSubmit: (
+    values: ProductVariantsValues,
+    formikHelpers: FormikHelpers<ProductVariantsValues>
+  ) => void;
+  error?: boolean;
+}
+
+interface ProductVariantsValues {
+  title: string;
+}
+
+// const defaultValues: ProductVariantsValues = {};
+
+const ProductVariants: React.FC<ProductVariantsProps> = ({
+  onSubmit,
+  error,
+  product,
+}) => (
   <Box>
     <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
       <Heading as="h4" sx={{ mb: '17px' }}>
@@ -79,7 +99,7 @@ const ProductVariants: React.FC<{ product?: ProductAttr }> = ({ product }) => (
       <Heading as="h4" sx={{ mb: '30px' }}>
         Variantinnstillinger
       </Heading>
-      <Table options={{ columns, data: product ? product.variants : [] }} />
+      <Table options={{ columns, data: [] }} />
     </Box>
   </Box>
 );

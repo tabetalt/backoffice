@@ -1,9 +1,29 @@
 import { Field, Switch } from '@tabetalt/kit';
 import React from 'react';
 import { Box } from 'theme-ui';
-import { ProductAttr } from '../ProductUpdate';
+import { FormikHelpers } from 'formik';
+import { Product } from '../../../../api/types/Product';
 
-const ProductInventory: React.FC<{ product?: ProductAttr }> = ({ product }) => (
+interface ProductInventoryProps {
+  product?: Product;
+  onSubmit: (
+    values: ProductInventoryValues,
+    formikHelpers: FormikHelpers<ProductInventoryValues>
+  ) => void;
+  error?: boolean;
+}
+
+interface ProductInventoryValues {
+  title: string;
+}
+
+// const defaultValues: ProductInventoryValues = {};
+
+const ProductInventory: React.FC<ProductInventoryProps> = ({
+  onSubmit,
+  error,
+  product,
+}) => (
   <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
     <Field
       as={Switch}

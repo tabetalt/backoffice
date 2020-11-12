@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button } from 'theme-ui';
 import {
-  CheckboxList,
+  // CheckboxList,
   Field,
   LabeledSelect,
   PrefilledInput,
@@ -16,11 +16,14 @@ import { Error } from '../../../../components/common';
 
 interface ProductBasicOptionsProps {
   product?: Product;
-  onSubmit: (values: Values, formikHelpers: FormikHelpers<Values>) => void;
+  onSubmit: (
+    values: ProductBasicOptionsValues,
+    formikHelpers: FormikHelpers<ProductBasicOptionsValues>
+  ) => void;
   error?: boolean;
 }
 
-interface Values {
+interface ProductBasicOptionsValues {
   title: string;
   slug: string;
   price: string;
@@ -30,7 +33,7 @@ interface Values {
   images?: string[];
 }
 
-const defaultValues: Values = {
+const defaultValues: ProductBasicOptionsValues = {
   title: '',
   slug: '',
   price: '',
@@ -64,8 +67,11 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   product,
 }) => {
   console.log(product, product);
-  const form = useFormik<Values>({
-    initialValues: { ...defaultValues, ...product } as Values,
+  const form = useFormik<ProductBasicOptionsValues>({
+    initialValues: {
+      ...defaultValues,
+      ...product,
+    } as ProductBasicOptionsValues,
     validationSchema: ProductSchema,
     onSubmit,
   });

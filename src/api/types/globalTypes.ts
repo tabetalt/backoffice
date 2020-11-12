@@ -16,6 +16,7 @@ export enum ProductCategoryStatus {
 export enum ProductStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
+  PENDING = "PENDING",
   PRODUCT_STATUS_UNSPECIFIED = "PRODUCT_STATUS_UNSPECIFIED",
 }
 
@@ -60,6 +61,24 @@ export interface ProductCreateInput {
 export interface ProductImageInput {
   url?: string | null;
   title?: string | null;
+}
+
+export interface ProductUpdateInput {
+  tenantId: string;
+  status: ProductStatus;
+  price: number;
+  title: string;
+  slug?: string | null;
+  isOnMainPage?: boolean | null;
+  shortDescription?: string | null;
+  description?: string | null;
+  technicalDescription?: string | null;
+  isAvailable?: boolean | null;
+  count?: number | null;
+  variants?: (ProductVariantInput | null)[] | null;
+  attributes?: (ProductAttributeInput | null)[] | null;
+  categories?: (ProductCategoryInput | null)[] | null;
+  images?: (ProductImageInput | null)[] | null;
 }
 
 export interface ProductVariantInput {

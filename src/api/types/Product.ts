@@ -9,6 +9,13 @@ import { ProductStatus, ProductCategoryStatus } from "./globalTypes";
 // GraphQL fragment: Product
 // ====================================================
 
+export interface Product_price {
+  __typename: "Price";
+  vatAmount: number | null;
+  grossAmount: number;
+  netAmount: number;
+}
+
 export interface Product_variants {
   __typename: "ProductVariant";
   id: string;
@@ -46,6 +53,7 @@ export interface Product {
   technicalDescription: string | null;
   isAvailable: boolean | null;
   count: number | null;
+  price: Product_price | null;
   variants: (Product_variants | null)[] | null;
   attributes: (Product_attributes | null)[] | null;
   categories: (Product_categories | null)[];

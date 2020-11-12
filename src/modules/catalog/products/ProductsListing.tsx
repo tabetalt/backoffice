@@ -6,6 +6,7 @@ import { Table, StatusLabel, icons } from '@tabetalt/kit';
 import type { CellProps } from 'react-table';
 import { Product } from '../../../api/types/Product';
 import { MUTATION_DELETE_PRODUCT, QUERY_GET_PRODUCTS } from '../../../api';
+import { formatPrice } from '../../../helpers';
 
 const { OpenIcon, TrashIcon, PencilIcon } = icons;
 
@@ -40,7 +41,7 @@ const ProductsListingActions = ({ product }: { product: Product }) => {
 };
 
 export interface ProductsListingProps {
-  data: any[];
+  data: Product[];
 }
 
 const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
@@ -53,6 +54,8 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       {
         Header: 'Produktpris',
         accessor: 'price',
+        Cell: ({ row: { original: product } }: CellProps<Product>) =>
+          formatPrice(product.price),
       },
       {
         Header: 'Lagerstatus',

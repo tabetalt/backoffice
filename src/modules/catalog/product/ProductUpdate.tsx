@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { useQuery } from '@apollo/client';
+import _ from 'lodash';
+import { useMutation, useQuery } from '@apollo/client';
 import { useRoutes, useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, Heading } from 'theme-ui';
 import { LoaderIcon } from '@tabetalt/kit';
@@ -12,7 +13,11 @@ import ProductVariants from './components/ProductVariants';
 import ProductNavigation from './components/ProductNavigation';
 import { Error } from '../../../components/common';
 import { headerLinks } from '../products';
-import { QUERY_GET_PRODUCT } from '../../../api';
+import {
+  MUTATION_UPDATE_PRODUCT,
+  QUERY_GET_PRODUCT,
+  QUERY_GET_PRODUCTS,
+} from '../../../api';
 
 /*
 const product = {
@@ -68,13 +73,33 @@ const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
 
-  const { data, loading, error } = useQuery(QUERY_GET_PRODUCT, {
-    variables: { id: productId },
-  });
-  console.log('ProductUpdate', { data, loading, error });
+  const { data, loading, error: errorGetProduct } = useQuery(
+    QUERY_GET_PRODUCT,
+    {
+      variables: { id: productId },
+    }
+  );
+  const [updateProduct, { error: errorUpdateProduct }] = useMutation(
+    MUTATION_UPDATE_PRODUCT,
+    {
+      refetchQueries: [
+        { query: QUERY_GET_PRODUCTS },
+        { query: QUERY_GET_PRODUCT, variables: { id: productId } },
+      ],
+    }
+  );
 
-  const onSubmitBasic = useCallback((values) => {
-    console.log(values);
+  const onSubmitBasic = useCallback(async (values) => {
+    const input = _.omit(
+      {
+        tenantId: 1,
+        ...data?.product,
+        ...values,
+        price: values.price.replace(',', '.') * 100,
+      },
+      ['id', '__typename']
+    );
+    await updateProduct({ variables: { id: productId, input } });
   }, []);
 
   const onSubmitDescription = () => null;
@@ -86,7 +111,11 @@ const ProductUpdate: React.FC = () => {
     {
       path: 'basic',
       element: (
-        <ProductBasicOptions onSubmit={onSubmitBasic} product={data?.product} />
+        <ProductBasicOptions
+          onSubmit={onSubmitBasic}
+          product={data?.product}
+          error={!!errorUpdateProduct}
+        />
       ),
     },
     {
@@ -124,7 +153,7 @@ const ProductUpdate: React.FC = () => {
   let content;
   if (loading) {
     content = <LoaderIcon sx={{ width: 5, display: 'block', m: '0 auto' }} />;
-  } else if (error) {
+  } else if (errorGetProduct) {
     content = <Error message="Error getting product" />; // TODO: improve error message
   } else {
     content = (

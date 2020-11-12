@@ -11,5 +11,5 @@ export interface Price {
   __typename: "Price";
   vatAmount: number | null;
   grossAmount: number;
-  netAmount: string;
+  netAmount: number;
 }

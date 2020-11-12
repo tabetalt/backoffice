@@ -3,18 +3,13 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus } from "./globalTypes";
+import { ProductUpdateInput, ProductStatus } from "./globalTypes";
 
 // ====================================================
-// GraphQL query operation: GetProduct
+// GraphQL mutation operation: UpdateProduct
 // ====================================================
 
-export interface GetProduct_product_price {
-  __typename: "Price";
-  id: string;
-}
-
-export interface GetProduct_product {
+export interface UpdateProduct_updateProduct {
   __typename: "Product";
   id: string;
   status: ProductStatus;
@@ -26,13 +21,13 @@ export interface GetProduct_product {
   technicalDescription: string | null;
   isAvailable: boolean | null;
   count: number | null;
-  price: GetProduct_product_price | null;
 }
 
-export interface GetProduct {
-  product: GetProduct_product | null;
+export interface UpdateProduct {
+  updateProduct: UpdateProduct_updateProduct | null;
 }
 
-export interface GetProductVariables {
+export interface UpdateProductVariables {
   id: string;
+  input: ProductUpdateInput;
 }

@@ -9,6 +9,13 @@ import { ProductStatus } from "./globalTypes";
 // GraphQL query operation: GetProducts
 // ====================================================
 
+export interface GetProducts_products_items_price {
+  __typename: "Price";
+  vatAmount: number | null;
+  grossAmount: number;
+  netAmount: number;
+}
+
 export interface GetProducts_products_items {
   __typename: "Product";
   id: string;
@@ -21,6 +28,7 @@ export interface GetProducts_products_items {
   technicalDescription: string | null;
   isAvailable: boolean | null;
   count: number | null;
+  price: GetProducts_products_items_price | null;
 }
 
 export interface GetProducts_products {

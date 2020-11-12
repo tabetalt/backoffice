@@ -13,6 +13,7 @@ import { TextPosition } from '@tabetalt/kit/build/components/Input/components/pr
 import { ProductStatus } from '../../../../api/types/globalTypes';
 import { Product } from '../../../../api/types/Product';
 import { Error } from '../../../../components/common';
+import { formatPrice } from '../../../../helpers';
 
 interface ProductBasicOptionsProps {
   product?: Product;
@@ -66,11 +67,11 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   error,
   product,
 }) => {
-  console.log(product, product);
   const form = useFormik<ProductBasicOptionsValues>({
     initialValues: {
       ...defaultValues,
       ...product,
+      price: formatPrice(product?.price, null),
     } as ProductBasicOptionsValues,
     validationSchema: ProductSchema,
     onSubmit,
@@ -116,12 +117,12 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             placeholder="258,00"
             name="price"
             type="number"
-            value={form.values.price}
+            value={form.values.price + ''}
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />
           {form.touched.price && form.errors.price && (
-            <Error message={form.errors.slug} />
+            <Error message={form.errors.price} />
           )}
         </div>
         {/*

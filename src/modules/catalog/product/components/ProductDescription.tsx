@@ -27,13 +27,6 @@ const ProductDescriptionSchema = Yup.object().shape({
   technicalDescription: Yup.array().required('Required!'),
 });
 
-const defaultValue = [
-  {
-    type: 'paragraph',
-    children: [{ text: '' }],
-  },
-];
-
 const ProductDescription: React.FC<ProductDescriptionProps> = ({
   onSubmit,
   error,
@@ -41,15 +34,9 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
 }) => {
   const form = useFormik<ProductDescriptionValues>({
     initialValues: {
-      shortDescription: product?.shortDescription
-        ? JSON.parse(product?.shortDescription)
-        : defaultValue,
-      description: product?.description
-        ? JSON.parse(product?.description)
-        : defaultValue,
-      technicalDescription: product?.technicalDescription
-        ? JSON.parse(product?.technicalDescription)
-        : defaultValue,
+      shortDescription: product?.shortDescription,
+      description: product?.description,
+      technicalDescription: product?.technicalDescription,
     } as ProductDescriptionValues,
     validationSchema: ProductDescriptionSchema,
     onSubmit,
@@ -66,7 +53,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
           as={Editor}
           label="Kort beskrivelse"
           name="shortDescription"
-          text={form.values.shortDescription}
+          value={form.values.shortDescription}
         />
         {form.touched.description && form.errors.description && (
           <Error message={form.errors.description} />
@@ -75,7 +62,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
           as={Editor}
           label="Produktbeskrivelse"
           name="description"
-          text={form.values.description}
+          value={form.values.description}
         />
         {form.touched.technicalDescription &&
           form.errors.technicalDescription && (
@@ -85,7 +72,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
           as={Editor}
           label="Teknisk beskrivelse"
           name="technicalDescription"
-          text={form.values.technicalDescription}
+          value={form.values.technicalDescription}
         />
         <Button type="submit">Lagre</Button>
       </Box>

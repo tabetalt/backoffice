@@ -11,7 +11,7 @@ import { ProductCreateInput, ProductStatus } from "./globalTypes";
 
 export interface CreateProduct_createProduct {
   __typename: "Product";
-  id: string;
+  id: number;
   status: ProductStatus;
   title: string;
   slug: string | null;

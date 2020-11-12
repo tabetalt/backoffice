@@ -43,7 +43,7 @@ export interface Product_tenant {
 
 export interface Product {
   __typename: "Product";
-  id: string;
+  id: number;
   status: ProductStatus;
   title: string;
   slug: string | null;

@@ -18,7 +18,7 @@ export interface GetProducts_products_items_price {
 
 export interface GetProducts_products_items {
   __typename: "Product";
-  id: string;
+  id: number;
   status: ProductStatus;
   title: string;
   slug: string | null;

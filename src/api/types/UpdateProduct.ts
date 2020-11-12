@@ -11,7 +11,7 @@ import { ProductUpdateInput, ProductStatus } from "./globalTypes";
 
 export interface UpdateProduct_updateProduct {
   __typename: "Product";
-  id: string;
+  id: number;
   status: ProductStatus;
   title: string;
   slug: string | null;

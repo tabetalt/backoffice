@@ -11,12 +11,14 @@ import { ProductStatus } from "./globalTypes";
 
 export interface GetProduct_product_price {
   __typename: "Price";
-  id: string;
+  vatAmount: number | null;
+  grossAmount: number;
+  netAmount: number;
 }
 
 export interface GetProduct_product {
   __typename: "Product";
-  id: string;
+  id: number;
   status: ProductStatus;
   title: string;
   slug: string | null;

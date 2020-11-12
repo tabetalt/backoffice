@@ -11,7 +11,7 @@ import { ProductStatus } from "./globalTypes";
 
 export interface ProductShort {
   __typename: "Product";
-  id: string;
+  id: number;
   status: ProductStatus;
   title: string;
   slug: string | null;

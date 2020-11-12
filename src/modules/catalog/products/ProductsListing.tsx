@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { Box, IconButton } from 'theme-ui';
+import { Box, IconButton, Label } from 'theme-ui';
 import { Table, StatusLabel, icons } from '@tabetalt/kit';
 import type { CellProps } from 'react-table';
 import {
@@ -57,6 +57,7 @@ export interface ProductsListingProps {
 }
 
 const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
+  console.log(data);
   const columns = useMemo(
     () => [
       {
@@ -71,7 +72,14 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       },
       {
         Header: 'Lagerstatus',
-        accessor: 'inventoryStatus',
+        accessor: 'stockControl',
+        Cell: ({ row: { original: product } }: CellProps<Product>) => {
+          const label =
+            product.stockControl && product.inStockNum && product.inStockNum > 0
+              ? 'På lager'
+              : 'Ikke på lager';
+          return <Label>{label}</Label>;
+        },
       },
       {
         Header: 'Statistikk',

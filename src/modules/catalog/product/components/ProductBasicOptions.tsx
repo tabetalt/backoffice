@@ -76,7 +76,6 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     validationSchema: ProductSchema,
     onSubmit,
   });
-  console.log(form);
   return (
     <form onSubmit={form.handleSubmit}>
       <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>

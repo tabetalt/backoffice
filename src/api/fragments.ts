@@ -29,6 +29,11 @@ export const FRAGMENT_PRODUCT_ATTRIBUTE = gql`
 export const FRAGMENT_PRODUCT_CATEGORY = gql`
   fragment ProductCategory on ProductCategory {
     id
+    tenantId
+    title
+    status
+    parentCategoryId
+    showInMainMenu
   }
 `;
 
@@ -50,6 +55,9 @@ export const FRAGMENT_PRODUCT_SHORT = gql`
 export const FRAGMENT_PRODUCT = gql`
   fragment Product on Product {
     ...ProductShort
+    #price {
+    #  ...Price
+    #}
     variants {
       ...ProductVariant
     }

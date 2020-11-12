@@ -35,7 +35,8 @@ export interface ProductCategoryInput {
   title?: string | null;
   showInMainMenu?: boolean | null;
   status: ProductCategoryStatus;
-  parentCategoryId: number;
+  parentCategoryId?: number | null;
+  tenantId: number;
 }
 
 export interface ProductCreateInput {
@@ -53,6 +54,12 @@ export interface ProductCreateInput {
   variants?: (ProductVariantInput | null)[] | null;
   attributes?: (ProductAttributeInput | null)[] | null;
   categories?: (ProductCategoryInput | null)[] | null;
+  images?: (ProductImageInput | null)[] | null;
+}
+
+export interface ProductImageInput {
+  url?: string | null;
+  title?: string | null;
 }
 
 export interface ProductVariantInput {

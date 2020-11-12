@@ -7,13 +7,14 @@ import Layout from '../../../components/layout/Layout';
 import ProductBasicOptions from './components/ProductBasicOptions';
 import ProductDescription from './components/ProductDescription';
 import ProductInventory from './components/ProductInventory';
-import ProductLabelCampaign from './components/ProductLabelCampaign';
+import ProductCampaign from './components/ProductCampaign';
 import ProductVariants from './components/ProductVariants';
 import ProductNavigation from './components/ProductNavigation';
+import { Error } from '../../../components/common';
 import { headerLinks } from '../products';
 import { QUERY_GET_PRODUCT } from '../../../api';
-import { Product } from '../../../api/types/Product';
 
+/*
 const product = {
   id: '1337',
   name: 'Strikket genser',
@@ -61,25 +62,62 @@ const product = {
 };
 
 export type ProductAttr = typeof product;
+*/
 
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
-  product.id = productId;
 
   const { data, loading, error } = useQuery(QUERY_GET_PRODUCT, {
     variables: { id: productId },
   });
   console.log('ProductUpdate', { data, loading, error });
 
+  const onSubmitBasic = useCallback((values) => {
+    console.log(values);
+  }, []);
+
+  const onSubmitDescription = () => null;
+  const onSubmitInventory = () => null;
+  const onSubmitVariants = () => null;
+  const onSubmitCampaign = () => null;
+
   const routes = useRoutes([
-    { path: 'basic', element: <ProductBasicOptions onSubmit={() => null} /> },
-    { path: 'description', element: <ProductDescription product={product} /> },
-    { path: 'inventory', element: <ProductInventory product={product} /> },
-    { path: 'variants', element: <ProductVariants product={product} /> },
+    {
+      path: 'basic',
+      element: (
+        <ProductBasicOptions onSubmit={onSubmitBasic} product={data?.product} />
+      ),
+    },
+    {
+      path: 'description',
+      element: (
+        <ProductDescription
+          onSubmit={onSubmitDescription}
+          product={data?.product}
+        />
+      ),
+    },
+    {
+      path: 'inventory',
+      element: (
+        <ProductInventory
+          onSubmit={onSubmitInventory}
+          product={data?.product}
+        />
+      ),
+    },
+    {
+      path: 'variants',
+      element: (
+        <ProductVariants onSubmit={onSubmitVariants} product={data?.product} />
+      ),
+    },
     {
       path: 'label-campaign',
-      element: <ProductLabelCampaign product={product} />,
+      element: (
+        <ProductCampaign onSubmit={onSubmitCampaign} product={data?.product} />
+      ),
     },
   ]);
 
@@ -87,11 +125,11 @@ const ProductUpdate: React.FC = () => {
   if (loading) {
     content = <LoaderIcon sx={{ width: 5, display: 'block', m: '0 auto' }} />;
   } else if (error) {
-    content = <span>Error getting product</span>; // TODO: improve error message
+    content = <Error message="Error getting product" />; // TODO: improve error message
   } else {
     content = (
       <>
-        <Heading>{product.name}</Heading>
+        <Heading>{data?.product?.title}</Heading>
         <ProductNavigation />
         {routes}
       </>

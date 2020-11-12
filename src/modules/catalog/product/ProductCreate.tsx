@@ -1,47 +1,36 @@
 import React, { useCallback } from 'react';
-import { useNavigate, useRoutes } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Heading } from 'theme-ui';
 import { useMutation } from '@apollo/client';
 import { MUTATION_CREATE_PRODUCT, QUERY_GET_PRODUCTS } from '../../../api';
 import Layout from '../../../components/layout/Layout';
 import { headerLinks } from '../products';
 import ProductBasicOptions from './components/ProductBasicOptions';
-import ProductDescription from './components/ProductDescription';
-import ProductInventory from './components/ProductInventory';
-import ProductLabelCampaign from './components/ProductLabelCampaign';
-import ProductVariants from './components/ProductVariants';
 import ProductNavigation from './components/ProductNavigation';
 
 const ProductCreate: React.FC = () => {
+  const navigate = useNavigate();
   const [createProduct, { error }] = useMutation(MUTATION_CREATE_PRODUCT, {
     refetchQueries: [{ query: QUERY_GET_PRODUCTS }],
   });
 
   const onSubmitBasic = useCallback(
-    async (values, actions) => {
+    async (values) => {
       const input = {
         tenantId: 1,
         ...values,
         price: values.price.replace(',', '.') * 100,
       };
-      await createProduct({ variables: { input } });
-      actions.setSubmitting(false);
+      const {
+        data: {
+          createProduct: { id },
+        },
+      } = await createProduct({ variables: { input } });
+      navigate(`/catalog/product/${id}/basic`, { replace: true });
     },
-    [createProduct]
+    [createProduct, navigate]
   );
 
-  const routes = useRoutes([
-    {
-      path: 'basic',
-      element: <ProductBasicOptions onSubmit={onSubmitBasic} error={!!error} />,
-    },
-    { path: 'description', element: <ProductDescription /> },
-    { path: 'inventory', element: <ProductInventory /> },
-    { path: 'variants', element: <ProductVariants /> },
-    { path: 'label-campaign', element: <ProductLabelCampaign /> },
-  ]);
-
-  const navigate = useNavigate();
   const onCancel = () => navigate('/catalog/products');
   const onPublish = useCallback(() => null, []);
 
@@ -70,7 +59,7 @@ const ProductCreate: React.FC = () => {
       <Box sx={{ p: 5 }}>
         <Heading>Add product</Heading>
         <ProductNavigation creation />
-        {routes}
+        <ProductBasicOptions onSubmit={onSubmitBasic} error={!!error} />
       </Box>
     </Layout>
   );

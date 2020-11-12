@@ -1,9 +1,27 @@
 import React from 'react';
 import { Editor, Field } from '@tabetalt/kit';
 import { Box } from 'theme-ui';
-import { ProductAttr } from '../ProductUpdate';
+import { FormikHelpers } from 'formik';
+import { Product } from '../../../../api/types/Product';
 
-const ProductDescription: React.FC<{ product?: ProductAttr }> = ({
+interface ProductDescriptionProps {
+  product?: Product;
+  onSubmit: (
+    values: ProductDescriptionValues,
+    formikHelpers: FormikHelpers<ProductDescriptionValues>
+  ) => void;
+  error?: boolean;
+}
+
+interface ProductDescriptionValues {
+  title: string;
+}
+
+// const defaultValues: ProductDescriptionValues = {};
+
+const ProductDescription: React.FC<ProductDescriptionProps> = ({
+  onSubmit,
+  error,
   product,
 }) => (
   <Box sx={{ width: '911px', '> div': { mb: 3 } }}>

@@ -10,7 +10,7 @@ const ProductUpdate = lazy(
   () => import('./modules/catalog/product/ProductUpdate')
 );
 const ProductCategories = lazy(
-  () => import('./modules/catalog/ProductCategories')
+  () => import('./modules/catalog/category/ProductCategories')
 );
 const Dashboard = lazy(() => import('./modules/dashboard/Dashboard'));
 const Orders = lazy(() => import('./modules/order/Orders'));

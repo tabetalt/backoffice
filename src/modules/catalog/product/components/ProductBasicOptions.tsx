@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button } from 'theme-ui';
 import {
-  CheckboxList,
+  // CheckboxList,
   Field,
   LabeledSelect,
   PrefilledInput,
@@ -16,11 +16,14 @@ import { Error } from '../../../../components/common';
 
 interface ProductBasicOptionsProps {
   product?: Product;
-  onSubmit: (values: Values, formikHelpers: FormikHelpers<Values>) => void;
+  onSubmit: (
+    values: ProductBasicOptionsValues,
+    formikHelpers: FormikHelpers<ProductBasicOptionsValues>
+  ) => void;
   error?: boolean;
 }
 
-interface Values {
+interface ProductBasicOptionsValues {
   title: string;
   slug: string;
   price: string;
@@ -30,7 +33,7 @@ interface Values {
   images?: string[];
 }
 
-const initialValues: Values = {
+const defaultValues: ProductBasicOptionsValues = {
   title: '',
   slug: '',
   price: '',
@@ -63,8 +66,12 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   error,
   product,
 }) => {
-  const form = useFormik<Values>({
-    initialValues,
+  console.log(product, product);
+  const form = useFormik<ProductBasicOptionsValues>({
+    initialValues: {
+      ...defaultValues,
+      ...product,
+    } as ProductBasicOptionsValues,
     validationSchema: ProductSchema,
     onSubmit,
   });
@@ -82,7 +89,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />
-          {form.touched && form.errors.title && (
+          {form.touched.title && form.errors.title && (
             <Error message={form.errors.title} />
           )}
         </div>
@@ -93,11 +100,11 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             prefilledTextPosition={TextPosition.LEFT}
             placeholder="strikket-genser"
             name="slug"
-            text={form.values.slug} // TODO: rename as value
-            // onChange={form.handleChange}
-            // onBlur={form.handleBlur}
+            value={form.values.slug}
+            onChange={form.handleChange}
+            onBlur={form.handleBlur}
           />
-          {form.touched && form.errors.slug && (
+          {form.touched.slug && form.errors.slug && (
             <Error message={form.errors.slug} />
           )}
         </div>
@@ -108,12 +115,12 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             prefilledTextPosition={TextPosition.RIGHT}
             placeholder="258,00"
             name="price"
-            // type="number"
-            text={form.values.price} // TODO: rename as value
-            // onChange={form.handleChange}
-            // onBlur={form.handleBlur}
+            type="number"
+            value={form.values.price}
+            onChange={form.handleChange}
+            onBlur={form.handleBlur}
           />
-          {form.touched && form.errors.price && (
+          {form.touched.price && form.errors.price && (
             <Error message={form.errors.slug} />
           )}
         </div>
@@ -128,7 +135,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />
-          {form.touched && form.errors.categories && (
+          {form.touched.categories && form.errors.categories && (
             <Error message={form.errors.categories} />
           )}
         </div>
@@ -139,7 +146,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             value={form.values.images}
             onChange={form.handleChange}
           />
-          {form.touched && form.errors.images && (
+          {form.touched.images && form.errors.images && (
             <Error message={form.errors.images} />
           )}
         </div>
@@ -152,7 +159,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             checked={form.values.isOnMainPage}
             onChange={form.handleChange}
           />
-          {form.touched && form.errors.isOnMainPage && (
+          {form.touched.isOnMainPage && form.errors.isOnMainPage && (
             <Error message={form.errors.isOnMainPage} />
           )}
         </div>
@@ -167,7 +174,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             <option value={ProductStatus.ACTIVE}>Active</option>
             <option value={ProductStatus.INACTIVE}>Inaktiv</option>
           </LabeledSelect>
-          {form.touched && form.errors.status && (
+          {form.touched.status && form.errors.status && (
             <Error message={form.errors.status} />
           )}
         </div>

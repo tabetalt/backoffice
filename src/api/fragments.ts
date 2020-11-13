@@ -49,6 +49,8 @@ export const FRAGMENT_PRODUCT_SHORT = gql`
     technicalDescription
     isAvailable
     count
+    stockControl
+    inStockNum
   }
 `;
 

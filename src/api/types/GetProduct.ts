@@ -28,6 +28,8 @@ export interface GetProduct_product {
   technicalDescription: string | null;
   isAvailable: boolean | null;
   count: number | null;
+  stockControl: boolean | null;
+  inStockNum: number | null;
   price: GetProduct_product_price | null;
 }
 

@@ -53,6 +53,8 @@ export interface Product {
   technicalDescription: string | null;
   isAvailable: boolean | null;
   count: number | null;
+  stockControl: boolean | null;
+  inStockNum: number | null;
   price: Product_price | null;
   variants: (Product_variants | null)[] | null;
   attributes: (Product_attributes | null)[] | null;

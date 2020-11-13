@@ -76,7 +76,6 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     validationSchema: ProductSchema,
     onSubmit,
   });
-  console.log(form);
   return (
     <form onSubmit={form.handleSubmit}>
       <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
@@ -117,7 +116,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             placeholder="258,00"
             name="price"
             type="number"
-            value={form.values.price + ''}
+            value={form.values.price}
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />

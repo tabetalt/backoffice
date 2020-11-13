@@ -76,6 +76,8 @@ export interface ProductUpdateInput {
   technicalDescription?: string | null;
   isAvailable?: boolean | null;
   count?: number | null;
+  stockControl?: boolean | null;
+  inStockNum?: number | null;
   variants?: (ProductVariantInput | null)[] | null;
   attributes?: (ProductAttributeInput | null)[] | null;
   categories?: (ProductCategoryInput | null)[] | null;

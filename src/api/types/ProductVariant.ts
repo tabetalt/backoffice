@@ -9,5 +9,5 @@
 
 export interface ProductVariant {
   __typename: "ProductVariant";
-  id: string;
+  id: number;
 }

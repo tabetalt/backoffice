@@ -2,10 +2,10 @@ import React from 'react';
 import { Editor, Field } from '@tabetalt/kit';
 import { Box } from 'theme-ui';
 import { FormikHelpers } from 'formik';
-import { Product } from '../../../../api/types/Product';
+import { GetProduct_product } from '../../../../api/types/GetProduct';
 
 interface ProductDescriptionProps {
-  product?: Product;
+  product?: GetProduct_product | null;
   onSubmit: (
     values: ProductDescriptionValues,
     formikHelpers: FormikHelpers<ProductDescriptionValues>

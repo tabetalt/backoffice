@@ -25,14 +25,15 @@ export interface PriceInput {
 }
 
 export interface ProductAttributeInput {
-  tenantId: string;
-  productId: string;
+  tenantId: number;
+  productId: number;
   name: string;
   displayType: string;
   value: string;
 }
 
 export interface ProductCategoryInput {
+  id?: number | null;
   title?: string | null;
   showInMainMenu?: boolean | null;
   status: ProductCategoryStatus;
@@ -41,7 +42,7 @@ export interface ProductCategoryInput {
 }
 
 export interface ProductCreateInput {
-  tenantId: string;
+  tenantId: number;
   status: ProductStatus;
   price: number;
   title: string;
@@ -64,7 +65,7 @@ export interface ProductImageInput {
 }
 
 export interface ProductUpdateInput {
-  tenantId: string;
+  tenantId: number;
   status: ProductStatus;
   price: number;
   title: string;
@@ -82,8 +83,8 @@ export interface ProductUpdateInput {
 }
 
 export interface ProductVariantInput {
-  tenant: string;
-  productId: string;
+  tenant: number;
+  productId: number;
   name: string;
   displayName: string;
   price: PriceInput;

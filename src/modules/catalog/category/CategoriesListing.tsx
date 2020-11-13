@@ -9,7 +9,7 @@ import {
 import { GetProductCategories_productCategories_items } from '../../../api/types/GetProductCategories';
 
 export interface CategoriesListingProps {
-  data: GetProductCategories_productCategories_items[];
+  data: any;
   openModal: boolean;
   setOpenModal: (value: React.SetStateAction<boolean>) => void;
   setCurrentCategory: (

@@ -18,6 +18,12 @@ import {
   QUERY_GET_PRODUCT,
   QUERY_GET_PRODUCTS,
 } from '../../../api';
+import { ProductUpdateInput } from '../../../api/types/globalTypes';
+import { GetProductVariables, GetProduct } from '../../../api/types/GetProduct';
+import {
+  UpdateProduct,
+  UpdateProductVariables,
+} from '../../../api/types/UpdateProduct';
 
 /*
 const product = {
@@ -71,48 +77,46 @@ export type ProductAttr = typeof product;
 
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
-  const { productId } = useParams();
+  const params = useParams();
+  const productId = parseInt(params.productId, 10);
 
-  const { data, loading, error: errorGetProduct } = useQuery(
-    QUERY_GET_PRODUCT,
-    {
-      variables: { id: productId },
-    }
+  const { data, loading, error: errorGetProduct } = useQuery<
+    GetProduct,
+    GetProductVariables
+  >(QUERY_GET_PRODUCT, { variables: { id: productId } });
+
+  const [updateProduct, { error: errorUpdateProduct }] = useMutation<
+    UpdateProduct,
+    UpdateProductVariables
+  >(MUTATION_UPDATE_PRODUCT, {
+    refetchQueries: [
+      { query: QUERY_GET_PRODUCTS },
+      { query: QUERY_GET_PRODUCT, variables: { id: productId } },
+    ],
+  });
+
+  const onSubmit = useCallback(
+    async (values) => {
+      const input = _.omit({ tenantId: 1, ...data?.product, ...values }, [
+        'id',
+        '__typename',
+      ]) as ProductUpdateInput;
+
+      if (values.price) {
+        input.price = values.price.replace(',', '.') * 100;
+      }
+
+      await updateProduct({ variables: { id: productId, input } });
+    },
+    [updateProduct]
   );
-  const [updateProduct, { error: errorUpdateProduct }] = useMutation(
-    MUTATION_UPDATE_PRODUCT,
-    {
-      refetchQueries: [
-        { query: QUERY_GET_PRODUCTS },
-        { query: QUERY_GET_PRODUCT, variables: { id: productId } },
-      ],
-    }
-  );
-
-  const onSubmitBasic = useCallback(async (values) => {
-    const input = _.omit(
-      {
-        tenantId: 1,
-        ...data?.product,
-        ...values,
-        price: values.price.replace(',', '.') * 100,
-      },
-      ['id', '__typename']
-    );
-    await updateProduct({ variables: { id: productId, input } });
-  }, []);
-
-  const onSubmitDescription = () => null;
-  const onSubmitInventory = () => null;
-  const onSubmitVariants = () => null;
-  const onSubmitCampaign = () => null;
 
   const routes = useRoutes([
     {
       path: 'basic',
       element: (
         <ProductBasicOptions
-          onSubmit={onSubmitBasic}
+          onSubmit={onSubmit}
           product={data?.product}
           error={!!errorUpdateProduct}
         />
@@ -121,32 +125,20 @@ const ProductUpdate: React.FC = () => {
     {
       path: 'description',
       element: (
-        <ProductDescription
-          onSubmit={onSubmitDescription}
-          product={data?.product}
-        />
+        <ProductDescription onSubmit={onSubmit} product={data?.product} />
       ),
     },
     {
       path: 'inventory',
-      element: (
-        <ProductInventory
-          onSubmit={onSubmitInventory}
-          product={data?.product}
-        />
-      ),
+      element: <ProductInventory onSubmit={onSubmit} product={data?.product} />,
     },
     {
       path: 'variants',
-      element: (
-        <ProductVariants onSubmit={onSubmitVariants} product={data?.product} />
-      ),
+      element: <ProductVariants onSubmit={onSubmit} product={data?.product} />,
     },
     {
       path: 'label-campaign',
-      element: (
-        <ProductCampaign onSubmit={onSubmitCampaign} product={data?.product} />
-      ),
+      element: <ProductCampaign onSubmit={onSubmit} product={data?.product} />,
     },
   ]);
 

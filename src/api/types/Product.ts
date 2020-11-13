@@ -18,17 +18,17 @@ export interface Product_price {
 
 export interface Product_variants {
   __typename: "ProductVariant";
-  id: string;
+  id: number;
 }
 
 export interface Product_attributes {
   __typename: "ProductAttribute";
-  id: string;
+  id: number;
 }
 
 export interface Product_categories {
   __typename: "ProductCategory";
-  id: string;
+  id: number;
   tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;
@@ -38,7 +38,7 @@ export interface Product_categories {
 
 export interface Product_tenant {
   __typename: "Tenant";
-  id: string;
+  id: number;
 }
 
 export interface Product {

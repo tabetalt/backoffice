@@ -3,7 +3,10 @@ import { Modal, LoaderIcon } from '@tabetalt/kit';
 import React, { useState } from 'react';
 import { Box, Button } from 'theme-ui';
 import { QUERY_PRODUCT_CATEGORIES_WITH_PARENT } from '../../../api';
-import { GetProductCategories_productCategories_items } from '../../../api/types/GetProductCategories';
+import {
+  GetProductCategories,
+  GetProductCategories_productCategories_items,
+} from '../../../api/types/GetProductCategories';
 import Layout from '../../../components/layout/Layout';
 import CategoriesListing from './CategoriesListing';
 import { CategoryModalContent } from './CategoryModalContent';
@@ -14,7 +17,7 @@ const Categories: React.FC = () => {
     currentCategory,
     setCurrentCategory,
   ] = useState<GetProductCategories_productCategories_items | null>(null);
-  const { data, loading, error } = useQuery(
+  const { data, loading, error } = useQuery<GetProductCategories>(
     QUERY_PRODUCT_CATEGORIES_WITH_PARENT
   );
 
@@ -26,7 +29,7 @@ const Categories: React.FC = () => {
   } else {
     content = (
       <CategoriesListing
-        data={data.productCategories.items}
+        data={data?.productCategories?.items}
         openModal={openModal}
         setOpenModal={setOpenModal}
         setCurrentCategory={setCurrentCategory}

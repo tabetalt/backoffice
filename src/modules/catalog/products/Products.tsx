@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button } from 'theme-ui';
 import { LoaderIcon } from '@tabetalt/kit';
+import { GetProducts } from '../../../api/types/GetProducts';
 import Layout from '../../../components/layout/Layout';
 import ProductsListing from './ProductsListing';
 import ProductsListingFilters from './ProductsListingFilters';
@@ -21,8 +22,7 @@ export const headerLinks = [
 
 const Products: React.FC = () => {
   const navigate = useNavigate();
-  const { data, loading, error } = useQuery(QUERY_GET_PRODUCTS);
-  console.log({ data, loading, error });
+  const { data, loading, error } = useQuery<GetProducts>(QUERY_GET_PRODUCTS);
 
   let content = null;
   if (loading) {
@@ -30,7 +30,7 @@ const Products: React.FC = () => {
   } else if (error) {
     content = <span>Error getting product list</span>; // TODO: improve error message
   } else {
-    content = <ProductsListing data={data.products.items} />;
+    content = <ProductsListing data={data?.products?.items} />;
   }
 
   const onExport = () => null;

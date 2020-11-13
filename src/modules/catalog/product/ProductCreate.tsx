@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Heading } from 'theme-ui';
 import { useMutation } from '@apollo/client';
 import { MUTATION_CREATE_PRODUCT, QUERY_GET_PRODUCTS } from '../../../api';
+import {
+  CreateProduct,
+  CreateProductVariables,
+} from '../../../api/types/CreateProduct';
 import Layout from '../../../components/layout/Layout';
 import { headerLinks } from '../products';
 import ProductBasicOptions from './components/ProductBasicOptions';
@@ -10,7 +14,10 @@ import ProductNavigation from './components/ProductNavigation';
 
 const ProductCreate: React.FC = () => {
   const navigate = useNavigate();
-  const [createProduct, { error }] = useMutation(MUTATION_CREATE_PRODUCT, {
+  const [createProduct, { error }] = useMutation<
+    CreateProduct,
+    CreateProductVariables
+  >(MUTATION_CREATE_PRODUCT, {
     refetchQueries: [{ query: QUERY_GET_PRODUCTS }],
   });
 
@@ -21,12 +28,10 @@ const ProductCreate: React.FC = () => {
         ...values,
         price: values.price.replace(',', '.') * 100,
       };
-      const {
-        data: {
-          createProduct: { id },
-        },
-      } = await createProduct({ variables: { input } });
-      navigate(`/catalog/product/${id}/basic`, { replace: true });
+      const res = await createProduct({ variables: { input } });
+      navigate(`/catalog/product/${res.data?.createProduct?.id}/basic`, {
+        replace: true,
+      });
     },
     [createProduct, navigate]
   );

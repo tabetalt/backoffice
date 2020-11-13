@@ -11,7 +11,7 @@ import { ProductCategoryStatus } from "./globalTypes";
 
 export interface ProductCategory {
   __typename: "ProductCategory";
-  id: string;
+  id: number;
   tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;

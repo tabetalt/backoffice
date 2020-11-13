@@ -9,5 +9,5 @@
 
 export interface ProductAttribute {
   __typename: "ProductAttribute";
-  id: string;
+  id: number;
 }

@@ -9,5 +9,5 @@
 
 export interface Tenant {
   __typename: "Tenant";
-  id: string;
+  id: number;
 }

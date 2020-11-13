@@ -36,5 +36,5 @@ export interface GetProduct {
 }
 
 export interface GetProductVariables {
-  id: string;
+  id: number;
 }

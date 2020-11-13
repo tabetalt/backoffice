@@ -3,7 +3,7 @@ import { Box, Heading } from 'theme-ui';
 import { FormikHelpers } from 'formik';
 import { Table, InputTags, Switch, PrefilledInput } from '@tabetalt/kit';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
-import { Product } from '../../../../api/types/Product';
+import { GetProduct_product } from '../../../../api/types/GetProduct';
 
 const columns = [
   {
@@ -40,7 +40,7 @@ const columns = [
 ];
 
 interface ProductVariantsProps {
-  product?: Product;
+  product?: GetProduct_product | null;
   onSubmit: (
     values: ProductVariantsValues,
     formikHelpers: FormikHelpers<ProductVariantsValues>

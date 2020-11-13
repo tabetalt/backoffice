@@ -10,13 +10,13 @@ import {
 import { FormikHelpers, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
+import { GetProduct_product } from '../../../../api/types/GetProduct';
 import { ProductStatus } from '../../../../api/types/globalTypes';
-import { Product } from '../../../../api/types/Product';
 import { Error } from '../../../../components/common';
 import { formatPrice } from '../../../../helpers';
 
 interface ProductBasicOptionsProps {
-  product?: Product;
+  product?: GetProduct_product | null;
   onSubmit: (
     values: ProductBasicOptionsValues,
     formikHelpers: FormikHelpers<ProductBasicOptionsValues>

@@ -11,7 +11,7 @@ import { ProductCategoryInput, ProductCategoryStatus } from "./globalTypes";
 
 export interface CreateProductCategory_createProductCategory_parentCategory {
   __typename: "ProductCategory";
-  id: string;
+  id: number;
   tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;
@@ -21,7 +21,7 @@ export interface CreateProductCategory_createProductCategory_parentCategory {
 
 export interface CreateProductCategory_createProductCategory {
   __typename: "ProductCategory";
-  id: string;
+  id: number;
   tenantId: number;
   title: string | null;
   status: ProductCategoryStatus;

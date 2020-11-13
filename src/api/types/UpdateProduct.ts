@@ -9,6 +9,13 @@ import { ProductUpdateInput, ProductStatus } from "./globalTypes";
 // GraphQL mutation operation: UpdateProduct
 // ====================================================
 
+export interface UpdateProduct_updateProduct_price {
+  __typename: "Price";
+  vatAmount: number | null;
+  grossAmount: number;
+  netAmount: number;
+}
+
 export interface UpdateProduct_updateProduct {
   __typename: "Product";
   id: number;
@@ -21,6 +28,7 @@ export interface UpdateProduct_updateProduct {
   technicalDescription: string | null;
   isAvailable: boolean | null;
   count: number | null;
+  price: UpdateProduct_updateProduct_price | null;
 }
 
 export interface UpdateProduct {
@@ -28,6 +36,6 @@ export interface UpdateProduct {
 }
 
 export interface UpdateProductVariables {
-  id: string;
+  id: number;
   input: ProductUpdateInput;
 }

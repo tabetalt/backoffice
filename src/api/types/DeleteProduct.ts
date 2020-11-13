@@ -12,5 +12,5 @@ export interface DeleteProduct {
 }
 
 export interface DeleteProductVariables {
-  id: string;
+  id: number;
 }

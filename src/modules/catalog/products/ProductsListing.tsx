@@ -4,17 +4,29 @@ import { useMutation } from '@apollo/client';
 import { Box, IconButton } from 'theme-ui';
 import { Table, StatusLabel, icons } from '@tabetalt/kit';
 import type { CellProps } from 'react-table';
-import { Product } from '../../../api/types/Product';
+import {
+  DeleteProduct,
+  DeleteProductVariables,
+} from '../../../api/types/DeleteProduct';
+import { GetProduct_product } from '../../../api/types/GetProduct';
+import { GetProducts_products_items } from '../../../api/types/GetProducts';
 import { MUTATION_DELETE_PRODUCT, QUERY_GET_PRODUCTS } from '../../../api';
 import { formatPrice } from '../../../helpers';
 
 const { OpenIcon, TrashIcon, PencilIcon } = icons;
 
-const ProductsListingActions = ({ product }: { product: Product }) => {
+export interface ProductsListingActionsProps {
+  product: GetProduct_product;
+}
+
+const ProductsListingActions = ({ product }: ProductsListingActionsProps) => {
   const { id: productId } = product;
 
   const navigate = useNavigate();
-  const [deleteProduct, { loading }] = useMutation(MUTATION_DELETE_PRODUCT, {
+  const [deleteProduct, { loading }] = useMutation<
+    DeleteProduct,
+    DeleteProductVariables
+  >(MUTATION_DELETE_PRODUCT, {
     refetchQueries: [{ query: QUERY_GET_PRODUCTS }],
   });
 
@@ -41,7 +53,7 @@ const ProductsListingActions = ({ product }: { product: Product }) => {
 };
 
 export interface ProductsListingProps {
-  data: Product[];
+  data: (GetProducts_products_items | null)[] | null | undefined;
 }
 
 const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
@@ -54,7 +66,7 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       {
         Header: 'Produktpris',
         accessor: 'price',
-        Cell: ({ row: { original: product } }: CellProps<Product>) =>
+        Cell: ({ row: { original: product } }: CellProps<GetProduct_product>) =>
           formatPrice(product.price),
       },
       {
@@ -68,7 +80,9 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       {
         Header: 'Status',
         accessor: 'status',
-        Cell: ({ row: { original: product } }: CellProps<Product>) => {
+        Cell: ({
+          row: { original: product },
+        }: CellProps<GetProduct_product>) => {
           const label = product.status === 'ACTIVE' ? 'Aktiv' : 'Inaktiv';
           return (
             <StatusLabel active={product.status === 'ACTIVE'} label={label} />
@@ -78,7 +92,9 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       {
         Header: '',
         accessor: 'actions',
-        Cell: ({ row: { original: product } }: CellProps<Product>) => (
+        Cell: ({
+          row: { original: product },
+        }: CellProps<GetProduct_product>) => (
           <ProductsListingActions product={product} />
         ),
       },
@@ -86,6 +102,8 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
     []
   );
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return <Table options={{ columns, data }} />;
 };
 

@@ -52,15 +52,16 @@ const ProductUpdate: React.FC = () => {
       const input = _.omit({ tenantId: 1, ...data?.product, ...values }, [
         'id',
         '__typename',
+        'price',
       ]) as ProductUpdateInput;
 
       if (values.price) {
         input.price = values.price.replace(',', '.') * 100;
       }
-
+      console.log('input', input);
       await updateProduct({ variables: { id: productId, input } });
     },
-    [updateProduct]
+    [data, updateProduct]
   );
 
   const routes = useRoutes([

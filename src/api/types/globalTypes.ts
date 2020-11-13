@@ -44,7 +44,7 @@ export interface ProductCategoryInput {
 export interface ProductCreateInput {
   tenantId: number;
   status: ProductStatus;
-  price: number;
+  price?: number | null;
   title: string;
   slug?: string | null;
   isOnMainPage?: boolean | null;
@@ -67,7 +67,7 @@ export interface ProductImageInput {
 export interface ProductUpdateInput {
   tenantId: number;
   status: ProductStatus;
-  price: number;
+  price?: number | null;
   title: string;
   slug?: string | null;
   isOnMainPage?: boolean | null;

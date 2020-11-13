@@ -73,7 +73,9 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       {
         Header: 'Lagerstatus',
         accessor: 'stockControl',
-        Cell: ({ row: { original: product } }: CellProps<Product>) => {
+        Cell: ({
+          row: { original: product },
+        }: CellProps<GetProduct_product>) => {
           const label =
             product.stockControl && product.inStockNum && product.inStockNum > 0
               ? 'På lager'

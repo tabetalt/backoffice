@@ -3,9 +3,7 @@ import { TextPosition } from '@tabetalt/kit/build/components/Input/components/pr
 import React from 'react';
 import { Box } from 'theme-ui';
 
-const ProductLabelCampaign: React.FC<{ product?: any }> = ({
-  product,
-}) => (
+const ProductLabelCampaign: React.FC<{ product?: any }> = ({ product }) => (
   <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
     <LabeledSelect
       label="Lagervare"

@@ -22,9 +22,9 @@ interface ProductDescriptionValues {
 }
 
 const ProductDescriptionSchema = Yup.object().shape({
-  shortDescription: Yup.array().required('Required!'),
-  description: Yup.array().required('Required!'),
-  technicalDescription: Yup.array().required('Required!'),
+  shortDescription: Yup.string().required('Required!'),
+  description: Yup.string().required('Required!'),
+  technicalDescription: Yup.string().required('Required!'),
 });
 
 const ProductDescription: React.FC<ProductDescriptionProps> = ({
@@ -54,6 +54,9 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
           label="Kort beskrivelse"
           name="shortDescription"
           value={form.values.shortDescription}
+          onChange={(val: string) =>
+            form.setFieldValue('shortDescription', val)
+          }
         />
         {form.touched.description && form.errors.description && (
           <Error message={form.errors.description} />
@@ -63,6 +66,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
           label="Produktbeskrivelse"
           name="description"
           value={form.values.description}
+          onChange={(val: string) => form.setFieldValue('description', val)}
         />
         {form.touched.technicalDescription &&
           form.errors.technicalDescription && (
@@ -73,6 +77,9 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
           label="Teknisk beskrivelse"
           name="technicalDescription"
           value={form.values.technicalDescription}
+          onChange={(val: string) =>
+            form.setFieldValue('technicalDescription', val)
+          }
         />
         <Button type="submit">Lagre</Button>
       </Box>

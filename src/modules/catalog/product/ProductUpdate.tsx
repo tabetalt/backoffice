@@ -58,7 +58,6 @@ const ProductUpdate: React.FC = () => {
       if (values.price) {
         input.price = values.price.replace(',', '.') * 100;
       }
-      console.log('input', input);
       await updateProduct({ variables: { id: productId, input } });
     },
     [data, updateProduct]

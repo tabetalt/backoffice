@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { ProductStatus, CategoryStatus } from './globalTypes';
+
 // ====================================================
 // GraphQL fragment: Product
 // ====================================================
@@ -34,7 +36,7 @@ export interface Product_categories {
   id: number;
   tenantId: number;
   title: string;
-  status: string;
+  status: CategoryStatus;
   parentId: number | null;
   showInMainMenu: boolean;
 }
@@ -43,7 +45,7 @@ export interface Product {
   __typename: 'Product';
   id: number;
   tenantId: number;
-  status: string;
+  status: ProductStatus;
   title: string;
   slug: string | null;
   isOnMainPage: boolean | null;

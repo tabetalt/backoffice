@@ -1734,9 +1734,9 @@
     loader-utils "^1.2.3"
 
 "@tabetalt/kit@^1.19.6":
-  version "1.19.7"
-  resolved "https://registry.yarnpkg.com/@tabetalt/kit/-/kit-1.19.7.tgz#165f48f5e24ced1d062d61673aee1a8a67233873"
-  integrity sha512-i5NUO/lhGAVQHsX4G+ZVyB6JpZ4Uw8Gqy9+nVjyaHKy3/o6htblQ2ffFzf6fKDVmvURgNy0Rbc8aNV9V4RuHHQ==
+  version "1.19.8"
+  resolved "https://registry.yarnpkg.com/@tabetalt/kit/-/kit-1.19.8.tgz#8061620931fe2ec7866da524286e4dc2c4a37eee"
+  integrity sha512-vIaOkZVlkJxx6xMiPABN0izzWxC/WOIhtMgslmye3pPaLPXxw4NHejxpBQBA3hoWH9YEZ4DpZBaOWUZaD6VgNw==
   dependencies:
     "@types/escape-html" "^1.0.0"
     escape-html "^1.0.3"

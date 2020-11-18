@@ -24,6 +24,8 @@ import {
   UpdateProduct,
   UpdateProductVariables,
 } from '../../../api/types/UpdateProduct';
+import { idText } from 'typescript';
+import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
 
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
@@ -55,6 +57,14 @@ const ProductUpdate: React.FC = () => {
 
       if (values.price) {
         input.price = values.price.replace(',', '.') * 100;
+      }
+      if (values.categories) {
+        input.categories = (values.category as TagProps[]).map((category) => {
+          return {
+            id: category.id as number,
+            title: category.name,
+          };
+        });
       }
       await updateProduct({ variables: { id: productId, input } });
     },

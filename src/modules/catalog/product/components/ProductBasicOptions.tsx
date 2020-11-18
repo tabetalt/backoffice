@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button } from 'theme-ui';
 import {
-  // CheckboxList,
   Field,
   InputTags,
   LabeledSelect,
@@ -16,12 +15,12 @@ import { formatPrice } from '../../../../helpers';
 import { useQuery } from '@apollo/client';
 import { QUERY_PRODUCT_CATEGORIES_WITHOUT_PARENT } from '../../../../api';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
+import { GetCategoriesShort } from '../../../../api/types/GetCategoriesShort';
+import { ProductStatus } from '../../../../api/types/globalTypes';
 import {
   GetProduct_product,
   GetProduct_product_categories,
 } from '../../../../api/types/GetProduct';
-import { ProductStatus } from '../../../../api/types/globalTypes';
-import { GetCategoriesShort } from '../../../../api/types/GetCategoriesShort';
 
 interface ProductBasicOptionsProps {
   product?: GetProduct_product | null;
@@ -46,7 +45,7 @@ const defaultValues: ProductBasicOptionsValues = {
   title: '',
   slug: '',
   price: '',
-  status: ProductStatus.Active,
+  status: ProductStatus.ACTIVE,
   isOnMainPage: false,
   categories: [],
   images: [],
@@ -63,7 +62,7 @@ const ProductSchema = Yup.object().shape({
     .required('Required!'),
   price: Yup.number().positive().required('Required!'),
   status: Yup.string()
-    .oneOf([ProductStatus.Active, ProductStatus.Inactive])
+    .oneOf([ProductStatus.ACTIVE, ProductStatus.INACTIVE])
     .required('Required!'),
   isOnMainPage: Yup.boolean().notRequired(),
   // TODO: images:
@@ -74,9 +73,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   error,
   product,
 }) => {
-  const [inputTagsSuggetions, setInputTagsSuggetions] = useState<TagProps[]>(
-    []
-  );
+  const [inputTagsSuggetions] = useState<TagProps[]>([]);
   const form = useFormik<ProductBasicOptionsValues>({
     initialValues: {
       ...defaultValues,
@@ -117,7 +114,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   return (
     <form onSubmit={form.handleSubmit}>
       <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
-        {error && <Error message="Filed to save product." />}
+        {error && <Error message="Failed to save product." />}
         <div>
           <Field
             label="Produktnavn"
@@ -210,8 +207,8 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           >
-            <option value={ProductStatus.Active}>Active</option>
-            <option value={ProductStatus.Inactive}>Inaktiv</option>
+            <option value={ProductStatus.ACTIVE}>Active</option>
+            <option value={ProductStatus.INACTIVE}>Inaktiv</option>
           </LabeledSelect>
           {form.touched.status && form.errors.status && (
             <Error message={form.errors.status} />

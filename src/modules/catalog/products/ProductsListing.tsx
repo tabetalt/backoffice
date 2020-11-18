@@ -8,10 +8,10 @@ import {
   DeleteProduct,
   DeleteProductVariables,
 } from '../../../api/types/DeleteProduct';
-import { GetProduct_product } from '../../../api/types/GetProduct';
 import { GetProducts_products_items } from '../../../api/types/GetProducts';
 import { MUTATION_DELETE_PRODUCT, QUERY_GET_PRODUCTS } from '../../../api';
 import { formatPrice } from '../../../helpers';
+import { GetProduct_product } from '../../../api/types/GetProduct';
 
 const { OpenIcon, TrashIcon, PencilIcon } = icons;
 

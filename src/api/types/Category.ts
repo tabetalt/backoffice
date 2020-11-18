@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface Category {
-  __typename: "Category";
+  __typename: 'Category';
   id: number;
   tenantId: number;
   title: string;

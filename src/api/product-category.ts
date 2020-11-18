@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { FRAGMENT_CATEGORY, FRAGMENT_PRODUCT_CATEGORY_SHORT } from '.';
+import { FRAGMENT_CATEGORY, FRAGMENT_CATEGORY_SHORT } from '.';
 
 export const MUTATION_CREATE_PRODUCT_CATEGORY = gql`
   mutation CreateCategory($input: CategoryCreateInput!) {
@@ -46,14 +46,14 @@ export const QUERY_PRODUCT_CATEGORIES_WITH_PARENT = gql`
 `;
 
 export const QUERY_PRODUCT_CATEGORIES_WITHOUT_PARENT = gql`
-  query GetProductCategoriesShort {
-    productCategories {
+  query GetCategoriesShort {
+    categories {
       items {
-        ...ProductCategoryShort
+        ...CategoryShort
       }
     }
   }
-  ${FRAGMENT_PRODUCT_CATEGORY_SHORT}
+  ${FRAGMENT_CATEGORY_SHORT}
 `;
 
 export const QUERY_PRODUCT_CATEGORY_WITH_PARENT = gql`

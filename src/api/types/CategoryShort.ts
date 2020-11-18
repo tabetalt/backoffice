@@ -4,11 +4,11 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: ProductCategoryShort
+// GraphQL fragment: CategoryShort
 // ====================================================
 
-export interface ProductCategoryShort {
-  __typename: "ProductCategory";
+export interface CategoryShort {
+  __typename: 'Category';
   id: number;
-  title: string | null;
+  title: string;
 }

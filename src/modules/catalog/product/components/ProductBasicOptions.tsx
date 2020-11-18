@@ -11,17 +11,17 @@ import {
 import { FormikHelpers, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
-import { ProductStatus } from '../../../../api/types/globalTypes';
 import { Error } from '../../../../components/common';
 import { formatPrice } from '../../../../helpers';
 import { useQuery } from '@apollo/client';
 import { QUERY_PRODUCT_CATEGORIES_WITHOUT_PARENT } from '../../../../api';
-import { GetProductCategoriesShort } from '../../../../api/types/GetProductCategoriesShort';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
 import {
   GetProduct_product,
   GetProduct_product_categories,
 } from '../../../../api/types/GetProduct';
+import { ProductStatus } from '../../../../api/types/globalTypes';
+import { GetCategoriesShort } from '../../../../api/types/GetCategoriesShort';
 
 interface ProductBasicOptionsProps {
   product?: GetProduct_product | null;
@@ -93,17 +93,17 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     onSubmit,
   });
 
-  const { data: productCategoriesSuggestions } = useQuery<
-    GetProductCategoriesShort
-  >(QUERY_PRODUCT_CATEGORIES_WITHOUT_PARENT);
+  const { data: productCategoriesSuggestions } = useQuery<GetCategoriesShort>(
+    QUERY_PRODUCT_CATEGORIES_WITHOUT_PARENT
+  );
 
   useEffect(() => {
     if (
       productCategoriesSuggestions &&
-      productCategoriesSuggestions.productCategories &&
-      productCategoriesSuggestions.productCategories.items
+      productCategoriesSuggestions.categories &&
+      productCategoriesSuggestions.categories.items
     ) {
-      productCategoriesSuggestions.productCategories.items.map((item) => {
+      productCategoriesSuggestions.categories.items.map((item) => {
         if (item && item.title) {
           inputTagsSuggetions.push({
             id: item.id,

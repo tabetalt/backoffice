@@ -8,16 +8,16 @@
 //==============================================================
 
 export enum CategoryStatus {
-  Active = "Active",
-  CategoryStatusUnspecified = "CategoryStatusUnspecified",
-  Deactivated = "Deactivated",
+  Active = 'Active',
+  CategoryStatusUnspecified = 'CategoryStatusUnspecified',
+  Deactivated = 'Deactivated',
 }
 
 export enum ProductStatus {
-  Active = "Active",
-  Inactive = "Inactive",
-  Pending = "Pending",
-  ProductStatusUnspecified = "ProductStatusUnspecified",
+  Active = 'Active',
+  Inactive = 'Inactive',
+  Pending = 'Pending',
+  ProductStatusUnspecified = 'ProductStatusUnspecified',
 }
 
 export interface CategoryCreateInput {

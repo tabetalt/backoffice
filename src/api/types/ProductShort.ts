@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface ProductShort {
-  __typename: "Product";
+  __typename: 'Product';
   id: number;
   tenantId: number;
   status: string;

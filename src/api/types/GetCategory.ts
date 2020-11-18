@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface GetCategory_category_parent {
-  __typename: "Category";
+  __typename: 'Category';
   id: number;
   tenantId: number;
   title: string;
@@ -18,7 +18,7 @@ export interface GetCategory_category_parent {
 }
 
 export interface GetCategory_category {
-  __typename: "Category";
+  __typename: 'Category';
   id: number;
   tenantId: number;
   title: string;

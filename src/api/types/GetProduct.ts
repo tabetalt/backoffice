@@ -8,25 +8,25 @@
 // ====================================================
 
 export interface GetProduct_product_price_formatted {
-  __typename: "FormattedPrice";
+  __typename: 'FormattedPrice';
   vatAmount: number | null;
   grossAmount: number;
   netAmount: number;
 }
 
 export interface GetProduct_product_price {
-  __typename: "Price";
+  __typename: 'Price';
   formatted: GetProduct_product_price_formatted;
 }
 
 export interface GetProduct_product_categories {
-  __typename: "ProductCategory";
+  __typename: 'Category';
   id: number;
-  title: string | null;
+  title: string;
 }
 
 export interface GetProduct_product {
-  __typename: "Product";
+  __typename: 'Product';
   id: number;
   tenantId: number;
   status: string;
@@ -42,7 +42,7 @@ export interface GetProduct_product {
   inStockNum: number | null;
   priceId: number | null;
   price: GetProduct_product_price | null;
-  categories: (GetProduct_product_categories | null)[];
+  categories: GetProduct_product_categories[];
 }
 
 export interface GetProduct {

@@ -7,9 +7,14 @@
 // GraphQL fragment: Price
 // ====================================================
 
-export interface Price {
-  __typename: "Price";
+export interface Price_formatted {
+  __typename: "FormattedPrice";
   vatAmount: number | null;
   grossAmount: number;
   netAmount: number;
+}
+
+export interface Price {
+  __typename: "Price";
+  formatted: Price_formatted;
 }

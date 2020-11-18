@@ -7,91 +7,77 @@
 // START Enums and Input Objects
 //==============================================================
 
-export enum ProductCategoryStatus {
-  ACTIVE = "ACTIVE",
-  CATEGORY_STATUS_UNSPECIFIED = "CATEGORY_STATUS_UNSPECIFIED",
-  DEACTIVATED = "DEACTIVATED",
+export enum CategoryStatus {
+  Active = "Active",
+  CategoryStatusUnspecified = "CategoryStatusUnspecified",
+  Deactivated = "Deactivated",
 }
 
 export enum ProductStatus {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
-  PENDING = "PENDING",
-  PRODUCT_STATUS_UNSPECIFIED = "PRODUCT_STATUS_UNSPECIFIED",
+  Active = "Active",
+  Inactive = "Inactive",
+  Pending = "Pending",
+  ProductStatusUnspecified = "ProductStatusUnspecified",
 }
 
-export interface PriceInput {
-  value: number;
-}
-
-export interface ProductAttributeInput {
-  tenantId: number;
-  productId: number;
-  name: string;
-  displayType: string;
-  value: string;
-}
-
-export interface ProductCategoryInput {
-  id?: number | null;
-  title?: string | null;
+export interface CategoryCreateInput {
+  status: CategoryStatus;
+  title: string;
   showInMainMenu?: boolean | null;
-  status: ProductCategoryStatus;
-  parentCategoryId?: number | null;
+  parentId?: number | null;
   tenantId: number;
+  children?: CategoryCreateInput[] | null;
+}
+
+export interface CategoryUpdateInput {
+  status: CategoryStatus;
+  title: string;
+  showInMainMenu?: boolean | null;
+  parentId?: number | null;
+  tenantId: number;
+  children?: CategoryCreateInput[] | null;
+}
+
+export interface ImageCreateInput {
+  url: string;
 }
 
 export interface ProductCreateInput {
-  tenantId: number;
-  status: ProductStatus;
-  price?: number | null;
   title: string;
   slug?: string | null;
-  isOnMainPage?: boolean | null;
+  isOnMainPage: boolean;
   shortDescription?: string | null;
   description?: string | null;
   technicalDescription?: string | null;
   isAvailable?: boolean | null;
   count?: number | null;
-  variants?: (ProductVariantInput | null)[] | null;
-  attributes?: (ProductAttributeInput | null)[] | null;
-  categories?: (ProductCategoryInput | null)[] | null;
-  images?: (ProductImageInput | null)[] | null;
-}
-
-export interface ProductImageInput {
-  url?: string | null;
-  title?: string | null;
+  status: ProductStatus;
+  priceId?: number | null;
+  tenantId: number;
+  stockControl?: boolean | null;
+  inStockNum?: number | null;
+  price?: number | null;
+  categories?: CategoryCreateInput[] | null;
+  images?: ImageCreateInput[] | null;
 }
 
 export interface ProductUpdateInput {
-  tenantId: number;
-  status: ProductStatus;
-  price?: number | null;
   title: string;
   slug?: string | null;
-  isOnMainPage?: boolean | null;
+  isOnMainPage: boolean;
   shortDescription?: string | null;
   description?: string | null;
   technicalDescription?: string | null;
   isAvailable?: boolean | null;
   count?: number | null;
+  status: ProductStatus;
+  priceId?: number | null;
+  tenantId: number;
   stockControl?: boolean | null;
   inStockNum?: number | null;
-  variants?: (ProductVariantInput | null)[] | null;
-  attributes?: (ProductAttributeInput | null)[] | null;
-  categories?: (ProductCategoryInput | null)[] | null;
-  images?: (ProductImageInput | null)[] | null;
-}
-
-export interface ProductVariantInput {
-  tenant: number;
-  productId: number;
-  name: string;
-  displayName: string;
-  price: PriceInput;
-  count?: number | null;
-  productAttribute: (ProductAttributeInput | null)[];
+  price?: number | null;
+  categories?: CategoryCreateInput[] | null;
+  images?: ImageCreateInput[] | null;
 }
 
 //==============================================================

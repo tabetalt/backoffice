@@ -6,14 +6,14 @@ import {
   MUTATION_DELETE_PRODUCT_CATEGORY,
   QUERY_PRODUCT_CATEGORIES_WITH_PARENT,
 } from '../../../api';
-import { GetProductCategories_productCategories_items } from '../../../api/types/GetProductCategories';
+import { GetCategories_categories_items } from '../../../api/types/GetCategories';
 
 export interface CategoriesListingProps {
   data: any;
   openModal: boolean;
   setOpenModal: (value: React.SetStateAction<boolean>) => void;
   setCurrentCategory: (
-    value: React.SetStateAction<GetProductCategories_productCategories_items | null>
+    value: React.SetStateAction<GetCategories_categories_items | null>
   ) => void;
 }
 
@@ -28,7 +28,7 @@ const CategoriesListing: React.FC<CategoriesListingProps> = ({
   const actions = ({
     row,
   }: {
-    row: { original: GetProductCategories_productCategories_items };
+    row: { original: GetCategories_categories_items };
   }) => (
     <Box sx={{ textAlign: 'right' }}>
       <IconButton
@@ -68,10 +68,10 @@ const CategoriesListing: React.FC<CategoriesListingProps> = ({
   const parentCategoryTitle = ({
     row,
   }: {
-    row: { original: GetProductCategories_productCategories_items };
+    row: { original: GetCategories_categories_items };
   }) => (
     <Box>
-      <Label>{row.original.parentCategory?.title}</Label>
+      <Label>{row.original.parent?.title}</Label>
     </Box>
   );
 

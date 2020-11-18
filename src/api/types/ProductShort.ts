@@ -3,8 +3,6 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus } from "./globalTypes";
-
 // ====================================================
 // GraphQL fragment: ProductShort
 // ====================================================
@@ -12,7 +10,8 @@ import { ProductStatus } from "./globalTypes";
 export interface ProductShort {
   __typename: "Product";
   id: number;
-  status: ProductStatus;
+  tenantId: number;
+  status: string;
   title: string;
   slug: string | null;
   isOnMainPage: boolean | null;
@@ -23,4 +22,5 @@ export interface ProductShort {
   count: number | null;
   stockControl: boolean | null;
   inStockNum: number | null;
+  priceId: number | null;
 }

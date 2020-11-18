@@ -38,7 +38,7 @@ const defaultValues: ProductBasicOptionsValues = {
   title: '',
   slug: '',
   price: '',
-  status: ProductStatus.ACTIVE,
+  status: ProductStatus.Active,
   isOnMainPage: false,
   categories: [],
   images: [],
@@ -55,7 +55,7 @@ const ProductSchema = Yup.object().shape({
     .required('Required!'),
   price: Yup.number().positive().required('Required!'),
   status: Yup.string()
-    .oneOf([ProductStatus.ACTIVE, ProductStatus.INACTIVE])
+    .oneOf([ProductStatus.Active, ProductStatus.Inactive])
     .required('Required!'),
   isOnMainPage: Yup.boolean().notRequired(),
   // TODO: categories:
@@ -71,7 +71,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     initialValues: {
       ...defaultValues,
       ...product,
-      price: formatPrice(product?.price, null),
+      price: formatPrice(product?.price?.formatted, null),
     } as ProductBasicOptionsValues,
     validationSchema: ProductSchema,
     onSubmit,
@@ -171,8 +171,8 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           >
-            <option value={ProductStatus.ACTIVE}>Active</option>
-            <option value={ProductStatus.INACTIVE}>Inaktiv</option>
+            <option value={ProductStatus.Active}>Active</option>
+            <option value={ProductStatus.Inactive}>Inaktiv</option>
           </LabeledSelect>
           {form.touched.status && form.errors.status && (
             <Error message={form.errors.status} />

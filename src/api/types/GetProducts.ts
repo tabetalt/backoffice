@@ -3,23 +3,27 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus } from "./globalTypes";
-
 // ====================================================
 // GraphQL query operation: GetProducts
 // ====================================================
 
-export interface GetProducts_products_items_price {
-  __typename: "Price";
+export interface GetProducts_products_items_price_formatted {
+  __typename: "FormattedPrice";
   vatAmount: number | null;
   grossAmount: number;
   netAmount: number;
 }
 
+export interface GetProducts_products_items_price {
+  __typename: "Price";
+  formatted: GetProducts_products_items_price_formatted;
+}
+
 export interface GetProducts_products_items {
   __typename: "Product";
   id: number;
-  status: ProductStatus;
+  tenantId: number;
+  status: string;
   title: string;
   slug: string | null;
   isOnMainPage: boolean | null;
@@ -30,14 +34,15 @@ export interface GetProducts_products_items {
   count: number | null;
   stockControl: boolean | null;
   inStockNum: number | null;
+  priceId: number | null;
   price: GetProducts_products_items_price | null;
 }
 
 export interface GetProducts_products {
-  __typename: "ProductsResponse";
-  items: (GetProducts_products_items | null)[] | null;
+  __typename: "ProductsListResponse";
+  items: GetProducts_products_items[];
 }
 
 export interface GetProducts {
-  products: GetProducts_products | null;
+  products: GetProducts_products;
 }

@@ -4,13 +4,15 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: DeleteProduct
+// GraphQL fragment: Category
 // ====================================================
 
-export interface DeleteProduct {
-  deleteProduct: boolean;
-}
-
-export interface DeleteProductVariables {
+export interface Category {
+  __typename: "Category";
   id: number;
+  tenantId: number;
+  title: string;
+  status: string;
+  parentId: number | null;
+  showInMainMenu: boolean;
 }

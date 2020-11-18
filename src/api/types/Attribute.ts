@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: ProductAttribute
+// GraphQL fragment: Attribute
 // ====================================================
 
-export interface ProductAttribute {
-  __typename: "ProductAttribute";
+export interface Attribute {
+  __typename: "Attribute";
   id: number;
 }

@@ -7,9 +7,7 @@ import { LoaderIcon } from '@tabetalt/kit';
 import Layout from '../../../components/layout/Layout';
 import ProductBasicOptions from './components/ProductBasicOptions';
 import ProductDescription from './components/ProductDescription';
-import ProductInventory, {
-  ProductInventoryValues,
-} from './components/ProductInventory';
+import ProductInventory from './components/ProductInventory';
 import ProductCampaign from './components/ProductCampaign';
 import ProductVariants from './components/ProductVariants';
 import ProductNavigation from './components/ProductNavigation';

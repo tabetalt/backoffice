@@ -19,6 +19,12 @@ export interface GetProduct_product_price {
   formatted: GetProduct_product_price_formatted;
 }
 
+export interface GetProduct_product_categories {
+  __typename: "ProductCategory";
+  id: number;
+  title: string | null;
+}
+
 export interface GetProduct_product {
   __typename: "Product";
   id: number;
@@ -36,6 +42,7 @@ export interface GetProduct_product {
   inStockNum: number | null;
   priceId: number | null;
   price: GetProduct_product_price | null;
+  categories: (GetProduct_product_categories | null)[];
 }
 
 export interface GetProduct {

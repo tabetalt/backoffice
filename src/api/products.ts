@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client';
-import { FRAGMENT_PRODUCT_SHORT, FRAGMENT_PRICE } from './fragments';
+import {
+  FRAGMENT_PRODUCT_SHORT,
+  FRAGMENT_PRICE,
+  FRAGMENT_PRODUCT_CATEGORY_SHORT,
+} from './fragments';
 
 export const QUERY_GET_PRODUCTS = gql`
   query GetProducts {
@@ -23,10 +27,14 @@ export const QUERY_GET_PRODUCT = gql`
       price {
         ...Price
       }
+      categories {
+        ...ProductCategoryShort
+      }
     }
   }
   ${FRAGMENT_PRODUCT_SHORT}
   ${FRAGMENT_PRICE}
+  ${FRAGMENT_PRODUCT_CATEGORY_SHORT}
 `;
 
 export const MUTATION_DELETE_PRODUCT = gql`

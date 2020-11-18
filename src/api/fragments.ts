@@ -39,6 +39,13 @@ export const FRAGMENT_CATEGORY = gql`
   }
 `;
 
+export const FRAGMENT_PRODUCT_CATEGORY_SHORT = gql`
+  fragment ProductCategoryShort on ProductCategory {
+    id
+    title
+  }
+`;
+
 export const FRAGMENT_PRODUCT_SHORT = gql`
   fragment ProductShort on Product {
     id

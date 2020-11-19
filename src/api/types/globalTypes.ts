@@ -8,16 +8,16 @@
 //==============================================================
 
 export enum CategoryStatus {
-  Active = "Active",
-  CategoryStatusUnspecified = "CategoryStatusUnspecified",
-  Deactivated = "Deactivated",
+  ACTIVE = "ACTIVE",
+  CATEGORY_STATUS_UNSPECIFIED = "CATEGORY_STATUS_UNSPECIFIED",
+  INACTIVE = "INACTIVE",
 }
 
 export enum ProductStatus {
-  Active = "Active",
-  Inactive = "Inactive",
-  Pending = "Pending",
-  ProductStatusUnspecified = "ProductStatusUnspecified",
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  PENDING = "PENDING",
+  PRODUCT_STATUS_UNSPECIFIED = "PRODUCT_STATUS_UNSPECIFIED",
 }
 
 export interface CategoryCreateInput {
@@ -26,7 +26,6 @@ export interface CategoryCreateInput {
   showInMainMenu?: boolean | null;
   parentId?: number | null;
   tenantId: number;
-  children?: CategoryCreateInput[] | null;
 }
 
 export interface CategoryUpdateInput {
@@ -35,11 +34,15 @@ export interface CategoryUpdateInput {
   showInMainMenu?: boolean | null;
   parentId?: number | null;
   tenantId: number;
-  children?: CategoryCreateInput[] | null;
 }
 
 export interface ImageCreateInput {
   url: string;
+}
+
+export interface ProductCategoryCreateInput {
+  id?: number | null;
+  title: string;
 }
 
 export interface ProductCreateInput {
@@ -57,7 +60,7 @@ export interface ProductCreateInput {
   stockControl?: boolean | null;
   inStockNum?: number | null;
   price?: number | null;
-  categories?: CategoryCreateInput[] | null;
+  categories?: ProductCategoryCreateInput[] | null;
   images?: ImageCreateInput[] | null;
 }
 
@@ -76,7 +79,7 @@ export interface ProductUpdateInput {
   stockControl?: boolean | null;
   inStockNum?: number | null;
   price?: number | null;
-  categories?: CategoryCreateInput[] | null;
+  categories?: ProductCategoryCreateInput[] | null;
   images?: ImageCreateInput[] | null;
 }
 

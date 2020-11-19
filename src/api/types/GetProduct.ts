@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { ProductStatus } from "./globalTypes";
+
 // ====================================================
 // GraphQL query operation: GetProduct
 // ====================================================
@@ -23,7 +25,7 @@ export interface GetProduct_product {
   __typename: "Product";
   id: number;
   tenantId: number;
-  status: string;
+  status: ProductStatus;
   title: string;
   slug: string | null;
   isOnMainPage: boolean | null;

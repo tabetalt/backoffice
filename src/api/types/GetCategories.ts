@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { CategoryStatus } from "./globalTypes";
+
 // ====================================================
 // GraphQL query operation: GetCategories
 // ====================================================
@@ -12,7 +14,7 @@ export interface GetCategories_categories_items_parent {
   id: number;
   tenantId: number;
   title: string;
-  status: string;
+  status: CategoryStatus;
   parentId: number | null;
   showInMainMenu: boolean;
 }
@@ -22,7 +24,7 @@ export interface GetCategories_categories_items {
   id: number;
   tenantId: number;
   title: string;
-  status: string;
+  status: CategoryStatus;
   parentId: number | null;
   showInMainMenu: boolean;
   parent: GetCategories_categories_items_parent | null;

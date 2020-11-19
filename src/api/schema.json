@@ -631,25 +631,25 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "TenantStatusUnspecified",
+            "name": "TENANT_STATUS_UNSPECIFIED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Pending",
+            "name": "PENDING",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Active",
+            "name": "ACTIVE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Deactivated",
+            "name": "INACTIVE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -666,13 +666,13 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "IncVat",
+            "name": "INC_VAT",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "ExlVat",
+            "name": "EXL_VAT",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -800,43 +800,43 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "EmailAddressTypeUnspecified",
+            "name": "EMAIL_ADDRESS_TYPE_UNSPECIFIED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Primary",
+            "name": "PRIMARY",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "CatchAll",
+            "name": "CATCH_ALL",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Order",
+            "name": "ORDER",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Announcement",
+            "name": "ANNOUNCEMENT",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Recovery",
+            "name": "RECOVERY",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "CustomerFacing",
+            "name": "CUSTOMER_FACING",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -1088,25 +1088,25 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "AddressTypeUnspecified",
+            "name": "ADDRESS_TYPE_UNSPECIFIED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Invoice",
+            "name": "INVOICE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Postal",
+            "name": "POSTAL",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Visitor",
+            "name": "VISITOR",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -1214,49 +1214,49 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "SocialMediaTypeUnspecified",
+            "name": "SOCIAL_MEDIA_TYPE_UNSPECIFIED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Facebook",
+            "name": "FACEBOOK",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Twitter",
+            "name": "TWITTER",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Googleplus",
+            "name": "GOOGLEPLUS",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Instagram",
+            "name": "INSTAGRAM",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Linkedin",
+            "name": "LINKEDIN",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Pinterest",
+            "name": "PINTEREST",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Other",
+            "name": "OTHER",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -1364,37 +1364,37 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "TrackingTagTypeUnspecified",
+            "name": "TRACKING_TAG_TYPE_UNSPECIFIED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GoogleAnalytics",
+            "name": "GOOGLE_ANALYTICS",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GoogleTagManager",
+            "name": "GOOGLE_TAG_MANAGER",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "FacebookPixel",
+            "name": "FACEBOOK_PIXEL",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Hubspot",
+            "name": "HUBSPOT",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Other",
+            "name": "OTHER",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -1502,25 +1502,25 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "StoreUrlTypeUnspecified",
+            "name": "STORE_URL_TYPE_UNSPECIFIED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "CancellationForm",
+            "name": "CANCELLATION_FORM",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "TermsAndConditions",
+            "name": "TERMS_AND_CONDITIONS",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "PrivacyAgreement",
+            "name": "PRIVACY_AGREEMENT",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -1592,8 +1592,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "CategoryStatus",
                 "ofType": null
               }
             },
@@ -1716,6 +1716,35 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "CategoryStatus",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CATEGORY_STATUS_UNSPECIFIED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ACTIVE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INACTIVE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -1857,8 +1886,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "ProductStatus",
                 "ofType": null
               }
             },
@@ -2005,6 +2034,41 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ProductStatus",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "PRODUCT_STATUS_UNSPECIFIED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PENDING",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ACTIVE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INACTIVE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -3512,57 +3576,10 @@
               }
             },
             "defaultValue": null
-          },
-          {
-            "name": "children",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CategoryCreateInput",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null
           }
         ],
         "interfaces": null,
         "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "CategoryStatus",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "CategoryStatusUnspecified",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "Active",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "Deactivated",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
         "possibleTypes": null
       },
       {
@@ -3629,24 +3646,6 @@
                 "kind": "SCALAR",
                 "name": "Int",
                 "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "children",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CategoryCreateInput",
-                  "ofType": null
-                }
               }
             },
             "defaultValue": null
@@ -3829,7 +3828,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "CategoryCreateInput",
+                  "name": "ProductCategoryCreateInput",
                   "ofType": null
                 }
               }
@@ -3860,38 +3859,38 @@
         "possibleTypes": null
       },
       {
-        "kind": "ENUM",
-        "name": "ProductStatus",
+        "kind": "INPUT_OBJECT",
+        "name": "ProductCategoryCreateInput",
         "description": null,
         "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
+        "inputFields": [
           {
-            "name": "ProductStatusUnspecified",
+            "name": "id",
             "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
           },
           {
-            "name": "Pending",
+            "name": "title",
             "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "Active",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "Inactive",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
           }
         ],
+        "interfaces": null,
+        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -4092,7 +4091,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "CategoryCreateInput",
+                  "name": "ProductCategoryCreateInput",
                   "ofType": null
                 }
               }
@@ -4709,18 +4708,7 @@
           {
             "name": "inputFields",
             "description": null,
-            "args": [
-              {
-                "name": "includeDeprecated",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                },
-                "defaultValue": "false"
-              }
-            ],
+            "args": [],
             "type": {
               "kind": "LIST",
               "name": null,
@@ -4850,18 +4838,7 @@
           {
             "name": "args",
             "description": null,
-            "args": [
-              {
-                "name": "includeDeprecated",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                },
-                "defaultValue": "false"
-              }
-            ],
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -4984,34 +4961,6 @@
           {
             "name": "defaultValue",
             "description": "A GraphQL-formatted string representing the default value for this input value.",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isDeprecated",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "deprecationReason",
-            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",

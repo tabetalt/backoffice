@@ -1,71 +1,275 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
+import { Box, Button } from 'theme-ui';
 import {
-  CheckboxList,
   Field,
+  InputTags,
   LabeledSelect,
   PrefilledInput,
   Switch,
+  FileUpload,
 } from '@tabetalt/kit';
-import { CheckboxOption } from '@tabetalt/kit/build/components/CheckboxList/checkbox-list-props';
+import { FormikHelpers, useFormik } from 'formik';
+import * as Yup from 'yup';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
-import React from 'react';
-import { Box } from 'theme-ui';
-import { ProductAttr } from '../Product';
+import { Error } from '../../../../components/common';
+import { formatPrice } from '../../../../helpers';
+import { useQuery } from '@apollo/client';
+import {
+  QUERY_PRODUCT_CATEGORIES,
+  QUERY_GET_SIGNED_URL,
+} from '../../../../api';
+import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
+import { GetCategoriesShort } from '../../../../api/types/GetCategoriesShort';
+import { ProductStatus } from '../../../../api/types/globalTypes';
+import {
+  GetProduct_product,
+  GetProduct_product_categories,
+} from '../../../../api/types/GetProduct';
+import { GetSignedUrl } from '../../../../api/types/GetSignedUrl';
+import gqlClient from '../../../../api/client';
 
-export interface CategoriesAttr {
-  value: ProductAttr['categories'];
+interface ProductBasicOptionsProps {
+  product?: GetProduct_product | null;
+  onSubmit: (
+    values: ProductBasicOptionsValues,
+    formikHelpers: FormikHelpers<ProductBasicOptionsValues>
+  ) => void;
+  error?: boolean;
 }
 
-const ProductBasicOptions: React.FC<{ product: ProductAttr }> = ({
+interface ProductBasicOptionsValues {
+  title: string;
+  slug: string;
+  price: string;
+  status: ProductStatus;
+  isOnMainPage: boolean;
+  categories?: TagProps[];
+  images?: string[];
+}
+
+const defaultValues: ProductBasicOptionsValues = {
+  title: '',
+  slug: '',
+  price: '',
+  status: ProductStatus.ACTIVE,
+  isOnMainPage: false,
+  categories: [],
+  images: [],
+};
+
+const ProductSchema = Yup.object().shape({
+  title: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .required('Required!'),
+  slug: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .required('Required!'),
+  price: Yup.number().positive().required('Required!'),
+  status: Yup.string()
+    .oneOf([ProductStatus.ACTIVE, ProductStatus.INACTIVE])
+    .required('Required!'),
+  isOnMainPage: Yup.boolean().notRequired(),
+  // TODO: images:
+});
+
+const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
+  onSubmit,
+  error,
   product,
-}) => (
-  <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
-    <Field
-      label="Produktnavn"
-      name="name"
-      placeholder="Strikket genser"
-      value={product.name}
-    />
-    <PrefilledInput
-      label="URL"
-      name="slug"
-      prefilledText="Butikknavn.tabetalt.no/produkt/"
-      prefilledTextPosition={TextPosition.LEFT}
-      placeholder="strikket-genser"
-      text={product.slug}
-    />
-    <PrefilledInput
-      label="Pris inkl. MVA"
-      name="price"
-      prefilledText="NOK"
-      prefilledTextPosition={TextPosition.RIGHT}
-      placeholder="258,00"
-      text={product.price}
-    />
-    <Field
-      as={CheckboxList}
-      label="Kategori"
-      name="categories"
-      options={product.categories.map(
-        (value) => ({ value: value, checked: false } as CheckboxOption)
-      )}
-    />
-    <Field label="Bilder" name="images" value={product.images} />
-    <Field
-      as={Switch}
-      label="Vis på forsiden"
-      name="showOnFrontpage"
-      checked={product.showOnFrontpage}
-    />
-    <LabeledSelect
-      label="Status"
-      name="status"
-      defaultValue="Active"
-      value={product.status}
-    >
-      <option>Active</option>
-      <option>Inaktiv</option>
-    </LabeledSelect>
-  </Box>
-);
+}) => {
+  const [inputTagsSuggetions] = useState<TagProps[]>([]);
+  const form = useFormik<ProductBasicOptionsValues>({
+    initialValues: {
+      ...defaultValues,
+      ...product,
+      price: formatPrice(product?.price?.formatted, null),
+      categories: product?.categories.map(
+        (category: GetProduct_product_categories | null) => ({
+          id: category?.id,
+          name: category?.title,
+        })
+      ),
+    } as ProductBasicOptionsValues,
+    validationSchema: ProductSchema,
+    onSubmit,
+  });
+
+  const { data: productCategoriesSuggestions } = useQuery<GetCategoriesShort>(
+    QUERY_PRODUCT_CATEGORIES
+  );
+
+  const { setFieldValue } = form;
+
+  useEffect(() => {
+    setFieldValue(
+      'categories',
+      product?.categories.map(
+        (category: GetProduct_product_categories | null) => ({
+          id: category?.id,
+          name: category?.title,
+        })
+      )
+    );
+  }, [product, setFieldValue]);
+
+  useEffect(() => {
+    if (
+      productCategoriesSuggestions &&
+      productCategoriesSuggestions.categories &&
+      productCategoriesSuggestions.categories.items
+    ) {
+      productCategoriesSuggestions.categories.items.forEach((item) => {
+        if (item && item.title) {
+          inputTagsSuggetions.push({
+            id: item.id,
+            name: item.title,
+          });
+        }
+      });
+    }
+  }, [productCategoriesSuggestions, inputTagsSuggetions]);
+
+  // const [getSignedUrl] = useLazyQuery(QUERY_UPLOADING_SIGNED_URL);
+  const uploadProductImage = useCallback(
+    async (files: FileList) => {
+      _.map(Array.from(files), async ({ name, type, size }, i) => {
+        const {
+          data: {
+            signedUrl: { url, accessUrl },
+          },
+        }: { data: GetSignedUrl } = await gqlClient.query({
+          query: QUERY_GET_SIGNED_URL,
+          variables: {
+            input: {
+              filename: name,
+              contentType: type,
+              contentLength: size,
+            },
+          },
+        });
+        await fetch(url, { method: 'PUT', body: files[i] });
+        console.log(accessUrl);
+        setFieldValue('images', [
+          ...(form.values.images || []),
+          { url: accessUrl },
+        ]);
+      });
+    },
+    [setFieldValue, form.values.images]
+  );
+
+  console.log(form.values);
+
+  return (
+    <form onSubmit={form.handleSubmit}>
+      <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
+        {error && <Error message="Failed to save product." />}
+        <div>
+          <Field
+            label="Produktnavn"
+            placeholder="Strikket genser"
+            name="title"
+            value={form.values.title}
+            onChange={form.handleChange}
+            onBlur={form.handleBlur}
+          />
+          {form.touched.title && form.errors.title && (
+            <Error message={form.errors.title} />
+          )}
+        </div>
+        <div>
+          <PrefilledInput
+            label="URL"
+            prefilledText="Butikknavn.tabetalt.no/produkt/"
+            prefilledTextPosition={TextPosition.LEFT}
+            placeholder="strikket-genser"
+            name="slug"
+            value={form.values.slug}
+            onChange={form.handleChange}
+            onBlur={form.handleBlur}
+          />
+          {form.touched.slug && form.errors.slug && (
+            <Error message={form.errors.slug} />
+          )}
+        </div>
+        <div>
+          <PrefilledInput
+            label="Pris inkl. MVA"
+            prefilledText="NOK"
+            prefilledTextPosition={TextPosition.RIGHT}
+            placeholder="258,00"
+            name="price"
+            type="number"
+            value={form.values.price}
+            onChange={form.handleChange}
+            onBlur={form.handleBlur}
+          />
+          {form.touched.price && form.errors.price && (
+            <Error message={form.errors.price} />
+          )}
+        </div>
+        <div>
+          <Field
+            as={InputTags}
+            label="Kategori"
+            suggestions={inputTagsSuggetions}
+            name="categories"
+            tags={form.values.categories}
+            onChange={(tagProps: TagProps[]) =>
+              form.setFieldValue('categories', tagProps)
+            }
+          />
+          {form.touched.categories && form.errors.categories && (
+            <Error message={form.errors.categories} />
+          )}
+        </div>
+        <div>
+          <Field
+            as={FileUpload}
+            label="Bilder"
+            name="images"
+            value={form.values.images}
+            onChange={form.handleChange}
+            upload={uploadProductImage}
+          />
+          {form.touched.images && form.errors.images && (
+            <Error message={form.errors.images} />
+          )}
+        </div>
+        <div>
+          <Field
+            as={Switch}
+            label="Vis på forsiden"
+            name="isOnMainPage"
+            checked={form.values.isOnMainPage}
+            onChange={form.handleChange}
+          />
+          {form.touched.isOnMainPage && form.errors.isOnMainPage && (
+            <Error message={form.errors.isOnMainPage} />
+          )}
+        </div>
+        <div>
+          <LabeledSelect
+            label="Status"
+            name="status"
+            value={form.values.status}
+            onChange={form.handleChange}
+            onBlur={form.handleBlur}
+          >
+            <option value={ProductStatus.ACTIVE}>Active</option>
+            <option value={ProductStatus.INACTIVE}>Inaktiv</option>
+          </LabeledSelect>
+          {form.touched.status && form.errors.status && (
+            <Error message={form.errors.status} />
+          )}
+        </div>
+        <Button type="submit">Lagre</Button>
+      </Box>
+    </form>
+  );
+};
 
 export default ProductBasicOptions;

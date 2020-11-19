@@ -2,7 +2,7 @@ import React from 'react';
 import { PartialRouteObject } from 'react-router';
 import { NavLink, useRoutes } from 'react-router-dom';
 import { Box } from 'theme-ui';
-import Layout from '../../components/Layout';
+import Layout from '../../components/layout/Layout';
 import ShippingSettings from './ShippingSettings';
 import GenericSettings from './GenericSettings';
 import DiscountSettings from './DiscountSettings';

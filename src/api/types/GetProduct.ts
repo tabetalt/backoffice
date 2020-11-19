@@ -3,50 +3,37 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus, CategoryStatus } from "./globalTypes";
+import { ProductStatus } from "./globalTypes";
 
 // ====================================================
-// GraphQL fragment: Product
+// GraphQL query operation: GetProduct
 // ====================================================
 
-export interface Product_price_formatted {
+export interface GetProduct_product_price_formatted {
   __typename: "FormattedPrice";
   vatAmount: number | null;
   grossAmount: number;
   netAmount: number;
 }
 
-export interface Product_price {
+export interface GetProduct_product_price {
   __typename: "Price";
-  formatted: Product_price_formatted;
+  formatted: GetProduct_product_price_formatted;
 }
 
-export interface Product_variants {
-  __typename: "Variant";
-  id: number;
-}
-
-export interface Product_attributes {
-  __typename: "Attribute";
-  id: number;
-}
-
-export interface Product_categories {
+export interface GetProduct_product_categories {
   __typename: "Category";
   id: number;
-  tenantId: number;
   title: string;
-  status: CategoryStatus;
-  parentId: number | null;
-  showInMainMenu: boolean;
 }
 
-export interface Product_images {
+export interface GetProduct_product_images {
   __typename: "Attachment";
+  id: number;
   url: string;
 }
 
-export interface Product {
+export interface GetProduct_product {
   __typename: "Product";
   id: number;
   tenantId: number;
@@ -62,9 +49,15 @@ export interface Product {
   stockControl: boolean | null;
   inStockNum: number | null;
   priceId: number | null;
-  price: Product_price | null;
-  variants: Product_variants[];
-  attributes: Product_attributes[];
-  categories: Product_categories[];
-  images: Product_images[];
+  price: GetProduct_product_price | null;
+  categories: GetProduct_product_categories[];
+  images: GetProduct_product_images[];
+}
+
+export interface GetProduct {
+  product: GetProduct_product;
+}
+
+export interface GetProductVariables {
+  id: number;
 }

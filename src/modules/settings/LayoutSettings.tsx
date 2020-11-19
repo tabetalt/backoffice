@@ -1,5 +1,5 @@
 import React from 'react';
-import TabetaltLayout from '../../components/Layout';
+import TabetaltLayout from '../../components/layout/Layout';
 
 const Layout: React.FC = () => <TabetaltLayout>Layout</TabetaltLayout>;
 

@@ -3,11 +3,18 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { CategoryStatus } from "./globalTypes";
+
 // ====================================================
-// GraphQL fragment: Tenant
+// GraphQL fragment: Category
 // ====================================================
 
-export interface Tenant {
-  __typename: "Tenant";
+export interface Category {
+  __typename: "Category";
   id: number;
+  tenantId: number;
+  title: string;
+  status: CategoryStatus;
+  parentId: number | null;
+  showInMainMenu: boolean;
 }

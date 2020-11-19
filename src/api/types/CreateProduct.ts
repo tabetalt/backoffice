@@ -3,25 +3,25 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus } from "./globalTypes";
+import { ProductCreateInput, ProductStatus } from "./globalTypes";
 
 // ====================================================
-// GraphQL query operation: GetProducts
+// GraphQL mutation operation: CreateProduct
 // ====================================================
 
-export interface GetProducts_products_items_price_formatted {
+export interface CreateProduct_createProduct_price_formatted {
   __typename: "FormattedPrice";
   vatAmount: number | null;
   grossAmount: number;
   netAmount: number;
 }
 
-export interface GetProducts_products_items_price {
+export interface CreateProduct_createProduct_price {
   __typename: "Price";
-  formatted: GetProducts_products_items_price_formatted;
+  formatted: CreateProduct_createProduct_price_formatted;
 }
 
-export interface GetProducts_products_items {
+export interface CreateProduct_createProduct {
   __typename: "Product";
   id: number;
   tenantId: number;
@@ -37,14 +37,13 @@ export interface GetProducts_products_items {
   stockControl: boolean | null;
   inStockNum: number | null;
   priceId: number | null;
-  price: GetProducts_products_items_price | null;
+  price: CreateProduct_createProduct_price | null;
 }
 
-export interface GetProducts_products {
-  __typename: "ProductsListResponse";
-  items: GetProducts_products_items[];
+export interface CreateProduct {
+  createProduct: CreateProduct_createProduct;
 }
 
-export interface GetProducts {
-  products: GetProducts_products;
+export interface CreateProductVariables {
+  input: ProductCreateInput;
 }

@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React from 'react';
 import { Box, Styled, jsx } from 'theme-ui';
-import Layout from '../../components/Layout';
+import Layout from '../../components/layout/Layout';
 
 const NotFound: React.FC = () => (
   <Layout>

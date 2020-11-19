@@ -8,38 +8,48 @@ export const FRAGMENT_TENANT = gql`
 
 export const FRAGMENT_PRICE = gql`
   fragment Price on Price {
-    vatAmount
-    grossAmount
-    netAmount
+    formatted {
+      vatAmount
+      grossAmount
+      netAmount
+    }
   }
 `;
 
-export const FRAGMENT_PRODUCT_VARIANT = gql`
-  fragment ProductVariantFileds on ProductVariant {
+export const FRAGMENT_VARIANT = gql`
+  fragment Variant on Variant {
     id
   }
 `;
 
-export const FRAGMENT_PRODUCT_ATTRIBUTE = gql`
-  fragment ProductAttribute on ProductAttribute {
+export const FRAGMENT_ATTRIBUTE = gql`
+  fragment Attribute on Attribute {
     id
   }
 `;
 
-export const FRAGMENT_PRODUCT_CATEGORY = gql`
-  fragment ProductCategoryFields on ProductCategory {
+export const FRAGMENT_CATEGORY = gql`
+  fragment Category on Category {
     id
     tenantId
     title
     status
-    parentCategoryId
+    parentId
     showInMainMenu
+  }
+`;
+
+export const FRAGMENT_CATEGORY_SHORT = gql`
+  fragment CategoryShort on Category {
+    id
+    title
   }
 `;
 
 export const FRAGMENT_PRODUCT_SHORT = gql`
   fragment ProductShort on Product {
     id
+    tenantId
     status
     title
     slug
@@ -49,6 +59,9 @@ export const FRAGMENT_PRODUCT_SHORT = gql`
     technicalDescription
     isAvailable
     count
+    stockControl
+    inStockNum
+    priceId
   }
 `;
 
@@ -59,22 +72,21 @@ export const FRAGMENT_PRODUCT = gql`
       ...Price
     }
     variants {
-      ...ProductVariantFileds
+      ...Variant
     }
     attributes {
-      ...ProductAttribute
+      ...Attribute
     }
     categories {
-      ...ProductCategoryFields
+      ...Category
     }
-    tenant {
-      ...Tenant
+    images {
+      url
     }
   }
   ${FRAGMENT_PRODUCT_SHORT}
   ${FRAGMENT_PRICE}
-  ${FRAGMENT_PRODUCT_VARIANT}
-  ${FRAGMENT_PRODUCT_ATTRIBUTE}
-  ${FRAGMENT_PRODUCT_CATEGORY}
-  ${FRAGMENT_TENANT}
+  ${FRAGMENT_VARIANT}
+  ${FRAGMENT_ATTRIBUTE}
+  ${FRAGMENT_CATEGORY}
 `;

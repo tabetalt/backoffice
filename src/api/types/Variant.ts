@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: Tenant
+// GraphQL fragment: Variant
 // ====================================================
 
-export interface Tenant {
-  __typename: "Tenant";
+export interface Variant {
+  __typename: "Variant";
   id: number;
 }

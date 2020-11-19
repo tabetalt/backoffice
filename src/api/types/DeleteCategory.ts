@@ -4,13 +4,13 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: DeleteProductCategory
+// GraphQL mutation operation: DeleteCategory
 // ====================================================
 
-export interface DeleteProductCategory {
-  deleteProductCategory: boolean | null;
+export interface DeleteCategory {
+  deleteCategory: boolean;
 }
 
-export interface DeleteProductCategoryVariables {
-  id: string;
+export interface DeleteCategoryVariables {
+  id: number;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from '@tabetalt/kit';
-import Layout from '../../components/Layout';
+import Layout from '../../components/layout/Layout';
 import { Badge, Box, Button } from 'theme-ui';
 import { useNavigate } from 'react-router-dom';
 

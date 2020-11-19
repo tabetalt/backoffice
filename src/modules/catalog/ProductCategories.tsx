@@ -1,24 +1,20 @@
 import { Table, icons } from '@tabetalt/kit';
 import React from 'react';
-import { Box, IconButton } from 'theme-ui';
+import { Box, Button, IconButton } from 'theme-ui';
 import Layout from '../../components/layout/Layout';
 
 const columns = [
   {
-    Header: 'Sidenavn',
+    Header: 'Kategori',
     accessor: 'name',
   },
   {
-    Header: 'Lenke',
-    accessor: 'link',
+    Header: 'Undergruppe av',
+    accessor: 'parent',
   },
   {
-    Header: 'Vises i meny',
+    Header: 'Vis i meny',
     accessor: 'navigation',
-  },
-  {
-    Header: 'Status',
-    accessor: 'status',
   },
   {
     Header: '',
@@ -26,12 +22,11 @@ const columns = [
   },
 ];
 
-const Pages: React.FC = () => {
+const Categories: React.FC = () => {
   const data = Array(10).fill({
-    name: 'Om oss',
-    link: 'butikknavn.no/',
+    name: 'Alle produkter',
+    parent: '',
     navigation: 'Hovedmeny',
-    status: 'Aktiv',
     actions: (
       <Box sx={{ textAlign: 'right' }}>
         <IconButton>
@@ -47,7 +42,26 @@ const Pages: React.FC = () => {
     ),
   });
   return (
-    <Layout>
+    <Layout
+      header={{
+        links: [
+          {
+            name: 'Produkter',
+            to: '/catalog/products',
+          },
+          {
+            name: 'Kategorier',
+            to: '/catalog/categories',
+          },
+        ],
+        children: (
+          <Box>
+            <Button variant="outline">Rediger navigasjon</Button>
+            <Button sx={{ ml: 3 }}>Legg til ny kategori</Button>
+          </Box>
+        ),
+      }}
+    >
       <Box sx={{ p: 5 }}>
         <Table options={{ columns, data }} />
       </Box>
@@ -55,4 +69,4 @@ const Pages: React.FC = () => {
   );
 };
 
-export default Pages;
+export default Categories;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge, Box, Button, Flex, Heading, Link, Text } from 'theme-ui';
 import { icons, Table } from '@tabetalt/kit';
-import Layout from '../../components/Layout';
+import Layout from '../../components/layout/Layout';
 
 const columns = [
   {

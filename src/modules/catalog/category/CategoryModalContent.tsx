@@ -1,54 +1,64 @@
+import React from 'react';
+import _ from 'lodash';
+import * as Yup from 'yup';
 import { useMutation, useQuery } from '@apollo/client';
 import { LabeledSelect, Switch, Field } from '@tabetalt/kit';
 import { useFormik } from 'formik';
-import React from 'react';
 import { Box, Button } from 'theme-ui';
+import { Error } from '../../../components/common';
 import {
   MUTATION_CREATE_PRODUCT_CATEGORY,
   MUTATION_UPDATE_PRODUCT_CATEGORY,
   QUERY_PRODUCT_CATEGORIES_WITH_PARENT,
 } from '../../../api';
-import { GetProductCategories } from '../../../api/types/GetProductCategories';
+import { GetCategories } from '../../../api/types/GetCategories';
 import {
-  ProductCategoryInput,
-  ProductCategoryStatus,
+  CategoryCreateInput,
+  CategoryUpdateInput,
+  CategoryStatus,
 } from '../../../api/types/globalTypes';
-import { ProductCategoryFields } from '../../../api/types/ProductCategoryFields';
+import { Category } from '../../../api/types/Category';
+
+const CategorySchema = Yup.object().shape({
+  title: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .required('Required!'),
+});
 
 export const CategoryModalContent: React.FC<{
-  currentCategory: ProductCategoryFields | null;
+  currentCategory: Category | null;
   onRequestClose: () => void;
 }> = ({ currentCategory, onRequestClose }) => {
-  const { data } = useQuery<GetProductCategories>(
+  const { data } = useQuery<GetCategories>(
     QUERY_PRODUCT_CATEGORIES_WITH_PARENT
   );
-  const [updateCategory] = useMutation(MUTATION_UPDATE_PRODUCT_CATEGORY);
-  const [createCategory] = useMutation(MUTATION_CREATE_PRODUCT_CATEGORY);
+  const [updateCategory, { error: updateError }] = useMutation(
+    MUTATION_UPDATE_PRODUCT_CATEGORY
+  );
+  const [createCategory, { error: createError }] = useMutation(
+    MUTATION_CREATE_PRODUCT_CATEGORY
+  );
 
-  const onSubmit = (values: ProductCategoryFields) => {
-    const parentId =
-      values.parentCategoryId && Number(values.parentCategoryId) !== 0
-        ? Number(values.parentCategoryId)
-        : null;
+  const onSubmit = async (
+    values: CategoryUpdateInput | CategoryCreateInput
+  ) => {
+    const input = _.pick(
+      {
+        ...values,
+        parentId: values.parentId ? Number(values.parentId) : null,
+      },
+      ['status', 'title', 'showInMainMenu', 'parentId', 'tenantId']
+    );
+
     if (currentCategory) {
-      updateCategory({
-        variables: {
-          id: values.id,
-          input: {
-            title: values.title,
-            status: values.status,
-            parentCategoryId: parentId,
-            showInMainMenu: values.showInMainMenu,
-            tenantId: values.tenantId,
-          } as ProductCategoryInput,
-        },
+      await updateCategory({
+        variables: { id: currentCategory.id, input },
         refetchQueries: [{ query: QUERY_PRODUCT_CATEGORIES_WITH_PARENT }],
       });
     } else {
-      createCategory({
-        variables: {
-          input: { ...values, parentCategoryId: parentId },
-        },
+      await createCategory({
+        variables: { input },
         refetchQueries: [{ query: QUERY_PRODUCT_CATEGORIES_WITH_PARENT }],
       });
     }
@@ -57,23 +67,24 @@ export const CategoryModalContent: React.FC<{
 
   const initialValues = currentCategory
     ? currentCategory
-    : ({
-        title: null,
-        status: ProductCategoryStatus.ACTIVE,
-        parentCategoryId: null,
+    : {
+        title: '',
+        status: CategoryStatus.ACTIVE,
+        parentId: null,
         showInMainMenu: false,
         tenantId: 1,
-      } as ProductCategoryFields);
+      };
 
   const formik = useFormik({
-    initialValues,
+    initialValues: initialValues as CategoryCreateInput,
+    validationSchema: CategorySchema,
     onSubmit,
   });
 
   let categories: (false | JSX.Element)[] = [];
 
-  if (data && data.productCategories && data.productCategories.items) {
-    categories = data.productCategories.items.map(
+  if (data && data.categories && data.categories.items) {
+    categories = data.categories.items.map(
       (item) =>
         ((currentCategory && currentCategory.id !== item?.id) ||
           !currentCategory) && (
@@ -92,21 +103,27 @@ export const CategoryModalContent: React.FC<{
   return (
     <form onSubmit={formik.handleSubmit}>
       <Box sx={{ maxWidth: 820, '> div': { mb: 3 }, mt: '32px' }}>
-        <Field
-          name="title"
-          label="Navn på kategori"
-          placeholder="Rabattnavn"
-          onChange={formik.handleChange}
-          value={formik.values.title}
-        />
+        {createError && updateError && (
+          <Error message="Failed to save category." />
+        )}
+        <div>
+          <Field
+            name="title"
+            label="Navn på kategori"
+            placeholder="Rabattnavn"
+            onChange={formik.handleChange}
+            value={formik.values.title}
+          />
+          {formik.touched.title && formik.errors.title && (
+            <Error message={formik.errors.title} />
+          )}
+        </div>
         <LabeledSelect
-          name="parentCategoryId"
+          name="parentId"
           defaultValue={0}
           label="Underkategori av"
           onChange={formik.handleChange}
-          value={
-            formik.values.parentCategoryId ? formik.values.parentCategoryId : 0
-          }
+          value={formik.values.parentId ? formik.values.parentId : 0}
         >
           {categories}
         </LabeledSelect>
@@ -120,11 +137,11 @@ export const CategoryModalContent: React.FC<{
         <LabeledSelect
           name="status"
           label="Status"
-          defaultValue={ProductCategoryStatus.ACTIVE}
+          defaultValue={CategoryStatus.ACTIVE}
           onChange={formik.handleChange}
           value={formik.values.status}
         >
-          {Object.keys(ProductCategoryStatus).map((key) => (
+          {Object.keys(CategoryStatus).map((key) => (
             <option key={key} value={key}>
               {key}
             </option>

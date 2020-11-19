@@ -3,26 +3,26 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductCreateInput, ProductStatus } from './globalTypes';
+import { ProductCreateInput, ProductStatus } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: CreateProduct
 // ====================================================
 
 export interface CreateProduct_createProduct_price_formatted {
-  __typename: 'FormattedPrice';
+  __typename: "FormattedPrice";
   vatAmount: number | null;
   grossAmount: number;
   netAmount: number;
 }
 
 export interface CreateProduct_createProduct_price {
-  __typename: 'Price';
+  __typename: "Price";
   formatted: CreateProduct_createProduct_price_formatted;
 }
 
 export interface CreateProduct_createProduct {
-  __typename: 'Product';
+  __typename: "Product";
   id: number;
   tenantId: number;
   status: ProductStatus;

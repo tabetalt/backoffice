@@ -8,13 +8,13 @@
 // ====================================================
 
 export interface GetCategoriesShort_categories_items {
-  __typename: 'Category';
+  __typename: "Category";
   id: number;
   title: string;
 }
 
 export interface GetCategoriesShort_categories {
-  __typename: 'CategoriesListResponse';
+  __typename: "CategoriesListResponse";
   items: GetCategoriesShort_categories_items[];
 }
 

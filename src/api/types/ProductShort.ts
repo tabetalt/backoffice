@@ -3,14 +3,14 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductStatus } from './globalTypes';
+import { ProductStatus } from "./globalTypes";
 
 // ====================================================
 // GraphQL fragment: ProductShort
 // ====================================================
 
 export interface ProductShort {
-  __typename: 'Product';
+  __typename: "Product";
   id: number;
   tenantId: number;
   status: ProductStatus;

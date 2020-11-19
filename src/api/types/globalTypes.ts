@@ -8,16 +8,16 @@
 //==============================================================
 
 export enum CategoryStatus {
-  ACTIVE = 'ACTIVE',
-  CATEGORY_STATUS_UNSPECIFIED = 'CATEGORY_STATUS_UNSPECIFIED',
-  INACTIVE = 'INACTIVE',
+  ACTIVE = "ACTIVE",
+  CATEGORY_STATUS_UNSPECIFIED = "CATEGORY_STATUS_UNSPECIFIED",
+  INACTIVE = "INACTIVE",
 }
 
 export enum ProductStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  PENDING = 'PENDING',
-  PRODUCT_STATUS_UNSPECIFIED = 'PRODUCT_STATUS_UNSPECIFIED',
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  PENDING = "PENDING",
+  PRODUCT_STATUS_UNSPECIFIED = "PRODUCT_STATUS_UNSPECIFIED",
 }
 
 export interface CategoryCreateInput {
@@ -26,7 +26,6 @@ export interface CategoryCreateInput {
   showInMainMenu?: boolean | null;
   parentId?: number | null;
   tenantId: number;
-  children?: CategoryCreateInput[] | null;
 }
 
 export interface CategoryUpdateInput {
@@ -35,11 +34,13 @@ export interface CategoryUpdateInput {
   showInMainMenu?: boolean | null;
   parentId?: number | null;
   tenantId: number;
-  children?: CategoryCreateInput[] | null;
 }
 
 export interface ImageCreateInput {
+  id?: number | null;
   url: string;
+  mime?: string | null;
+  size?: number | null;
 }
 
 export interface ProductCategoryCreateInput {
@@ -83,6 +84,12 @@ export interface ProductUpdateInput {
   price?: number | null;
   categories?: ProductCategoryCreateInput[] | null;
   images?: ImageCreateInput[] | null;
+}
+
+export interface QuerySignedUrlInput {
+  filename: string;
+  contentType: string;
+  contentLength: number;
 }
 
 //==============================================================

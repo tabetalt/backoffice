@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
 import { Box, Button } from 'theme-ui';
 import {
   Field,
@@ -6,6 +7,7 @@ import {
   LabeledSelect,
   PrefilledInput,
   Switch,
+  FileUpload,
 } from '@tabetalt/kit';
 import { FormikHelpers, useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -13,7 +15,10 @@ import { TextPosition } from '@tabetalt/kit/build/components/Input/components/pr
 import { Error } from '../../../../components/common';
 import { formatPrice } from '../../../../helpers';
 import { useQuery } from '@apollo/client';
-import { QUERY_PRODUCT_CATEGORIES } from '../../../../api';
+import {
+  QUERY_PRODUCT_CATEGORIES,
+  QUERY_GET_SIGNED_URL,
+} from '../../../../api';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
 import { GetCategoriesShort } from '../../../../api/types/GetCategoriesShort';
 import { ProductStatus } from '../../../../api/types/globalTypes';
@@ -21,6 +26,8 @@ import {
   GetProduct_product,
   GetProduct_product_categories,
 } from '../../../../api/types/GetProduct';
+import { GetSignedUrl } from '../../../../api/types/GetSignedUrl';
+import gqlClient from '../../../../api/client';
 
 interface ProductBasicOptionsProps {
   product?: GetProduct_product | null;
@@ -94,8 +101,10 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     QUERY_PRODUCT_CATEGORIES
   );
 
+  const { setFieldValue } = form;
+
   useEffect(() => {
-    form.setFieldValue(
+    setFieldValue(
       'categories',
       product?.categories.map(
         (category: GetProduct_product_categories | null) => ({
@@ -104,7 +113,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
         })
       )
     );
-  }, [product]);
+  }, [product, setFieldValue]);
 
   useEffect(() => {
     if (
@@ -112,7 +121,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
       productCategoriesSuggestions.categories &&
       productCategoriesSuggestions.categories.items
     ) {
-      productCategoriesSuggestions.categories.items.map((item) => {
+      productCategoriesSuggestions.categories.items.forEach((item) => {
         if (item && item.title) {
           inputTagsSuggetions.push({
             id: item.id,
@@ -122,6 +131,37 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
       });
     }
   }, [productCategoriesSuggestions, inputTagsSuggetions]);
+
+  // const [getSignedUrl] = useLazyQuery(QUERY_UPLOADING_SIGNED_URL);
+  const uploadProductImage = useCallback(
+    async (files: FileList) => {
+      _.map(Array.from(files), async ({ name, type, size }, i) => {
+        const {
+          data: {
+            signedUrl: { url, accessUrl },
+          },
+        }: { data: GetSignedUrl } = await gqlClient.query({
+          query: QUERY_GET_SIGNED_URL,
+          variables: {
+            input: {
+              filename: name,
+              contentType: type,
+              contentLength: size,
+            },
+          },
+        });
+        await fetch(url, { method: 'PUT', body: files[i] });
+        console.log(accessUrl);
+        setFieldValue('images', [
+          ...(form.values.images || []),
+          { url: accessUrl },
+        ]);
+      });
+    },
+    [setFieldValue, form.values.images]
+  );
+
+  console.log(form.values);
 
   return (
     <form onSubmit={form.handleSubmit}>
@@ -186,19 +226,19 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             <Error message={form.errors.categories} />
           )}
         </div>
-        {/*
         <div>
           <Field
+            as={FileUpload}
             label="Bilder"
             name="images"
             value={form.values.images}
             onChange={form.handleChange}
+            upload={uploadProductImage}
           />
           {form.touched.images && form.errors.images && (
             <Error message={form.errors.images} />
           )}
         </div>
-        */}
         <div>
           <Field
             as={Switch}

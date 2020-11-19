@@ -8,6 +8,6 @@
 // ====================================================
 
 export interface Variant {
-  __typename: 'Variant';
+  __typename: "Variant";
   id: number;
 }

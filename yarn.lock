@@ -1733,10 +1733,10 @@
     "@svgr/plugin-svgo" "^4.3.1"
     loader-utils "^1.2.3"
 
-"@tabetalt/kit@^1.19.6":
-  version "1.19.8"
-  resolved "https://registry.yarnpkg.com/@tabetalt/kit/-/kit-1.19.8.tgz#8061620931fe2ec7866da524286e4dc2c4a37eee"
-  integrity sha512-vIaOkZVlkJxx6xMiPABN0izzWxC/WOIhtMgslmye3pPaLPXxw4NHejxpBQBA3hoWH9YEZ4DpZBaOWUZaD6VgNw==
+"@tabetalt/kit@^1.19.9":
+  version "1.19.9"
+  resolved "https://registry.yarnpkg.com/@tabetalt/kit/-/kit-1.19.9.tgz#ab7373268c06557172e341cd8efed34f88505b45"
+  integrity sha512-gI1g/qX73SwpBiz4zvM45jMtFvE9noWWQfj2JKupOzDXt+/u4oVj6zDiLeHFPEWW6krqAzsSr4JQq71+dZ+kBQ==
   dependencies:
     "@types/escape-html" "^1.0.0"
     escape-html "^1.0.3"

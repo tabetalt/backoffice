@@ -80,6 +80,9 @@ export const FRAGMENT_PRODUCT = gql`
     categories {
       ...Category
     }
+    images {
+      url
+    }
   }
   ${FRAGMENT_PRODUCT_SHORT}
   ${FRAGMENT_PRICE}

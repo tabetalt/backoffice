@@ -8,6 +8,6 @@
 // ====================================================
 
 export interface Attribute {
-  __typename: 'Attribute';
+  __typename: "Attribute";
   id: number;
 }

@@ -30,6 +30,10 @@ export const QUERY_GET_PRODUCT = gql`
       categories {
         ...CategoryShort
       }
+      images {
+        id
+        url
+      }
     }
   }
   ${FRAGMENT_PRODUCT_SHORT}

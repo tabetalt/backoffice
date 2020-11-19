@@ -60,16 +60,18 @@ const ProductUpdate: React.FC = () => {
         input.price = values.price.replace(',', '.') * 100;
       }
       if (values.categories) {
-        input.categories = (values.categories as TagProps[]).map((category) => {
-          return {
-            id: category.id as number,
-            title: category.name,
-          };
-        });
+        input.categories = (values.categories as TagProps[]).map(
+          ({ id, name }) => ({ id: id as number, title: name })
+        );
+      }
+      if (values.images) {
+        input.images = values.images.map(({ url }: { url: string }) => ({
+          url,
+        }));
       }
       await updateProduct({ variables: { id: productId, input } });
     },
-    [data, updateProduct]
+    [productId, data, updateProduct]
   );
 
   const routes = useRoutes([
@@ -118,10 +120,10 @@ const ProductUpdate: React.FC = () => {
     );
   }
 
-  const onCopy = useCallback(() => null, [productId]);
+  const onCopy = useCallback(() => null, []);
   const onCancel = () => navigate('/catalog/products');
-  const onDraft = useCallback(() => null, [productId]);
-  const onPublish = useCallback(() => null, [productId]);
+  const onDraft = useCallback(() => null, []);
+  const onPublish = useCallback(() => null, []);
 
   return (
     <Layout

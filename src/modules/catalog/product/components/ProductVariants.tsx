@@ -54,11 +54,7 @@ interface ProductVariantsValues {
 
 // const defaultValues: ProductVariantsValues = {};
 
-const ProductVariants: React.FC<ProductVariantsProps> = ({
-  onSubmit,
-  error,
-  product,
-}) => (
+const ProductVariants: React.FC<ProductVariantsProps> = () => (
   <Box>
     <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
       <Heading as="h4" sx={{ mb: '17px' }}>

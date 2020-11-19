@@ -20,11 +20,7 @@ interface ProductCampaignValues {
 
 // const defaultValues: ProductCampaignValues = {};
 
-const ProductCampaign: React.FC<ProductCampaignProps> = ({
-  onSubmit,
-  error,
-  product,
-}) => (
+const ProductCampaign: React.FC<ProductCampaignProps> = () => (
   <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
     <LabeledSelect
       label="Lagervare"

@@ -37,12 +37,14 @@ const ProductCreate: React.FC = () => {
         price: values.price.replace(',', '.') * 100,
       };
       if (values.categories) {
-        input.categories = (values.categories as TagProps[]).map((category) => {
-          return {
-            id: category.id as number,
-            title: category.name,
-          };
-        });
+        input.categories = (values.categories as TagProps[]).map(
+          ({ id, name }) => ({ id, title: name })
+        );
+      }
+      if (values.images) {
+        input.images = values.images.map(({ url }: { url: string }) => ({
+          url,
+        }));
       }
 
       const res = await createProduct({ variables: { input } });

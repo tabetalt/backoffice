@@ -56,7 +56,7 @@ export const CategoryModalContent: React.FC<{
     ? currentCategory
     : {
         title: '',
-        status: CategoryStatus.Active,
+        status: CategoryStatus.ACTIVE,
         parentId: null,
         showInMainMenu: false,
         tenantId: 1,
@@ -115,7 +115,7 @@ export const CategoryModalContent: React.FC<{
         <LabeledSelect
           name="status"
           label="Status"
-          defaultValue={CategoryStatus.Active}
+          defaultValue={CategoryStatus.ACTIVE}
           onChange={formik.handleChange}
           value={formik.values.status}
         >

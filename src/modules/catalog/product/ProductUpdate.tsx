@@ -17,6 +17,7 @@ import {
   MUTATION_UPDATE_PRODUCT,
   QUERY_GET_PRODUCT,
   QUERY_GET_PRODUCTS,
+  QUERY_PRODUCT_CATEGORIES,
 } from '../../../api';
 import { ProductUpdateInput } from '../../../api/types/globalTypes';
 import { GetProductVariables, GetProduct } from '../../../api/types/GetProduct';
@@ -24,6 +25,7 @@ import {
   UpdateProduct,
   UpdateProductVariables,
 } from '../../../api/types/UpdateProduct';
+import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
 
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ const ProductUpdate: React.FC = () => {
     refetchQueries: [
       { query: QUERY_GET_PRODUCTS },
       { query: QUERY_GET_PRODUCT, variables: { id: productId } },
+      { query: QUERY_PRODUCT_CATEGORIES },
     ],
   });
 
@@ -55,6 +58,14 @@ const ProductUpdate: React.FC = () => {
 
       if (values.price) {
         input.price = values.price.replace(',', '.') * 100;
+      }
+      if (values.categories) {
+        input.categories = (values.categories as TagProps[]).map((category) => {
+          return {
+            id: category.id as number,
+            title: category.name,
+          };
+        });
       }
       await updateProduct({ variables: { id: productId, input } });
     },

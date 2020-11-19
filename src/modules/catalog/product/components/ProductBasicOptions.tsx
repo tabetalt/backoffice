@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button } from 'theme-ui';
 import {
-  // CheckboxList,
   Field,
+  InputTags,
   LabeledSelect,
   PrefilledInput,
   Switch,
@@ -10,10 +10,17 @@ import {
 import { FormikHelpers, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
-import { GetProduct_product } from '../../../../api/types/GetProduct';
-import { ProductStatus } from '../../../../api/types/globalTypes';
 import { Error } from '../../../../components/common';
 import { formatPrice } from '../../../../helpers';
+import { useQuery } from '@apollo/client';
+import { QUERY_PRODUCT_CATEGORIES } from '../../../../api';
+import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
+import { GetCategoriesShort } from '../../../../api/types/GetCategoriesShort';
+import { ProductStatus } from '../../../../api/types/globalTypes';
+import {
+  GetProduct_product,
+  GetProduct_product_categories,
+} from '../../../../api/types/GetProduct';
 
 interface ProductBasicOptionsProps {
   product?: GetProduct_product | null;
@@ -30,7 +37,7 @@ interface ProductBasicOptionsValues {
   price: string;
   status: ProductStatus;
   isOnMainPage: boolean;
-  categories?: string[];
+  categories?: TagProps[];
   images?: string[];
 }
 
@@ -38,7 +45,7 @@ const defaultValues: ProductBasicOptionsValues = {
   title: '',
   slug: '',
   price: '',
-  status: ProductStatus.Active,
+  status: ProductStatus.ACTIVE,
   isOnMainPage: false,
   categories: [],
   images: [],
@@ -55,10 +62,9 @@ const ProductSchema = Yup.object().shape({
     .required('Required!'),
   price: Yup.number().positive().required('Required!'),
   status: Yup.string()
-    .oneOf([ProductStatus.Active, ProductStatus.Inactive])
+    .oneOf([ProductStatus.ACTIVE, ProductStatus.INACTIVE])
     .required('Required!'),
   isOnMainPage: Yup.boolean().notRequired(),
-  // TODO: categories:
   // TODO: images:
 });
 
@@ -67,19 +73,60 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   error,
   product,
 }) => {
+  const [inputTagsSuggetions] = useState<TagProps[]>([]);
   const form = useFormik<ProductBasicOptionsValues>({
     initialValues: {
       ...defaultValues,
       ...product,
       price: formatPrice(product?.price?.formatted, null),
+      categories: product?.categories.map(
+        (category: GetProduct_product_categories | null) => ({
+          id: category?.id,
+          name: category?.title,
+        })
+      ),
     } as ProductBasicOptionsValues,
     validationSchema: ProductSchema,
     onSubmit,
   });
+
+  const { data: productCategoriesSuggestions } = useQuery<GetCategoriesShort>(
+    QUERY_PRODUCT_CATEGORIES
+  );
+
+  useEffect(() => {
+    form.setFieldValue(
+      'categories',
+      product?.categories.map(
+        (category: GetProduct_product_categories | null) => ({
+          id: category?.id,
+          name: category?.title,
+        })
+      )
+    );
+  }, [product]);
+
+  useEffect(() => {
+    if (
+      productCategoriesSuggestions &&
+      productCategoriesSuggestions.categories &&
+      productCategoriesSuggestions.categories.items
+    ) {
+      productCategoriesSuggestions.categories.items.map((item) => {
+        if (item && item.title) {
+          inputTagsSuggetions.push({
+            id: item.id,
+            name: item.title,
+          });
+        }
+      });
+    }
+  }, [productCategoriesSuggestions, inputTagsSuggetions]);
+
   return (
     <form onSubmit={form.handleSubmit}>
       <Box sx={{ maxWidth: 820, '> div': { mb: 3 } }}>
-        {error && <Error message="Filed to save product." />}
+        {error && <Error message="Failed to save product." />}
         <div>
           <Field
             label="Produktnavn"
@@ -124,21 +171,22 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             <Error message={form.errors.price} />
           )}
         </div>
-        {/*
         <div>
           <Field
-            as={CheckboxList}
+            as={InputTags}
             label="Kategori"
-            options={[]}
+            suggestions={inputTagsSuggetions}
             name="categories"
-            value={form.values.categories}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
+            tags={form.values.categories}
+            onChange={(tagProps: TagProps[]) =>
+              form.setFieldValue('categories', tagProps)
+            }
           />
           {form.touched.categories && form.errors.categories && (
             <Error message={form.errors.categories} />
           )}
         </div>
+        {/*
         <div>
           <Field
             label="Bilder"
@@ -171,8 +219,8 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           >
-            <option value={ProductStatus.Active}>Active</option>
-            <option value={ProductStatus.Inactive}>Inaktiv</option>
+            <option value={ProductStatus.ACTIVE}>Active</option>
+            <option value={ProductStatus.INACTIVE}>Inaktiv</option>
           </LabeledSelect>
           {form.touched.status && form.errors.status && (
             <Error message={form.errors.status} />

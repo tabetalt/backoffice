@@ -13,7 +13,7 @@ import { TextPosition } from '@tabetalt/kit/build/components/Input/components/pr
 import { Error } from '../../../../components/common';
 import { formatPrice } from '../../../../helpers';
 import { useQuery } from '@apollo/client';
-import { QUERY_PRODUCT_CATEGORIES_WITHOUT_PARENT } from '../../../../api';
+import { QUERY_PRODUCT_CATEGORIES } from '../../../../api';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
 import { GetCategoriesShort } from '../../../../api/types/GetCategoriesShort';
 import { ProductStatus } from '../../../../api/types/globalTypes';
@@ -82,7 +82,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
       categories: product?.categories.map(
         (category: GetProduct_product_categories | null) => ({
           id: category?.id,
-          title: category?.title,
+          name: category?.title,
         })
       ),
     } as ProductBasicOptionsValues,
@@ -91,8 +91,20 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   });
 
   const { data: productCategoriesSuggestions } = useQuery<GetCategoriesShort>(
-    QUERY_PRODUCT_CATEGORIES_WITHOUT_PARENT
+    QUERY_PRODUCT_CATEGORIES
   );
+
+  useEffect(() => {
+    form.setFieldValue(
+      'categories',
+      product?.categories.map(
+        (category: GetProduct_product_categories | null) => ({
+          id: category?.id,
+          name: category?.title,
+        })
+      )
+    );
+  }, [product]);
 
   useEffect(() => {
     if (

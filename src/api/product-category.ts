@@ -45,7 +45,7 @@ export const QUERY_PRODUCT_CATEGORIES_WITH_PARENT = gql`
   ${FRAGMENT_CATEGORY}
 `;
 
-export const QUERY_PRODUCT_CATEGORIES_WITHOUT_PARENT = gql`
+export const QUERY_PRODUCT_CATEGORIES = gql`
   query GetCategoriesShort {
     categories {
       items {

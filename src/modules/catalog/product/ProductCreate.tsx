@@ -2,7 +2,11 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Heading } from 'theme-ui';
 import { useMutation } from '@apollo/client';
-import { MUTATION_CREATE_PRODUCT, QUERY_GET_PRODUCTS } from '../../../api';
+import {
+  MUTATION_CREATE_PRODUCT,
+  QUERY_GET_PRODUCTS,
+  QUERY_PRODUCT_CATEGORIES,
+} from '../../../api';
 import {
   CreateProduct,
   CreateProductVariables,
@@ -11,6 +15,7 @@ import Layout from '../../../components/layout/Layout';
 import { headerLinks } from '../products';
 import ProductBasicOptions from './components/ProductBasicOptions';
 import ProductNavigation from './components/ProductNavigation';
+import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
 
 const ProductCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +23,10 @@ const ProductCreate: React.FC = () => {
     CreateProduct,
     CreateProductVariables
   >(MUTATION_CREATE_PRODUCT, {
-    refetchQueries: [{ query: QUERY_GET_PRODUCTS }],
+    refetchQueries: [
+      { query: QUERY_GET_PRODUCTS },
+      { query: QUERY_PRODUCT_CATEGORIES },
+    ],
   });
 
   const onSubmitBasic = useCallback(
@@ -28,6 +36,15 @@ const ProductCreate: React.FC = () => {
         ...values,
         price: values.price.replace(',', '.') * 100,
       };
+      if (values.categories) {
+        input.categories = (values.categories as TagProps[]).map((category) => {
+          return {
+            id: category.id as number,
+            title: category.name,
+          };
+        });
+      }
+
       const res = await createProduct({ variables: { input } });
       navigate(`/catalog/product/${res.data?.createProduct?.id}/basic`, {
         replace: true,

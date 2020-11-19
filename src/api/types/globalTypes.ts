@@ -43,7 +43,7 @@ export interface ImageCreateInput {
 }
 
 export interface ProductCategoryCreateInput {
-  id: number;
+  id?: number | null;
   title: string;
 }
 

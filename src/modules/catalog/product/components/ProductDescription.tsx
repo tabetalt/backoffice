@@ -22,9 +22,9 @@ interface ProductDescriptionValues {
 }
 
 const ProductDescriptionSchema = Yup.object().shape({
-  shortDescription: Yup.string().required('Required!'),
-  description: Yup.string().required('Required!'),
-  technicalDescription: Yup.string().required('Required!'),
+  shortDescription: Yup.string().nullable().notRequired(),
+  description: Yup.string().nullable().notRequired(),
+  technicalDescription: Yup.string().nullable().notRequired(),
 });
 
 const ProductDescription: React.FC<ProductDescriptionProps> = ({

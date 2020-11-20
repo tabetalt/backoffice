@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface CategoryShort {
-  __typename: "Category";
+  __typename: 'Category';
   id: number;
   title: string;
 }

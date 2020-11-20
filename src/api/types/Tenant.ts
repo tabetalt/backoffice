@@ -8,6 +8,6 @@
 // ====================================================
 
 export interface Tenant {
-  __typename: "Tenant";
+  __typename: 'Tenant';
   id: number;
 }

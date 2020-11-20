@@ -3,14 +3,14 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { CategoryUpdateInput, CategoryStatus } from "./globalTypes";
+import { CategoryUpdateInput, CategoryStatus } from './globalTypes';
 
 // ====================================================
 // GraphQL mutation operation: UpdateCategory
 // ====================================================
 
 export interface UpdateCategory_updateCategory_parent {
-  __typename: "Category";
+  __typename: 'Category';
   id: number;
   tenantId: number;
   title: string;
@@ -20,7 +20,7 @@ export interface UpdateCategory_updateCategory_parent {
 }
 
 export interface UpdateCategory_updateCategory {
-  __typename: "Category";
+  __typename: 'Category';
   id: number;
   tenantId: number;
   title: string;

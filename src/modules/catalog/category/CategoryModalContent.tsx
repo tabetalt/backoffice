@@ -1,9 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
+import * as Yup from 'yup';
 import { useMutation, useQuery } from '@apollo/client';
 import { LabeledSelect, Switch, Field } from '@tabetalt/kit';
 import { useFormik } from 'formik';
 import { Box, Button } from 'theme-ui';
+import { Error } from '../../../components/common';
 import {
   MUTATION_CREATE_PRODUCT_CATEGORY,
   MUTATION_UPDATE_PRODUCT_CATEGORY,
@@ -17,6 +19,13 @@ import {
 } from '../../../api/types/globalTypes';
 import { Category } from '../../../api/types/Category';
 
+const CategorySchema = Yup.object().shape({
+  title: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .required('Required!'),
+});
+
 export const CategoryModalContent: React.FC<{
   currentCategory: Category | null;
   onRequestClose: () => void;
@@ -24,8 +33,12 @@ export const CategoryModalContent: React.FC<{
   const { data } = useQuery<GetCategories>(
     QUERY_PRODUCT_CATEGORIES_WITH_PARENT
   );
-  const [updateCategory] = useMutation(MUTATION_UPDATE_PRODUCT_CATEGORY);
-  const [createCategory] = useMutation(MUTATION_CREATE_PRODUCT_CATEGORY);
+  const [updateCategory, { error: updateError }] = useMutation(
+    MUTATION_UPDATE_PRODUCT_CATEGORY
+  );
+  const [createCategory, { error: createError }] = useMutation(
+    MUTATION_CREATE_PRODUCT_CATEGORY
+  );
 
   const onSubmit = async (
     values: CategoryUpdateInput | CategoryCreateInput
@@ -64,6 +77,7 @@ export const CategoryModalContent: React.FC<{
 
   const formik = useFormik({
     initialValues: initialValues as CategoryCreateInput,
+    validationSchema: CategorySchema,
     onSubmit,
   });
 
@@ -89,13 +103,21 @@ export const CategoryModalContent: React.FC<{
   return (
     <form onSubmit={formik.handleSubmit}>
       <Box sx={{ maxWidth: 820, '> div': { mb: 3 }, mt: '32px' }}>
-        <Field
-          name="title"
-          label="Navn på kategori"
-          placeholder="Rabattnavn"
-          onChange={formik.handleChange}
-          value={formik.values.title}
-        />
+        {createError && updateError && (
+          <Error message="Failed to save category." />
+        )}
+        <div>
+          <Field
+            name="title"
+            label="Navn på kategori"
+            placeholder="Rabattnavn"
+            onChange={formik.handleChange}
+            value={formik.values.title}
+          />
+          {formik.touched.title && formik.errors.title && (
+            <Error message={formik.errors.title} />
+          )}
+        </div>
         <LabeledSelect
           name="parentId"
           defaultValue={0}

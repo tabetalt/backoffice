@@ -54,6 +54,7 @@ const ProductUpdate: React.FC = () => {
         'id',
         '__typename',
         'price',
+        'categories',
       ]) as ProductUpdateInput;
 
       if (values.price) {

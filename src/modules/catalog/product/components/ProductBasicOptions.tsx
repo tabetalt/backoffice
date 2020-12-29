@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import _ from 'lodash';
 import { Box, Button } from 'theme-ui';
 import {
   Field,
@@ -36,14 +35,14 @@ interface ProductBasicOptionsProps {
   error?: boolean;
 }
 
-interface ProductBasicOptionsValues {
+export interface ProductBasicOptionsValues {
   title: string;
   slug: string;
   price: string;
   status: ProductStatus;
   isOnMainPage: boolean;
   categories?: TagProps[];
-  images?: string[];
+  images?: { url: string }[];
 }
 
 const defaultValues: ProductBasicOptionsValues = {
@@ -122,7 +121,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
 
   const uploadProductImage = useCallback(
     async (files: FileList) => {
-      _.map(Array.from(files), async ({ name, type, size }, i) => {
+      Array.from(files).map(async ({name, type, size}, i) => {
         const {
           data: {
             signedUrl: { url, accessUrl },

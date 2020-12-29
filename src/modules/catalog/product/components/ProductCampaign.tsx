@@ -16,7 +16,7 @@ interface ProductCampaignProps {
   error?: boolean;
 }
 
-interface ProductCampaignValues {
+export interface ProductCampaignValues {
   title: string;
 }
 

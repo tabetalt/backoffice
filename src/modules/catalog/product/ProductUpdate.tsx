@@ -1,14 +1,23 @@
 import React, { useCallback } from 'react';
-import _ from 'lodash';
 import { useRoutes, useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, Heading } from 'theme-ui';
 import { LoaderIcon } from '@tabetalt/kit';
 import Layout from '../../../components/layout/Layout';
-import ProductBasicOptions from './components/ProductBasicOptions';
-import ProductDescription from './components/ProductDescription';
-import ProductInventory from './components/ProductInventory';
-import ProductCampaign from './components/ProductCampaign';
-import ProductVariants from './components/ProductVariants';
+import ProductBasicOptions, {
+  ProductBasicOptionsValues,
+} from './components/ProductBasicOptions';
+import ProductDescription, {
+  ProductDescriptionValues,
+} from './components/ProductDescription';
+import ProductInventory, {
+  ProductInventoryValues,
+} from './components/ProductInventory';
+import ProductCampaign, {
+  ProductCampaignValues,
+} from './components/ProductCampaign';
+import ProductVariants, {
+  ProductVariantsValues,
+} from './components/ProductVariants';
 import ProductNavigation from './components/ProductNavigation';
 import { Error } from '../../../components/common';
 import { headerLinks } from '../products';
@@ -20,7 +29,16 @@ import {
   useGetProductQuery,
   useUpdateProductMutation,
   ProductUpdateInput,
+  GetProductQuery,
 } from '../../../generated/graphql';
+
+export type Product = GetProductQuery['product'];
+export type InputProductValues =
+  | ProductBasicOptionsValues
+  | ProductDescriptionValues
+  | ProductInventoryValues
+  | ProductVariantsValues
+  | ProductCampaignValues;
 
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
@@ -45,19 +63,20 @@ const ProductUpdate: React.FC = () => {
   });
 
   const onSubmit = useCallback(
-    async (values) => {
-      const input = _.omit({ tenantId: 1, ...data?.product, ...values }, [
-        'id',
-        '__typename',
-        'price',
-        'categories',
-      ]) as ProductUpdateInput;
+    async (values: Partial<ProductBasicOptionsValues>) => {
+      const { id: _id, __typename, price, categories, ...inputVars } = {
+        ...data?.product,
+        ...values,
+      };
 
-      if (values.price) {
-        input.price = values.price.replace(',', '.') * 100;
+      const input = inputVars as ProductUpdateInput;
+
+      if (values.price && typeof values.price === 'string') {
+        // TODO: This is not the way we should handle monetary values.
+        input.price = Number(values.price.replace(',', '.')) * 100;
       }
       if (values.categories) {
-        input.categories = (values.categories as TagProps[]).map(
+        input.categories = ((values.categories as unknown) as TagProps[]).map(
           ({ id, name }) => ({ id: id as number, title: name })
         );
       }

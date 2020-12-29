@@ -5,19 +5,20 @@ import * as Yup from 'yup';
 import { FormikHelpers, useFormik } from 'formik';
 import { Error } from '../../../../components/common';
 import { GetProductQuery } from '../../../../generated/graphql';
+import { InputProductValues } from '../ProductUpdate';
 
 export type Product = GetProductQuery['product'];
 
 interface ProductDescriptionProps {
   product?: Product | null;
   onSubmit: (
-    values: ProductDescriptionValues,
-    formikHelpers: FormikHelpers<ProductDescriptionValues>
+    values: InputProductValues,
+    formikHelpers: FormikHelpers<InputProductValues>
   ) => void;
   error?: boolean;
 }
 
-interface ProductDescriptionValues {
+export interface ProductDescriptionValues {
   shortDescription: string | null;
   description: string | null;
   technicalDescription: string | null;

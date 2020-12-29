@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import * as Yup from 'yup';
 import { LabeledSelect, Switch, Field } from '@tabetalt/kit';
 import { useFormik } from 'formik';
@@ -34,13 +33,13 @@ export const CategoryModalContent: React.FC<{
   const onSubmit = async (
     values: CategoryUpdateInput | CategoryCreateInput
   ) => {
-    const input = _.pick(
-      {
-        ...values,
-        parentId: values.parentId ? Number(values.parentId) : null,
-      },
-      ['status', 'title', 'showInMainMenu', 'parentId', 'tenantId']
-    );
+    const input = {
+      status: values.status,
+      title: values.title,
+      showInMainMenu: values.showInMainMenu,
+      tenantId: values.tenantId,
+      parentId: values.parentId ? Number(values.parentId) : null,
+    };
 
     if (currentCategory) {
       await updateCategory({

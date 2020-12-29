@@ -50,7 +50,7 @@ interface ProductVariantsProps {
   error?: boolean;
 }
 
-interface ProductVariantsValues {
+export interface ProductVariantsValues {
   title: string;
 }
 

@@ -1,23 +1,20 @@
 import React from 'react';
 import _ from 'lodash';
 import * as Yup from 'yup';
-import { useMutation, useQuery } from '@apollo/client';
 import { LabeledSelect, Switch, Field } from '@tabetalt/kit';
 import { useFormik } from 'formik';
 import { Box, Button } from 'theme-ui';
 import { Error } from '../../../components/common';
 import {
-  MUTATION_CREATE_PRODUCT_CATEGORY,
-  MUTATION_UPDATE_PRODUCT_CATEGORY,
-  QUERY_PRODUCT_CATEGORIES_WITH_PARENT,
-} from '../../../api';
-import { GetCategories } from '../../../api/types/GetCategories';
-import {
-  CategoryCreateInput,
+  GetCategoriesWithParentDocument,
+  useCreateCategoryMutation,
+  useGetCategoriesWithParentQuery,
+  useUpdateCategoryMutation,
   CategoryUpdateInput,
+  CategoryCreateInput,
   CategoryStatus,
-} from '../../../api/types/globalTypes';
-import { Category } from '../../../api/types/Category';
+  Category,
+} from '../../../generated/graphql';
 
 const CategorySchema = Yup.object().shape({
   title: Yup.string()
@@ -30,15 +27,9 @@ export const CategoryModalContent: React.FC<{
   currentCategory: Category | null;
   onRequestClose: () => void;
 }> = ({ currentCategory, onRequestClose }) => {
-  const { data } = useQuery<GetCategories>(
-    QUERY_PRODUCT_CATEGORIES_WITH_PARENT
-  );
-  const [updateCategory, { error: updateError }] = useMutation(
-    MUTATION_UPDATE_PRODUCT_CATEGORY
-  );
-  const [createCategory, { error: createError }] = useMutation(
-    MUTATION_CREATE_PRODUCT_CATEGORY
-  );
+  const { data } = useGetCategoriesWithParentQuery();
+  const [updateCategory, { error: updateError }] = useUpdateCategoryMutation();
+  const [createCategory, { error: createError }] = useCreateCategoryMutation();
 
   const onSubmit = async (
     values: CategoryUpdateInput | CategoryCreateInput
@@ -54,12 +45,12 @@ export const CategoryModalContent: React.FC<{
     if (currentCategory) {
       await updateCategory({
         variables: { id: currentCategory.id, input },
-        refetchQueries: [{ query: QUERY_PRODUCT_CATEGORIES_WITH_PARENT }],
+        refetchQueries: [{ query: GetCategoriesWithParentDocument }],
       });
     } else {
       await createCategory({
         variables: { input },
-        refetchQueries: [{ query: QUERY_PRODUCT_CATEGORIES_WITH_PARENT }],
+        refetchQueries: [{ query: GetCategoriesWithParentDocument }],
       });
     }
     onRequestClose();
@@ -69,7 +60,7 @@ export const CategoryModalContent: React.FC<{
     ? currentCategory
     : {
         title: '',
-        status: CategoryStatus.ACTIVE,
+        status: CategoryStatus.Active,
         parentId: null,
         showInMainMenu: false,
         tenantId: 1,
@@ -137,7 +128,7 @@ export const CategoryModalContent: React.FC<{
         <LabeledSelect
           name="status"
           label="Status"
-          defaultValue={CategoryStatus.ACTIVE}
+          defaultValue={CategoryStatus.Active}
           onChange={formik.handleChange}
           value={formik.values.status}
         >

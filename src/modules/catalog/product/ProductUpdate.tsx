@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import _ from 'lodash';
-import { useMutation, useQuery } from '@apollo/client';
 import { useRoutes, useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, Heading } from 'theme-ui';
 import { LoaderIcon } from '@tabetalt/kit';
@@ -13,38 +12,35 @@ import ProductVariants from './components/ProductVariants';
 import ProductNavigation from './components/ProductNavigation';
 import { Error } from '../../../components/common';
 import { headerLinks } from '../products';
-import {
-  MUTATION_UPDATE_PRODUCT,
-  QUERY_GET_PRODUCT,
-  QUERY_GET_PRODUCTS,
-  QUERY_PRODUCT_CATEGORIES,
-} from '../../../api';
-import { ProductUpdateInput } from '../../../api/types/globalTypes';
-import { GetProductVariables, GetProduct } from '../../../api/types/GetProduct';
-import {
-  UpdateProduct,
-  UpdateProductVariables,
-} from '../../../api/types/UpdateProduct';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
+import {
+  GetCategoriesShortDocument,
+  GetProductDocument,
+  GetProductsDocument,
+  useGetProductQuery,
+  useUpdateProductMutation,
+  ProductUpdateInput,
+} from '../../../generated/graphql';
 
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const productId = parseInt(params.productId, 10);
+  const productId = Number(params.productId);
 
-  const { data, loading, error: errorGetProduct } = useQuery<
-    GetProduct,
-    GetProductVariables
-  >(QUERY_GET_PRODUCT, { variables: { id: productId } });
+  const { data, loading, error: errorGetProduct } = useGetProductQuery({
+    variables: {
+      id: productId,
+    },
+  });
 
-  const [updateProduct, { error: errorUpdateProduct }] = useMutation<
-    UpdateProduct,
-    UpdateProductVariables
-  >(MUTATION_UPDATE_PRODUCT, {
+  const [
+    updateProduct,
+    { error: errorUpdateProduct },
+  ] = useUpdateProductMutation({
     refetchQueries: [
-      { query: QUERY_GET_PRODUCTS },
-      { query: QUERY_GET_PRODUCT, variables: { id: productId } },
-      { query: QUERY_PRODUCT_CATEGORIES },
+      { query: GetProductsDocument },
+      { query: GetProductDocument, variables: { id: productId } },
+      { query: GetCategoriesShortDocument },
     ],
   });
 

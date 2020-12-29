@@ -1,0 +1,3 @@
+fragment Tenant on Tenant {
+  id
+}

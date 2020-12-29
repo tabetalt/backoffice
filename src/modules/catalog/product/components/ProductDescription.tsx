@@ -4,10 +4,12 @@ import { Box, Button } from 'theme-ui';
 import * as Yup from 'yup';
 import { FormikHelpers, useFormik } from 'formik';
 import { Error } from '../../../../components/common';
-import { GetProduct_product } from '../../../../api/types/GetProduct';
+import { GetProductQuery } from '../../../../generated/graphql';
+
+export type Product = GetProductQuery['product'];
 
 interface ProductDescriptionProps {
-  product?: GetProduct_product | null;
+  product?: Product | null;
   onSubmit: (
     values: ProductDescriptionValues,
     formikHelpers: FormikHelpers<ProductDescriptionValues>

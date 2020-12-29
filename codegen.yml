@@ -1,0 +1,13 @@
+overwrite: true
+schema: 'https://dev.v1.api.tabetalt.no/'
+documents: 'src/**/*.graphql'
+generates:
+  src/generated/graphql.ts:
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+      - fragment-matcher

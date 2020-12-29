@@ -1,19 +1,18 @@
 import React from 'react';
 import { icons, Table } from '@tabetalt/kit';
 import { Box, IconButton, Label } from 'theme-ui';
-import { useMutation } from '@apollo/client';
 import {
-  MUTATION_DELETE_PRODUCT_CATEGORY,
-  QUERY_PRODUCT_CATEGORIES_WITH_PARENT,
-} from '../../../api';
-import { GetCategories_categories_items } from '../../../api/types/GetCategories';
+  GetCategoriesWithParentDocument,
+  useDeleteCategoryMutation,
+} from '../../../generated/graphql';
+import type { CategoryItem } from './ProductCategories';
 
 export interface CategoriesListingProps {
   data: any;
   openModal: boolean;
   setOpenModal: (value: React.SetStateAction<boolean>) => void;
   setCurrentCategory: (
-    value: React.SetStateAction<GetCategories_categories_items | null>
+    value: React.SetStateAction<CategoryItem | null>
   ) => void;
 }
 
@@ -23,19 +22,15 @@ const CategoriesListing: React.FC<CategoriesListingProps> = ({
   setOpenModal,
   setCurrentCategory,
 }) => {
-  const [deleteCategory] = useMutation(MUTATION_DELETE_PRODUCT_CATEGORY);
+  const [deleteCategory] = useDeleteCategoryMutation();
 
-  const actions = ({
-    row,
-  }: {
-    row: { original: GetCategories_categories_items };
-  }) => (
+  const actions = ({ row }: { row: { original: CategoryItem } }) => (
     <Box sx={{ textAlign: 'right' }}>
       <IconButton
         onClick={() => {
           deleteCategory({
             variables: { id: row.original.id },
-            refetchQueries: [{ query: QUERY_PRODUCT_CATEGORIES_WITH_PARENT }],
+            refetchQueries: [{ query: GetCategoriesWithParentDocument }],
           });
         }}
       >
@@ -68,7 +63,7 @@ const CategoriesListing: React.FC<CategoriesListingProps> = ({
   const parentCategoryTitle = ({
     row,
   }: {
-    row: { original: GetCategories_categories_items };
+    row: { original: CategoryItem };
   }) => (
     <Box>
       <Label>{row.original.parent?.title}</Label>

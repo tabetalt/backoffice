@@ -1,25 +1,22 @@
-import { useQuery } from '@apollo/client';
 import { Modal, LoaderIcon } from '@tabetalt/kit';
 import React, { useState } from 'react';
 import { Box, Button } from 'theme-ui';
-import { QUERY_PRODUCT_CATEGORIES_WITH_PARENT } from '../../../api';
-import {
-  GetCategories,
-  GetCategories_categories_items,
-} from '../../../api/types/GetCategories';
 import Layout from '../../../components/layout/Layout';
+import {
+  GetCategoriesWithParentQuery,
+  useGetCategoriesWithParentQuery,
+} from '../../../generated/graphql';
 import CategoriesListing from './CategoriesListing';
 import { CategoryModalContent } from './CategoryModalContent';
 
+export type CategoryItem = GetCategoriesWithParentQuery['categories']['items'][0];
+
 const Categories: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [
-    currentCategory,
-    setCurrentCategory,
-  ] = useState<GetCategories_categories_items | null>(null);
-  const { data, loading, error } = useQuery<GetCategories>(
-    QUERY_PRODUCT_CATEGORIES_WITH_PARENT
+  const [currentCategory, setCurrentCategory] = useState<CategoryItem | null>(
+    null
   );
+  const { data, loading, error } = useGetCategoriesWithParentQuery();
 
   let content = null;
   if (loading) {

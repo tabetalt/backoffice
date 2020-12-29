@@ -1,0 +1,100 @@
+fragment ProductShort on Product {
+  id
+  tenantId
+  status
+  title
+  slug
+  isOnMainPage
+  shortDescription
+  description
+  technicalDescription
+  isAvailable
+  count
+  stockControl
+  inStockNum
+  priceId
+}
+
+fragment Price on Price {
+  formatted {
+    vatAmount
+    grossAmount
+    netAmount
+  }
+}
+
+fragment Variant on Variant {
+  id
+}
+
+fragment Attribute on Attribute {
+  id
+}
+
+fragment Product on Product {
+  ...ProductShort
+  price {
+    ...Price
+  }
+  variants {
+    ...Variant
+  }
+  attributes {
+    ...Attribute
+  }
+  categories {
+    ...Category
+  }
+  images {
+    url
+  }
+}
+
+query GetProducts {
+  products {
+    items {
+      ...ProductShort
+      price {
+        ...Price
+      }
+    }
+  }
+}
+
+mutation DeleteProduct($id: Int!) {
+  deleteProduct(id: $id)
+}
+
+query GetProduct($id: Int!) {
+  product(id: $id) {
+    ...ProductShort
+    price {
+      ...Price
+    }
+    categories {
+      ...CategoryShort
+    }
+    images {
+      id
+      url
+    }
+  }
+}
+
+mutation CreateProduct($input: ProductCreateInput!) {
+  createProduct(input: $input) {
+    ...ProductShort
+    price {
+      ...Price
+    }
+  }
+}
+
+mutation UpdateProduct($id: Int!, $input: ProductUpdateInput!) {
+  updateProduct(id: $id, input: $input) {
+    ...ProductShort
+    price {
+      ...Price
+    }
+  }
+}

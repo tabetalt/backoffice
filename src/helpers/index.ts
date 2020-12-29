@@ -1,8 +1,8 @@
 import numeral from 'numeral';
-import { Product_price_formatted } from '../api/types/Product';
+import { FormattedPrice } from '../generated/graphql';
 
 export const formatPrice = (
-  formattedPrice?: Product_price_formatted | null,
+  formattedPrice?: FormattedPrice | null,
   currency: string | null = 'NOK'
 ): string => {
   const amount = numeral(

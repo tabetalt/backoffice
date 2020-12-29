@@ -3,10 +3,12 @@ import { Box } from 'theme-ui';
 import { FormikHelpers } from 'formik';
 import { LabeledSelect, PrefilledInput } from '@tabetalt/kit';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
-import { GetProduct_product } from '../../../../api/types/GetProduct';
+import { GetProductQuery } from '../../../../generated/graphql';
+
+export type Product = GetProductQuery['product'];
 
 interface ProductCampaignProps {
-  product?: GetProduct_product | null;
+  product?: Product | null;
   onSubmit: (
     values: ProductCampaignValues,
     formikHelpers: FormikHelpers<ProductCampaignValues>

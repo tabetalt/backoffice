@@ -1,33 +1,28 @@
 import React, { useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
 import { Box, IconButton, Label } from 'theme-ui';
 import { Table, StatusLabel, icons } from '@tabetalt/kit';
 import type { CellProps } from 'react-table';
-import {
-  DeleteProduct,
-  DeleteProductVariables,
-} from '../../../api/types/DeleteProduct';
-import { GetProducts_products_items } from '../../../api/types/GetProducts';
-import { MUTATION_DELETE_PRODUCT, QUERY_GET_PRODUCTS } from '../../../api';
 import { formatPrice } from '../../../helpers';
-import { GetProduct_product } from '../../../api/types/GetProduct';
+import {
+  GetProductsDocument,
+  useDeleteProductMutation,
+} from '../../../generated/graphql';
+
+import { ProductItem } from './Products';
 
 const { OpenIcon, TrashIcon, PencilIcon } = icons;
 
 export interface ProductsListingActionsProps {
-  product: GetProduct_product;
+  product: ProductItem;
 }
 
 const ProductsListingActions = ({ product }: ProductsListingActionsProps) => {
   const { id: productId } = product;
-
   const navigate = useNavigate();
-  const [deleteProduct, { loading }] = useMutation<
-    DeleteProduct,
-    DeleteProductVariables
-  >(MUTATION_DELETE_PRODUCT, {
-    refetchQueries: [{ query: QUERY_GET_PRODUCTS }],
+
+  const [deleteProduct, { loading }] = useDeleteProductMutation({
+    refetchQueries: [{ query: GetProductsDocument }],
   });
 
   const onRemove = useCallback(async () => {
@@ -53,11 +48,10 @@ const ProductsListingActions = ({ product }: ProductsListingActionsProps) => {
 };
 
 export interface ProductsListingProps {
-  data: (GetProducts_products_items | null)[] | null | undefined;
+  data: (ProductItem | null)[] | null | undefined;
 }
 
 const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
-  console.log(data);
   const columns = useMemo(
     () => [
       {
@@ -67,15 +61,13 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       {
         Header: 'Produktpris',
         accessor: 'price',
-        Cell: ({ row: { original: product } }: CellProps<GetProduct_product>) =>
+        Cell: ({ row: { original: product } }: CellProps<ProductItem>) =>
           formatPrice(product?.price?.formatted),
       },
       {
         Header: 'Lagerstatus',
         accessor: 'stockControl',
-        Cell: ({
-          row: { original: product },
-        }: CellProps<GetProduct_product>) => {
+        Cell: ({ row: { original: product } }: CellProps<ProductItem>) => {
           const label =
             product.stockControl && product.inStockNum && product.inStockNum > 0
               ? 'På lager'
@@ -90,9 +82,7 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       {
         Header: 'Status',
         accessor: 'status',
-        Cell: ({
-          row: { original: product },
-        }: CellProps<GetProduct_product>) => {
+        Cell: ({ row: { original: product } }: CellProps<ProductItem>) => {
           const label = product.status === 'ACTIVE' ? 'Aktiv' : 'Inaktiv';
           return (
             <StatusLabel active={product.status === 'ACTIVE'} label={label} />
@@ -102,9 +92,7 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
       {
         Header: '',
         accessor: 'actions',
-        Cell: ({
-          row: { original: product },
-        }: CellProps<GetProduct_product>) => (
+        Cell: ({ row: { original: product } }: CellProps<ProductItem>) => (
           <ProductsListingActions product={product} />
         ),
       },

@@ -3,11 +3,13 @@ import React from 'react';
 import { Box, Button } from 'theme-ui';
 import * as Yup from 'yup';
 import { FormikHelpers, useFormik } from 'formik';
-import { GetProduct_product } from '../../../../api/types/GetProduct';
 import { Error } from '../../../../components/common';
+import { GetProductQuery } from '../../../../generated/graphql';
+
+export type Product = GetProductQuery['product'];
 
 interface ProductInventoryProps {
-  product?: GetProduct_product | null;
+  product?: Product | null;
   onSubmit: (
     values: ProductInventoryValues,
     formikHelpers: FormikHelpers<ProductInventoryValues>

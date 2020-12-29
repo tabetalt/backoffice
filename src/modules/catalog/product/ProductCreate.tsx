@@ -1,31 +1,23 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Heading } from 'theme-ui';
-import { useMutation } from '@apollo/client';
-import {
-  MUTATION_CREATE_PRODUCT,
-  QUERY_GET_PRODUCTS,
-  QUERY_PRODUCT_CATEGORIES,
-} from '../../../api';
-import {
-  CreateProduct,
-  CreateProductVariables,
-} from '../../../api/types/CreateProduct';
 import Layout from '../../../components/layout/Layout';
 import { headerLinks } from '../products';
 import ProductBasicOptions from './components/ProductBasicOptions';
 import ProductNavigation from './components/ProductNavigation';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
+import {
+  GetCategoriesShortDocument,
+  GetProductDocument,
+  useCreateProductMutation,
+} from '../../../generated/graphql';
 
 const ProductCreate: React.FC = () => {
   const navigate = useNavigate();
-  const [createProduct, { error }] = useMutation<
-    CreateProduct,
-    CreateProductVariables
-  >(MUTATION_CREATE_PRODUCT, {
+  const [createProduct, { error }] = useCreateProductMutation({
     refetchQueries: [
-      { query: QUERY_GET_PRODUCTS },
-      { query: QUERY_PRODUCT_CATEGORIES },
+      { query: GetProductDocument },
+      { query: GetCategoriesShortDocument },
     ],
   });
 

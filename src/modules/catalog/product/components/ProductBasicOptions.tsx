@@ -14,23 +14,21 @@ import * as Yup from 'yup';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import { Error } from '../../../../components/common';
 import { formatPrice } from '../../../../helpers';
-import { useQuery } from '@apollo/client';
-import {
-  QUERY_PRODUCT_CATEGORIES,
-  QUERY_GET_SIGNED_URL,
-} from '../../../../api';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
-import { GetCategoriesShort } from '../../../../api/types/GetCategoriesShort';
-import { ProductStatus } from '../../../../api/types/globalTypes';
-import {
-  GetProduct_product,
-  GetProduct_product_categories,
-} from '../../../../api/types/GetProduct';
-import { GetSignedUrl } from '../../../../api/types/GetSignedUrl';
 import gqlClient from '../../../../api/client';
+import {
+  GetProductQuery,
+  GetSignedUrlDocument,
+  GetSignedUrlQuery,
+  GetSignedUrlQueryVariables,
+  ProductStatus,
+  useGetCategoriesShortQuery,
+} from '../../../../generated/graphql';
+
+export type Product = GetProductQuery['product'];
 
 interface ProductBasicOptionsProps {
-  product?: GetProduct_product | null;
+  product?: Product | null;
   onSubmit: (
     values: ProductBasicOptionsValues,
     formikHelpers: FormikHelpers<ProductBasicOptionsValues>
@@ -52,7 +50,7 @@ const defaultValues: ProductBasicOptionsValues = {
   title: '',
   slug: '',
   price: '',
-  status: ProductStatus.ACTIVE,
+  status: ProductStatus.Active,
   isOnMainPage: false,
   categories: [],
   images: [],
@@ -69,7 +67,7 @@ const ProductSchema = Yup.object().shape({
     .required('Required!'),
   price: Yup.number().positive().required('Required!'),
   status: Yup.string()
-    .oneOf([ProductStatus.ACTIVE, ProductStatus.INACTIVE])
+    .oneOf([ProductStatus.Active, ProductStatus.Inactive])
     .required('Required!'),
   isOnMainPage: Yup.boolean().notRequired(),
   // TODO: images:
@@ -86,41 +84,31 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
       ...defaultValues,
       ...product,
       price: formatPrice(product?.price?.formatted, null),
-      categories: product?.categories.map(
-        (category: GetProduct_product_categories | null) => ({
-          id: category?.id,
-          name: category?.title,
-        })
-      ),
+      categories: product?.categories.map((category) => ({
+        id: category?.id,
+        name: category?.title,
+      })),
     } as ProductBasicOptionsValues,
     validationSchema: ProductSchema,
     onSubmit,
   });
 
-  const { data: productCategoriesSuggestions } = useQuery<GetCategoriesShort>(
-    QUERY_PRODUCT_CATEGORIES
-  );
+  const { data: productCategoriesSuggestions } = useGetCategoriesShortQuery();
 
   const { setFieldValue } = form;
 
   useEffect(() => {
     setFieldValue(
       'categories',
-      product?.categories.map(
-        (category: GetProduct_product_categories | null) => ({
-          id: category?.id,
-          name: category?.title,
-        })
-      )
+      product?.categories.map((category) => ({
+        id: category?.id,
+        name: category?.title,
+      }))
     );
   }, [product, setFieldValue]);
 
   useEffect(() => {
-    if (
-      productCategoriesSuggestions &&
-      productCategoriesSuggestions.categories &&
-      productCategoriesSuggestions.categories.items
-    ) {
+    if (productCategoriesSuggestions?.categories?.items) {
       productCategoriesSuggestions.categories.items.forEach((item) => {
         if (item && item.title) {
           inputTagsSuggetions.push({
@@ -132,7 +120,6 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     }
   }, [productCategoriesSuggestions, inputTagsSuggetions]);
 
-  // const [getSignedUrl] = useLazyQuery(QUERY_UPLOADING_SIGNED_URL);
   const uploadProductImage = useCallback(
     async (files: FileList) => {
       _.map(Array.from(files), async ({ name, type, size }, i) => {
@@ -140,8 +127,11 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
           data: {
             signedUrl: { url, accessUrl },
           },
-        }: { data: GetSignedUrl } = await gqlClient.query({
-          query: QUERY_GET_SIGNED_URL,
+        } = await gqlClient.query<
+          GetSignedUrlQuery,
+          GetSignedUrlQueryVariables
+        >({
+          query: GetSignedUrlDocument,
           variables: {
             input: {
               filename: name,
@@ -151,7 +141,6 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
           },
         });
         await fetch(url, { method: 'PUT', body: files[i] });
-        console.log(accessUrl);
         setFieldValue('images', [
           ...(form.values.images || []),
           { url: accessUrl },
@@ -259,8 +248,8 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           >
-            <option value={ProductStatus.ACTIVE}>Active</option>
-            <option value={ProductStatus.INACTIVE}>Inaktiv</option>
+            <option value={ProductStatus.Active}>Active</option>
+            <option value={ProductStatus.Inactive}>Inaktiv</option>
           </LabeledSelect>
           {form.touched.status && form.errors.status && (
             <Error message={form.errors.status} />

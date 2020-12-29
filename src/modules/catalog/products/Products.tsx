@@ -1,13 +1,16 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button } from 'theme-ui';
 import { LoaderIcon } from '@tabetalt/kit';
-import { GetProducts } from '../../../api/types/GetProducts';
 import Layout from '../../../components/layout/Layout';
 import ProductsListing from './ProductsListing';
 import ProductsListingFilters from './ProductsListingFilters';
-import { QUERY_GET_PRODUCTS } from '../../../api';
+import {
+  GetProductsQuery,
+  useGetProductsQuery,
+} from '../../../generated/graphql';
+
+export type ProductItem = GetProductsQuery['products']['items'][0];
 
 export const headerLinks = [
   {
@@ -22,7 +25,8 @@ export const headerLinks = [
 
 const Products: React.FC = () => {
   const navigate = useNavigate();
-  const { data, loading, error } = useQuery<GetProducts>(QUERY_GET_PRODUCTS);
+  // const { data, loading, error } = useQuery<GetProducts>(QUERY_GET_PRODUCTS);
+  const { data, loading, error } = useGetProductsQuery();
 
   let content = null;
   if (loading) {

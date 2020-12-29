@@ -1,0 +1,63 @@
+fragment Category on Category {
+  id
+  tenantId
+  title
+  status
+  parentId
+  showInMainMenu
+}
+
+fragment CategoryShort on Category {
+  id
+  title
+}
+
+mutation CreateCategory($input: CategoryCreateInput!) {
+  createCategory(input: $input) {
+    ...Category
+    parent {
+      ...Category
+    }
+  }
+}
+
+mutation UpdateCategory($id: Int!, $input: CategoryUpdateInput!) {
+  updateCategory(id: $id, input: $input) {
+    ...Category
+    parent {
+      ...Category
+    }
+  }
+}
+
+mutation DeleteCategory($id: Int!) {
+  deleteCategory(id: $id)
+}
+
+query GetCategoriesWithParent {
+  categories {
+    items {
+      ...Category
+      parent {
+        ...Category
+      }
+    }
+  }
+}
+
+query GetCategoriesShort {
+  categories {
+    items {
+      ...CategoryShort
+    }
+  }
+}
+
+query GetCategory($id: Int!) {
+  category(id: $id) {
+    ...Category
+    parent {
+      ...Category
+    }
+  }
+}

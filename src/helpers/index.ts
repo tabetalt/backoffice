@@ -1,12 +1,11 @@
-import numeral from 'numeral';
-import { FormattedPrice } from '../generated/graphql';
+import Dinero, { DineroObject } from 'dinero.js';
+import { Price } from '../generated/graphql';
 
-export const formatPrice = (
-  formattedPrice?: FormattedPrice | null,
-  currency: string | null = 'NOK'
-): string => {
-  const amount = numeral(
-    formattedPrice ? formattedPrice.netAmount / 100 : 0
-  ).format('0.00');
-  return currency ? `${amount} ${currency}` : amount;
+export const formatPrice = (formattedPrice?: Price | null): string => {
+  const price = formattedPrice
+    ? (formattedPrice.netAmount as DineroObject)
+    : undefined;
+  const amount = price ? Dinero(price).toFormat('0,0.00') : '0';
+
+  return amount;
 };

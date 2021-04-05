@@ -19,84 +19,236 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  tenants: TenantsListResponse;
-  tenant: Tenant;
-  categories: CategoriesListResponse;
-  category: Category;
-  products: ProductsListResponse;
-  product: Product;
-  prices: PricesListResponse;
-  price: Price;
-  variants: VariantsListResponse;
-  variant: Variant;
-  attributes: AttributesListResponse;
-  attribute: Attribute;
-  signedUrl: SignedUrl;
-};
-
-export type QueryTenantArgs = {
+export type Address = {
+  __typename?: 'Address';
   id: Scalars['Int'];
-};
-
-export type QueryCategoryArgs = {
-  id: Scalars['Int'];
-};
-
-export type QueryProductArgs = {
-  id: Scalars['Int'];
-};
-
-export type QueryPriceArgs = {
-  id: Scalars['Int'];
-};
-
-export type QueryVariantArgs = {
-  id: Scalars['Int'];
-};
-
-export type QueryAttributeArgs = {
-  id: Scalars['Int'];
-};
-
-export type QuerySignedUrlArgs = {
-  input: QuerySignedUrlInput;
-};
-
-export type TenantsListResponse = {
-  __typename?: 'TenantsListResponse';
-  items: Array<Tenant>;
-};
-
-export type Tenant = {
-  __typename?: 'Tenant';
-  id: Scalars['Int'];
-  status: TenantStatus;
-  priceDisplay: TenantPriceDisplay;
-  title: Scalars['String'];
-  displayName: Scalars['String'];
-  url: Scalars['String'];
+  regionCode: Scalars['Int'];
+  type: AddressType;
   languageCode: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  emailAddresses: Array<EmailAddress>;
-  addresses: Array<Address>;
-  socialMedias: Array<SocialMedia>;
-  trackingTags: Array<TrackingTag>;
-  storeUrls: Array<StoreUrl>;
+  postalCode: Scalars['String'];
+  sortingCode: Scalars['String'];
+  administrativeArea: Scalars['String'];
+  locality: Scalars['String'];
+  addressLines: Scalars['String'];
+  recipients: Scalars['String'];
+  organization: Scalars['String'];
+  current: Scalars['String'];
 };
 
-export enum TenantStatus {
-  TenantStatusUnspecified = 'TENANT_STATUS_UNSPECIFIED',
-  Pending = 'PENDING',
+export enum AddressType {
+  AddressTypeUnspecified = 'ADDRESS_TYPE_UNSPECIFIED',
+  Invoice = 'INVOICE',
+  Postal = 'POSTAL',
+  Visitor = 'VISITOR',
+}
+
+export type Attachment = {
+  __typename?: 'Attachment';
+  id: Scalars['Int'];
+  url: Scalars['String'];
+  mime?: Maybe<Scalars['String']>;
+  size: Scalars['Int'];
+};
+
+export type AttachmentCreateInput = {
+  url: Scalars['String'];
+  mime: Scalars['String'];
+  size: Scalars['Int'];
+};
+
+export type AttachmentsListResponse = {
+  __typename?: 'AttachmentsListResponse';
+  items: Array<Attachment>;
+};
+
+export type Attribute = {
+  __typename?: 'Attribute';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  displayName: Scalars['String'];
+  value: Scalars['String'];
+  product: Product;
+  variant?: Maybe<Variant>;
+};
+
+export type AttributeCreateInput = {
+  name: Scalars['String'];
+  displayName: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type AttributeUpdateInput = {
+  name: Scalars['String'];
+  displayName: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type AttributesListResponse = {
+  __typename?: 'AttributesListResponse';
+  items: Array<Attribute>;
+};
+
+export type CategoriesListResponse = {
+  __typename?: 'CategoriesListResponse';
+  items: Array<Category>;
+};
+
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['Int'];
+  status: CategoryStatus;
+  title: Scalars['String'];
+  showInMainMenu: Scalars['Boolean'];
+  parentId?: Maybe<Scalars['Int']>;
+  tenantId: Scalars['Int'];
+  parent?: Maybe<Category>;
+  children?: Maybe<Array<Category>>;
+  products?: Maybe<Array<Product>>;
+};
+
+export type CategoryCreateInput = {
+  status: CategoryStatus;
+  title: Scalars['String'];
+  showInMainMenu?: Maybe<Scalars['Boolean']>;
+  parentId?: Maybe<Scalars['Int']>;
+  tenantId: Scalars['Int'];
+};
+
+export enum CategoryStatus {
+  CategoryStatusUnspecified = 'CATEGORY_STATUS_UNSPECIFIED',
   Active = 'ACTIVE',
   Inactive = 'INACTIVE',
 }
 
-export enum TenantPriceDisplay {
-  IncVat = 'INC_VAT',
-  ExlVat = 'EXL_VAT',
+export type CategoryUpdateInput = {
+  status: CategoryStatus;
+  title: Scalars['String'];
+  showInMainMenu?: Maybe<Scalars['Boolean']>;
+  parentId?: Maybe<Scalars['Int']>;
+  tenantId: Scalars['Int'];
+};
+
+/** Currency Code */
+export enum CurrencyCode {
+  Usd = 'USD',
+  Cad = 'CAD',
+  Eur = 'EUR',
+  Aed = 'AED',
+  Afn = 'AFN',
+  All = 'ALL',
+  Amd = 'AMD',
+  Ars = 'ARS',
+  Aud = 'AUD',
+  Azn = 'AZN',
+  Bam = 'BAM',
+  Bdt = 'BDT',
+  Bgn = 'BGN',
+  Bhd = 'BHD',
+  Bif = 'BIF',
+  Bnd = 'BND',
+  Bob = 'BOB',
+  Brl = 'BRL',
+  Bwp = 'BWP',
+  Byn = 'BYN',
+  Bzd = 'BZD',
+  Cdf = 'CDF',
+  Chf = 'CHF',
+  Clp = 'CLP',
+  Cny = 'CNY',
+  Cop = 'COP',
+  Crc = 'CRC',
+  Cve = 'CVE',
+  Czk = 'CZK',
+  Djf = 'DJF',
+  Dkk = 'DKK',
+  Dop = 'DOP',
+  Dzd = 'DZD',
+  Eek = 'EEK',
+  Egp = 'EGP',
+  Ern = 'ERN',
+  Etb = 'ETB',
+  Gbp = 'GBP',
+  Gel = 'GEL',
+  Ghs = 'GHS',
+  Gnf = 'GNF',
+  Gtq = 'GTQ',
+  Hkd = 'HKD',
+  Hnl = 'HNL',
+  Hrk = 'HRK',
+  Huf = 'HUF',
+  Idr = 'IDR',
+  Ils = 'ILS',
+  Inr = 'INR',
+  Iqd = 'IQD',
+  Irr = 'IRR',
+  Isk = 'ISK',
+  Jmd = 'JMD',
+  Jod = 'JOD',
+  Jpy = 'JPY',
+  Kes = 'KES',
+  Khr = 'KHR',
+  Kmf = 'KMF',
+  Krw = 'KRW',
+  Kwd = 'KWD',
+  Kzt = 'KZT',
+  Lbp = 'LBP',
+  Lkr = 'LKR',
+  Ltl = 'LTL',
+  Lvl = 'LVL',
+  Lyd = 'LYD',
+  Mad = 'MAD',
+  Mdl = 'MDL',
+  Mga = 'MGA',
+  Mkd = 'MKD',
+  Mmk = 'MMK',
+  Mop = 'MOP',
+  Mur = 'MUR',
+  Mxn = 'MXN',
+  Myr = 'MYR',
+  Mzn = 'MZN',
+  Nad = 'NAD',
+  Ngn = 'NGN',
+  Nio = 'NIO',
+  Nok = 'NOK',
+  Npr = 'NPR',
+  Nzd = 'NZD',
+  Omr = 'OMR',
+  Pab = 'PAB',
+  Pen = 'PEN',
+  Php = 'PHP',
+  Pkr = 'PKR',
+  Pln = 'PLN',
+  Pyg = 'PYG',
+  Qar = 'QAR',
+  Ron = 'RON',
+  Rsd = 'RSD',
+  Rub = 'RUB',
+  Rwf = 'RWF',
+  Sar = 'SAR',
+  Sdg = 'SDG',
+  Sek = 'SEK',
+  Sgd = 'SGD',
+  Sos = 'SOS',
+  Syp = 'SYP',
+  Thb = 'THB',
+  Tnd = 'TND',
+  Top = 'TOP',
+  Try = 'TRY',
+  Ttd = 'TTD',
+  Twd = 'TWD',
+  Tzs = 'TZS',
+  Uah = 'UAH',
+  Ugx = 'UGX',
+  Uyu = 'UYU',
+  Uzs = 'UZS',
+  Vef = 'VEF',
+  Vnd = 'VND',
+  Xaf = 'XAF',
+  Xof = 'XOF',
+  Yer = 'YER',
+  Zar = 'ZAR',
+  Zmk = 'ZMK',
+  Zwl = 'ZWL',
 }
 
 export type EmailAddress = {
@@ -118,226 +270,24 @@ export enum EmailAddressType {
   CustomerFacing = 'CUSTOMER_FACING',
 }
 
-export type Address = {
-  __typename?: 'Address';
-  id: Scalars['Int'];
-  regionCode: Scalars['Int'];
-  type: AddressType;
-  languageCode: Scalars['String'];
-  postalCode: Scalars['String'];
-  sortingCode: Scalars['String'];
-  administrativeArea: Scalars['String'];
-  locality: Scalars['String'];
-  addressLines: Scalars['String'];
-  recipients: Scalars['String'];
-  organization: Scalars['String'];
-  current: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export enum AddressType {
-  AddressTypeUnspecified = 'ADDRESS_TYPE_UNSPECIFIED',
-  Invoice = 'INVOICE',
-  Postal = 'POSTAL',
-  Visitor = 'VISITOR',
-}
-
-export type SocialMedia = {
-  __typename?: 'SocialMedia';
-  id: Scalars['Int'];
-  type: SocialMediaType;
-  url: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export enum SocialMediaType {
-  SocialMediaTypeUnspecified = 'SOCIAL_MEDIA_TYPE_UNSPECIFIED',
-  Facebook = 'FACEBOOK',
-  Twitter = 'TWITTER',
-  Googleplus = 'GOOGLEPLUS',
-  Instagram = 'INSTAGRAM',
-  Linkedin = 'LINKEDIN',
-  Pinterest = 'PINTEREST',
-  Other = 'OTHER',
-}
-
-export type TrackingTag = {
-  __typename?: 'TrackingTag';
-  id: Scalars['Int'];
-  type: TrackingTagType;
-  value: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export enum TrackingTagType {
-  TrackingTagTypeUnspecified = 'TRACKING_TAG_TYPE_UNSPECIFIED',
-  GoogleAnalytics = 'GOOGLE_ANALYTICS',
-  GoogleTagManager = 'GOOGLE_TAG_MANAGER',
-  FacebookPixel = 'FACEBOOK_PIXEL',
-  Hubspot = 'HUBSPOT',
-  Other = 'OTHER',
-}
-
-export type StoreUrl = {
-  __typename?: 'StoreUrl';
-  id: Scalars['Int'];
-  type: StoreUrlType;
-  url: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export enum StoreUrlType {
-  StoreUrlTypeUnspecified = 'STORE_URL_TYPE_UNSPECIFIED',
-  CancellationForm = 'CANCELLATION_FORM',
-  TermsAndConditions = 'TERMS_AND_CONDITIONS',
-  PrivacyAgreement = 'PRIVACY_AGREEMENT',
-}
-
-export type CategoriesListResponse = {
-  __typename?: 'CategoriesListResponse';
-  items: Array<Category>;
-};
-
-export type Category = {
-  __typename?: 'Category';
-  id: Scalars['Int'];
-  status: CategoryStatus;
-  title: Scalars['String'];
-  showInMainMenu: Scalars['Boolean'];
-  parentId?: Maybe<Scalars['Int']>;
-  tenantId: Scalars['Int'];
-  parent?: Maybe<Category>;
-  children?: Maybe<Array<Category>>;
-  products?: Maybe<Array<Product>>;
-};
-
-export enum CategoryStatus {
-  CategoryStatusUnspecified = 'CATEGORY_STATUS_UNSPECIFIED',
-  Active = 'ACTIVE',
-  Inactive = 'INACTIVE',
-}
-
-export type Product = {
-  __typename?: 'Product';
-  id: Scalars['Int'];
-  title: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  isOnMainPage?: Maybe<Scalars['Boolean']>;
-  shortDescription?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  technicalDescription?: Maybe<Scalars['String']>;
-  isAvailable?: Maybe<Scalars['Boolean']>;
-  count?: Maybe<Scalars['Int']>;
-  status: ProductStatus;
-  priceId?: Maybe<Scalars['Int']>;
-  tenantId: Scalars['Int'];
-  stockControl?: Maybe<Scalars['Boolean']>;
-  inStockNum?: Maybe<Scalars['Int']>;
-  price?: Maybe<Price>;
-  categories: Array<Category>;
-  attributes: Array<Attribute>;
-  variants: Array<Variant>;
-  images: Array<Attachment>;
-};
-
-export enum ProductStatus {
-  ProductStatusUnspecified = 'PRODUCT_STATUS_UNSPECIFIED',
-  Pending = 'PENDING',
-  Active = 'ACTIVE',
-  Inactive = 'INACTIVE',
-}
-
-export type Price = {
-  __typename?: 'Price';
-  id: Scalars['Int'];
-  value: Scalars['Int'];
-  product?: Maybe<Product>;
-  vatRateId?: Maybe<Scalars['Int']>;
-  vatRate?: Maybe<VatRate>;
-  productId?: Maybe<Scalars['Int']>;
-  formatted: FormattedPrice;
-};
-
-export type VatRate = {
-  __typename?: 'VatRate';
-  id: Scalars['Int'];
-  value: Scalars['Int'];
-  tenantId: Scalars['Int'];
-};
-
-export type FormattedPrice = {
-  __typename?: 'FormattedPrice';
-  vatAmount?: Maybe<Scalars['Int']>;
-  grossAmount: Scalars['Int'];
-  netAmount: Scalars['Int'];
-};
-
-export type Attribute = {
-  __typename?: 'Attribute';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  displayName: Scalars['String'];
-  value: Scalars['String'];
-  product: Product;
-  variant?: Maybe<Variant>;
-};
-
-export type Variant = {
-  __typename?: 'Variant';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  displayName: Scalars['String'];
-  count?: Maybe<Scalars['Int']>;
-  priceId?: Maybe<Scalars['Int']>;
-  price?: Maybe<Price>;
-  productId?: Maybe<Price>;
-  product?: Maybe<Product>;
-  attributes?: Maybe<Array<Attribute>>;
-};
-
-export type Attachment = {
-  __typename?: 'Attachment';
-  id: Scalars['Int'];
+export type ImageCreateInput = {
+  id?: Maybe<Scalars['Int']>;
   url: Scalars['String'];
   mime?: Maybe<Scalars['String']>;
-  size: Scalars['Int'];
+  size?: Maybe<Scalars['Int']>;
 };
 
-export type ProductsListResponse = {
-  __typename?: 'ProductsListResponse';
-  items: Array<Product>;
+export type Money = {
+  __typename?: 'Money';
+  amount: Scalars['Int'];
+  currency?: Maybe<CurrencyCode>;
+  precision?: Maybe<Scalars['Int']>;
 };
 
-export type PricesListResponse = {
-  __typename?: 'PricesListResponse';
-  items: Array<Price>;
-};
-
-export type VariantsListResponse = {
-  __typename?: 'VariantsListResponse';
-  items: Array<Variant>;
-};
-
-export type AttributesListResponse = {
-  __typename?: 'AttributesListResponse';
-  items: Array<Attribute>;
-};
-
-export type SignedUrl = {
-  __typename?: 'SignedUrl';
-  url: Scalars['String'];
-  expires: Scalars['String'];
-  accessUrl: Scalars['String'];
-};
-
-export type QuerySignedUrlInput = {
-  filename: Scalars['String'];
-  contentType: Scalars['String'];
-  contentLength: Scalars['Int'];
+export type MoneyInput = {
+  amount: Scalars['Int'];
+  currency?: Maybe<CurrencyCode>;
+  precision?: Maybe<Scalars['Int']>;
 };
 
 export type Mutation = {
@@ -351,9 +301,6 @@ export type Mutation = {
   createProduct: Product;
   updateProduct: Product;
   deleteProduct: Scalars['Boolean'];
-  createPrice: Price;
-  updatePrice: Price;
-  deletePrice: Scalars['Boolean'];
   createVariant: Variant;
   updateVariant: Variant;
   deleteVariant: Scalars['Boolean'];
@@ -402,19 +349,6 @@ export type MutationDeleteProductArgs = {
   id: Scalars['Int'];
 };
 
-export type MutationCreatePriceArgs = {
-  input: PriceCreateInput;
-};
-
-export type MutationUpdatePriceArgs = {
-  input: PriceUpdateInput;
-  id: Scalars['Int'];
-};
-
-export type MutationDeletePriceArgs = {
-  id: Scalars['Int'];
-};
-
 export type MutationCreateVariantArgs = {
   input: VariantCreateInput;
 };
@@ -445,6 +379,146 @@ export type MutationCreateAttachmentsArgs = {
   input: Array<AttachmentCreateInput>;
 };
 
+export type Price = {
+  __typename?: 'Price';
+  vatAmount: Money;
+  grossAmount: Money;
+  netAmount: Money;
+};
+
+export type PriceInput = {
+  grossAmount: MoneyInput;
+};
+
+export type Product = {
+  __typename?: 'Product';
+  id: Scalars['Int'];
+  title: Scalars['String'];
+  slug?: Maybe<Scalars['String']>;
+  isOnMainPage?: Maybe<Scalars['Boolean']>;
+  shortDescription?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  technicalDescription?: Maybe<Scalars['String']>;
+  isAvailable?: Maybe<Scalars['Boolean']>;
+  count?: Maybe<Scalars['Int']>;
+  status: ProductStatus;
+  tenantId: Scalars['Int'];
+  stockControl?: Maybe<Scalars['Boolean']>;
+  inStockNum?: Maybe<Scalars['Int']>;
+  price?: Maybe<Price>;
+  vatRate?: Maybe<VatRate>;
+  categories: Array<Category>;
+  attributes: Array<Attribute>;
+  variants: Array<Variant>;
+  images: Array<Attachment>;
+};
+
+export type ProductCategoryCreateInput = {
+  id?: Maybe<Scalars['Int']>;
+  title: Scalars['String'];
+};
+
+export type ProductCreateInput = {
+  title: Scalars['String'];
+  slug?: Maybe<Scalars['String']>;
+  isOnMainPage: Scalars['Boolean'];
+  shortDescription?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  technicalDescription?: Maybe<Scalars['String']>;
+  isAvailable?: Maybe<Scalars['Boolean']>;
+  count?: Maybe<Scalars['Int']>;
+  status: ProductStatus;
+  tenantId: Scalars['Int'];
+  stockControl?: Maybe<Scalars['Boolean']>;
+  inStockNum?: Maybe<Scalars['Int']>;
+  price?: Maybe<PriceInput>;
+  vatRateId?: Maybe<Scalars['Int']>;
+  categories?: Maybe<Array<ProductCategoryCreateInput>>;
+  images?: Maybe<Array<ImageCreateInput>>;
+};
+
+export enum ProductStatus {
+  ProductStatusUnspecified = 'PRODUCT_STATUS_UNSPECIFIED',
+  Pending = 'PENDING',
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}
+
+export type ProductUpdateInput = {
+  title: Scalars['String'];
+  slug?: Maybe<Scalars['String']>;
+  isOnMainPage: Scalars['Boolean'];
+  shortDescription?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  technicalDescription?: Maybe<Scalars['String']>;
+  isAvailable?: Maybe<Scalars['Boolean']>;
+  count?: Maybe<Scalars['Int']>;
+  status: ProductStatus;
+  tenantId: Scalars['Int'];
+  stockControl?: Maybe<Scalars['Boolean']>;
+  inStockNum?: Maybe<Scalars['Int']>;
+  price?: Maybe<PriceInput>;
+  vatRateId?: Maybe<Scalars['Int']>;
+  categories?: Maybe<Array<ProductCategoryCreateInput>>;
+  images?: Maybe<Array<ImageCreateInput>>;
+};
+
+export type ProductsListResponse = {
+  __typename?: 'ProductsListResponse';
+  items: Array<Product>;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  tenants: TenantsListResponse;
+  tenant: Tenant;
+  categories: CategoriesListResponse;
+  category: Category;
+  products: ProductsListResponse;
+  product: Product;
+  variants: VariantsListResponse;
+  variant: Variant;
+  attributes: AttributesListResponse;
+  attribute: Attribute;
+  signedUrl: SignedUrl;
+};
+
+export type QueryTenantArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryCategoryArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryProductArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryVariantArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryAttributeArgs = {
+  id: Scalars['Int'];
+};
+
+export type QuerySignedUrlArgs = {
+  input: QuerySignedUrlInput;
+};
+
+export type SignedUrl = {
+  __typename?: 'SignedUrl';
+  url: Scalars['String'];
+  expires: Scalars['String'];
+  accessUrl: Scalars['String'];
+};
+
+export type VariantsListResponse = {
+  __typename?: 'VariantsListResponse';
+  items: Array<Variant>;
+};
+
 export type TenantCreateInput = {
   status: Scalars['String'];
   priceDisplay: Scalars['String'];
@@ -463,87 +537,75 @@ export type TenantUpdateInput = {
   languageCode?: Maybe<Scalars['String']>;
 };
 
-export type CategoryCreateInput = {
-  status: CategoryStatus;
-  title: Scalars['String'];
-  showInMainMenu?: Maybe<Scalars['Boolean']>;
-  parentId?: Maybe<Scalars['Int']>;
-  tenantId: Scalars['Int'];
-};
-
-export type CategoryUpdateInput = {
-  status: CategoryStatus;
-  title: Scalars['String'];
-  showInMainMenu?: Maybe<Scalars['Boolean']>;
-  parentId?: Maybe<Scalars['Int']>;
-  tenantId: Scalars['Int'];
-};
-
-export type ProductCreateInput = {
-  title: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  isOnMainPage: Scalars['Boolean'];
-  shortDescription?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  technicalDescription?: Maybe<Scalars['String']>;
-  isAvailable?: Maybe<Scalars['Boolean']>;
+export type Variant = {
+  __typename?: 'Variant';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  displayName: Scalars['String'];
   count?: Maybe<Scalars['Int']>;
-  status: ProductStatus;
-  priceId?: Maybe<Scalars['Int']>;
+  productId?: Maybe<Price>;
+  product?: Maybe<Product>;
+  attributes?: Maybe<Array<Attribute>>;
+};
+
+export type TenantsListResponse = {
+  __typename?: 'TenantsListResponse';
+  items: Array<Tenant>;
+};
+
+export type VatRate = {
+  __typename?: 'VatRate';
+  id: Scalars['Int'];
+  value: Scalars['Int'];
   tenantId: Scalars['Int'];
-  stockControl?: Maybe<Scalars['Boolean']>;
-  inStockNum?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['Int']>;
-  categories?: Maybe<Array<ProductCategoryCreateInput>>;
-  images?: Maybe<Array<ImageCreateInput>>;
 };
 
-export type ProductCategoryCreateInput = {
-  id?: Maybe<Scalars['Int']>;
-  title: Scalars['String'];
-};
+export enum StoreUrlType {
+  StoreUrlTypeUnspecified = 'STORE_URL_TYPE_UNSPECIFIED',
+  CancellationForm = 'CANCELLATION_FORM',
+  TermsAndConditions = 'TERMS_AND_CONDITIONS',
+  PrivacyAgreement = 'PRIVACY_AGREEMENT',
+}
 
-export type ImageCreateInput = {
-  id?: Maybe<Scalars['Int']>;
+export type StoreUrl = {
+  __typename?: 'StoreUrl';
+  id: Scalars['Int'];
+  type: StoreUrlType;
   url: Scalars['String'];
-  mime?: Maybe<Scalars['String']>;
-  size?: Maybe<Scalars['Int']>;
-};
-
-export type ProductUpdateInput = {
-  title: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  isOnMainPage: Scalars['Boolean'];
-  shortDescription?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  technicalDescription?: Maybe<Scalars['String']>;
-  isAvailable?: Maybe<Scalars['Boolean']>;
-  count?: Maybe<Scalars['Int']>;
-  status: ProductStatus;
-  priceId?: Maybe<Scalars['Int']>;
   tenantId: Scalars['Int'];
-  stockControl?: Maybe<Scalars['Boolean']>;
-  inStockNum?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['Int']>;
-  categories?: Maybe<Array<ProductCategoryCreateInput>>;
-  images?: Maybe<Array<ImageCreateInput>>;
+  tenant: Tenant;
 };
 
-export type PriceCreateInput = {
-  value: Scalars['Int'];
-  vatRateId?: Maybe<Scalars['Int']>;
+export type QuerySignedUrlInput = {
+  filename: Scalars['String'];
+  contentType: Scalars['String'];
+  contentLength: Scalars['Int'];
 };
 
-export type PriceUpdateInput = {
-  value: Scalars['Int'];
-  vatRateId?: Maybe<Scalars['Int']>;
+export type TrackingTag = {
+  __typename?: 'TrackingTag';
+  id: Scalars['Int'];
+  type: TrackingTagType;
+  value: Scalars['String'];
+  tenantId: Scalars['Int'];
+  tenant: Tenant;
 };
+
+export enum SocialMediaType {
+  SocialMediaTypeUnspecified = 'SOCIAL_MEDIA_TYPE_UNSPECIFIED',
+  Facebook = 'FACEBOOK',
+  Twitter = 'TWITTER',
+  Googleplus = 'GOOGLEPLUS',
+  Instagram = 'INSTAGRAM',
+  Linkedin = 'LINKEDIN',
+  Pinterest = 'PINTEREST',
+  Other = 'OTHER',
+}
 
 export type VariantCreateInput = {
   name: Scalars['String'];
   displayName: Scalars['String'];
   count?: Maybe<Scalars['Int']>;
-  priceId?: Maybe<Scalars['Int']>;
   productId?: Maybe<Scalars['Int']>;
 };
 
@@ -551,32 +613,56 @@ export type VariantUpdateInput = {
   name: Scalars['String'];
   displayName: Scalars['String'];
   count?: Maybe<Scalars['Int']>;
-  priceId?: Maybe<Scalars['Int']>;
   productId?: Maybe<Scalars['Int']>;
 };
 
-export type AttributeCreateInput = {
-  name: Scalars['String'];
-  displayName: Scalars['String'];
-  value: Scalars['String'];
-};
-
-export type AttributeUpdateInput = {
-  name: Scalars['String'];
-  displayName: Scalars['String'];
-  value: Scalars['String'];
-};
-
-export type AttachmentsListResponse = {
-  __typename?: 'AttachmentsListResponse';
-  items: Array<Attachment>;
-};
-
-export type AttachmentCreateInput = {
+export type SocialMedia = {
+  __typename?: 'SocialMedia';
+  id: Scalars['Int'];
+  type: SocialMediaType;
   url: Scalars['String'];
-  mime: Scalars['String'];
-  size: Scalars['Int'];
+  tenantId: Scalars['Int'];
+  tenant: Tenant;
 };
+
+export enum TenantPriceDisplay {
+  IncVat = 'INC_VAT',
+  ExlVat = 'EXL_VAT',
+}
+
+export enum TenantStatus {
+  TenantStatusUnspecified = 'TENANT_STATUS_UNSPECIFIED',
+  Pending = 'PENDING',
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}
+
+export type Tenant = {
+  __typename?: 'Tenant';
+  id: Scalars['Int'];
+  status: TenantStatus;
+  priceDisplay: TenantPriceDisplay;
+  title: Scalars['String'];
+  displayName: Scalars['String'];
+  url: Scalars['String'];
+  languageCode: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  emailAddresses: Array<EmailAddress>;
+  addresses: Array<Address>;
+  socialMedias: Array<SocialMedia>;
+  trackingTags: Array<TrackingTag>;
+  storeUrls: Array<StoreUrl>;
+};
+
+export enum TrackingTagType {
+  TrackingTagTypeUnspecified = 'TRACKING_TAG_TYPE_UNSPECIFIED',
+  GoogleAnalytics = 'GOOGLE_ANALYTICS',
+  GoogleTagManager = 'GOOGLE_TAG_MANAGER',
+  FacebookPixel = 'FACEBOOK_PIXEL',
+  Hubspot = 'HUBSPOT',
+  Other = 'OTHER',
+}
 
 export type CategoryFragment = { __typename?: 'Category' } & Pick<
   Category,
@@ -676,14 +762,17 @@ export type ProductShortFragment = { __typename?: 'Product' } & Pick<
   | 'count'
   | 'stockControl'
   | 'inStockNum'
-  | 'priceId'
+>;
+
+export type MoneyFragment = { __typename?: 'Money' } & Pick<
+  Money,
+  'amount' | 'currency' | 'precision'
 >;
 
 export type PriceFragment = { __typename?: 'Price' } & {
-  formatted: { __typename?: 'FormattedPrice' } & Pick<
-    FormattedPrice,
-    'vatAmount' | 'grossAmount' | 'netAmount'
-  >;
+  vatAmount: { __typename?: 'Money' } & MoneyFragment;
+  grossAmount: { __typename?: 'Money' } & MoneyFragment;
+  netAmount: { __typename?: 'Money' } & MoneyFragment;
 };
 
 export type VariantFragment = { __typename?: 'Variant' } & Pick<Variant, 'id'>;
@@ -780,17 +869,28 @@ export const ProductShortFragmentDoc = gql`
     count
     stockControl
     inStockNum
-    priceId
+  }
+`;
+export const MoneyFragmentDoc = gql`
+  fragment Money on Money {
+    amount
+    currency
+    precision
   }
 `;
 export const PriceFragmentDoc = gql`
   fragment Price on Price {
-    formatted {
-      vatAmount
-      grossAmount
-      netAmount
+    vatAmount {
+      ...Money
+    }
+    grossAmount {
+      ...Money
+    }
+    netAmount {
+      ...Money
     }
   }
+  ${MoneyFragmentDoc}
 `;
 export const VariantFragmentDoc = gql`
   fragment Variant on Variant {

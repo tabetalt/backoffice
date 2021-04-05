@@ -83,7 +83,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     initialValues: {
       ...defaultValues,
       ...product,
-      price: formatPrice(product?.price?.formatted, null),
+      price: formatPrice(product?.price),
       categories: product?.categories.map((category) => ({
         id: category?.id,
         name: category?.title,

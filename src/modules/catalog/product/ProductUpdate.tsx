@@ -20,6 +20,7 @@ import {
   useGetProductQuery,
   useUpdateProductMutation,
   ProductUpdateInput,
+  CurrencyCode,
 } from '../../../generated/graphql';
 
 const ProductUpdate: React.FC = () => {
@@ -54,7 +55,13 @@ const ProductUpdate: React.FC = () => {
       ]) as ProductUpdateInput;
 
       if (values.price) {
-        input.price = values.price.replace(',', '.') * 100;
+        input.price = {
+          grossAmount: {
+            amount: values.price.replace(',', '.') * 100,
+            currency: CurrencyCode.Nok,
+            precision: 2,
+          },
+        };
       }
       if (values.categories) {
         input.categories = (values.categories as TagProps[]).map(

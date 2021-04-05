@@ -12,14 +12,23 @@ fragment ProductShort on Product {
   count
   stockControl
   inStockNum
-  priceId
+}
+
+fragment Money on Money {
+  amount
+  currency
+  precision
 }
 
 fragment Price on Price {
-  formatted {
-    vatAmount
-    grossAmount
-    netAmount
+  vatAmount {
+    ...Money
+  }
+  grossAmount {
+    ...Money
+  }
+  netAmount {
+    ...Money
   }
 }
 

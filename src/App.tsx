@@ -11,7 +11,15 @@ const renderLoader = () => <Skeleton />;
 
 const App: React.FC = () => {
   const contextFirebase = useFirebase();
-  const routes = useRoutes(getRoutes(contextFirebase.auth.currentUser));
+  const routes = useRoutes(
+    getRoutes(
+      localStorage.getItem('user')?.length &&
+        localStorage.getItem('user') != 'null'
+        ? true
+        : false
+    )
+  );
+  console.log(contextFirebase.auth.currentUser);
 
   return (
     <ApolloProvider client={gqlClient}>

@@ -8,12 +8,14 @@ const LoginPage: React.FC = () => (
     sx={{ width: '100%', justifyContent: 'center' }}
     style={{ marginTop: '100px' }}
   >
-    <Box>
-      <Box style={{ width: '191px', margin: '0 auto' }}>
+    <Box style={{ width: '250px' }}>
+      <Box style={{ margin: '0 auto' }}>
         <Logo />
       </Box>
 
-      <p>Logg inn ved å klikke på knappene nedenfor.</p>
+      <p style={{ textAlign: 'center' }}>
+        Logg inn ved å klikke på knappene nedenfor.
+      </p>
       {/* <Button>Google</Button>
 
       */}

@@ -5,21 +5,20 @@ import { ThemeProvider } from 'theme-ui';
 import { theme, Skeleton } from '@tabetalt/kit';
 import getRoutes from './routing';
 import gqlClient from './api/client';
-import { useFirebase } from './config/authConfig';
+import { auth } from './config/authConfig';
 
 const renderLoader = () => <Skeleton />;
 
+function checkAuth(): boolean {
+  const user = localStorage.getItem('user');
+  // console.log(user);
+  // console.log(auth.currentUser?.uid);
+  if (user && user === auth.currentUser?.uid) return true;
+  return false;
+}
+
 const App: React.FC = () => {
-  const contextFirebase = useFirebase();
-  const routes = useRoutes(
-    getRoutes(
-      localStorage.getItem('user')?.length &&
-        localStorage.getItem('user') != 'null'
-        ? true
-        : false
-    )
-  );
-  console.log(contextFirebase.auth.currentUser);
+  const routes = useRoutes(getRoutes(checkAuth()));
 
   return (
     <ApolloProvider client={gqlClient}>

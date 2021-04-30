@@ -1,12 +1,9 @@
 import React from 'react';
 import { Box, Button } from 'theme-ui';
 import Layout from '../../components/layout/Layout';
-import { useFirebase } from '../../config/authConfig';
+import { auth } from '../../config/authConfig';
 
 const Dashboard: React.FC = () => {
-  const contextFirebase = useFirebase();
-  console.log(contextFirebase.auth);
-
   return (
     <Layout
       header={{
@@ -22,8 +19,9 @@ const Dashboard: React.FC = () => {
             <Button
               sx={{ ml: 3 }}
               onClick={() => {
-                contextFirebase.auth.signOut();
+                auth.signOut();
                 localStorage.setItem('user', '');
+                localStorage.setItem('token', '');
                 window.location.reload();
               }}
             >

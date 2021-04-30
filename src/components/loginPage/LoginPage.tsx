@@ -16,9 +16,6 @@ const LoginPage: React.FC = () => (
       <p style={{ textAlign: 'center' }}>
         Logg inn ved å klikke på knappene nedenfor.
       </p>
-      {/* <Button>Google</Button>
-
-      */}
       <LoginButtons />
     </Box>
   </Flex>

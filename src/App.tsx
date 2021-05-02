@@ -11,8 +11,6 @@ const renderLoader = () => <Skeleton />;
 
 function checkAuth(): boolean {
   const user = localStorage.getItem('user');
-  // console.log(user);
-  // console.log(auth.currentUser?.uid);
   if (user && user === auth.currentUser?.uid) return true;
   return false;
 }

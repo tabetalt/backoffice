@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import { auth } from '../../config/authConfig';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
-const LoginButtons = (): any => {
+export const LoginButtons = (): any => {
   const uiConfig = {
     signInFlow: 'popup',
     signInSuccessUrl: '/',
@@ -12,5 +12,3 @@ const LoginButtons = (): any => {
 
   return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />;
 };
-
-export default LoginButtons;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, Flex } from 'theme-ui';
 import { Logo } from '@tabetalt/kit';
-import LoginButtons from './LoginButtons';
+import { LoginButtons } from './LoginButtons';
 
-const LoginPage: React.FC = () => (
+export const LoginPage: React.FC = () => (
   <Flex
     sx={{ width: '100%', justifyContent: 'center' }}
     style={{ marginTop: '100px' }}
@@ -20,5 +20,3 @@ const LoginPage: React.FC = () => (
     </Box>
   </Flex>
 );
-
-export default LoginPage;

@@ -2,13 +2,12 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: '<api-key>',
-  authDomain: '<auth-domain>',
-  databaseURL: '<auth-domain>',
-  projectId: '<auth-domain>',
-  storageBucket: '<auth-domain>',
-  messagingSenderId: 'n-a',
-  appId: 'n-a',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREMASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREMASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREMASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREMASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREMASE_APP_ID,
 };
 
 if (!firebase.apps.length) {

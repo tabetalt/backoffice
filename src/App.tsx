@@ -9,14 +9,17 @@ import { auth } from './config/authConfig';
 
 const renderLoader = () => <Skeleton />;
 
-function checkAuth(): boolean {
-  const user = localStorage.getItem('user');
-  if (user && user === auth.currentUser?.uid) return true;
-  return false;
-}
-
 const App: React.FC = () => {
-  const routes = useRoutes(getRoutes(checkAuth()));
+  const [isLoggedIn, setLoggedIn] = React.useState(false);
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  });
+
+  const routes = useRoutes(getRoutes(isLoggedIn));
 
   return (
     <ApolloProvider client={gqlClient}>

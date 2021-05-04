@@ -16,11 +16,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(function (user) {
       setInitApp(true);
-      if (user) {
-        setLoggedIn(true);
-      } else {
-        setLoggedIn(false);
-      }
+       setLoggedIn(user ? true : false);
     });
 
     return function cleanup() {

@@ -33,7 +33,6 @@
     "yup": "^0.29.3"
   },
   "scripts": {
-    "prestart": "yarn codegen",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",

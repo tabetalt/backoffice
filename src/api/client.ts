@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { TABETALT_API_URI } from '../config';
-import { auth } from '../config/authConfig';
+import { auth } from '../firebase';
 
 const httpLink = new HttpLink({
   uri: TABETALT_API_URI,
@@ -21,7 +21,6 @@ const authLink = setContext((_, { headers }) => {
   return auth.currentUser
     ?.getIdToken()
     .then(function (idToken) {
-      console.log(idToken);
       return {
         headers: {
           ...headers,

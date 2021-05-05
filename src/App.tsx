@@ -3,13 +3,15 @@ import { ApolloProvider } from '@apollo/client';
 import { useRoutes } from 'react-router-dom';
 import { ThemeProvider } from 'theme-ui';
 import { theme, Skeleton } from '@tabetalt/kit';
-import routing from './routing';
+import { getRoutes } from './routing';
 import gqlClient from './api/client';
+import { useAuth } from './context/AuthContext';
 
 const renderLoader = () => <Skeleton />;
 
-const App: React.FC = () => {
-  const routes = useRoutes(routing);
+export const App: React.FC = () => {
+  const { isLoggedIn } = useAuth();
+  const routes = useRoutes(getRoutes(isLoggedIn()));
 
   return (
     <ApolloProvider client={gqlClient}>
@@ -19,5 +21,3 @@ const App: React.FC = () => {
     </ApolloProvider>
   );
 };
-
-export default App;

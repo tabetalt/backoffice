@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, IconButton, Label } from 'theme-ui';
 import { Table, StatusLabel, icons } from '@tabetalt/kit';
 import type { CellProps } from 'react-table';
-import { formatPrice } from '../../../helpers';
+import * as DineroHelper from '../../../helpers';
 import {
   GetProductsDocument,
   useDeleteProductMutation,
@@ -62,7 +62,7 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
         Header: 'Produktpris',
         accessor: 'price',
         Cell: ({ row: { original: product } }: CellProps<ProductItem>) =>
-          formatPrice(product?.price),
+          DineroHelper.formatPrice(product?.price),
       },
       {
         Header: 'Lagerstatus',

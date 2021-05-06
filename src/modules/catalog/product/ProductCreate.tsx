@@ -11,6 +11,7 @@ import {
   GetProductDocument,
   useCreateProductMutation,
 } from '../../../generated/graphql';
+import * as DineroHelper from '../../../helpers';
 
 const ProductCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const ProductCreate: React.FC = () => {
       const input = {
         tenantId: 1,
         ...values,
-        price: values.price.replace(',', '.') * 100,
+        price: DineroHelper.valueFromString(values.price),
       };
       if (values.categories) {
         input.categories = (values.categories as TagProps[]).map(

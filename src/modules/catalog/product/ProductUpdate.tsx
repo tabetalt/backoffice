@@ -22,6 +22,7 @@ import {
   ProductUpdateInput,
   CurrencyCode,
 } from '../../../generated/graphql';
+import * as DineroHelper from '../../../helpers';
 
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const ProductUpdate: React.FC = () => {
       if (values.price) {
         input.price = {
           grossAmount: {
-            amount: values.price.replace(',', '.') * 100,
+            amount: DineroHelper.valueFromString(values.price),
             currency: CurrencyCode.Nok,
             precision: 2,
           },

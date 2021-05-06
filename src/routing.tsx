@@ -1,4 +1,6 @@
 import React, { lazy } from 'react';
+import { Navigate, PartialRouteObject } from 'react-router';
+import { LoginPage } from './components/loginPage/LoginPage';
 
 // Modules
 const Account = lazy(() => import('./modules/account/Account'));
@@ -18,9 +20,8 @@ const Order = lazy(() => import('./modules/order/Order'));
 const Pages = lazy(() => import('./modules/page/Pages'));
 const Page = lazy(() => import('./modules/page/Page'));
 const Settings = lazy(() => import('./modules/settings/Settings'));
-const NotFound = lazy(() => import('./modules/errors/NotFound'));
 
-export default [
+const secureRoutes = [
   { path: '/', element: <Dashboard /> },
   { path: 'account', element: <Account /> },
   {
@@ -45,5 +46,14 @@ export default [
     ],
   },
   { path: 'settings/*', element: <Settings /> },
-  { path: '*', element: <NotFound /> },
+  { path: '*', element: <Navigate to="/" /> },
 ];
+
+export const getRoutes = (isLoggedIn: boolean): PartialRouteObject[] => {
+  return isLoggedIn
+    ? secureRoutes
+    : [
+        { path: '/login', element: <LoginPage /> },
+        { path: '*', element: <Navigate to="/login" /> },
+      ];
+};

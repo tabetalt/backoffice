@@ -38,9 +38,9 @@ const Sidebar: React.FC = () => {
         <NavLink to="/order">
           <icons.ShirtIcon /> Ordre/Kunder
         </NavLink>
-        <NavLink to="/page">
+        {/* <NavLink to="/page">
           <icons.ListIcon /> Sider
-        </NavLink>
+        </NavLink> TODO: Enable after first release*/}
         <NavLink to="/settings">
           <icons.SettingsIcon /> Innstillinger
         </NavLink>

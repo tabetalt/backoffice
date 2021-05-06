@@ -2,8 +2,10 @@ import React from 'react';
 import { Box, Flex, Avatar, Text, IconButton } from 'theme-ui';
 import NavLink from './NavLink';
 import { icons } from '@tabetalt/kit';
+import { useAuth } from '../../context/AuthContext';
 
 const Sidebar: React.FC = () => {
+  const { auth, currentUser } = useAuth();
   return (
     <Flex
       sx={{
@@ -24,9 +26,9 @@ const Sidebar: React.FC = () => {
         <Text sx={{ ml: 3 }}>Butikknavn</Text>
       </Box>
       <Box sx={{ flexGrow: 3 }}>
-        <NavLink to="/">
+        {/* <NavLink to="/">
           <icons.DashboardIcon /> Dashbord
-        </NavLink>
+        </NavLink> TODO: Enable after first release*/}
         <NavLink to="/catalog/products">
           <icons.ShirtIcon /> Produkter
         </NavLink>
@@ -42,15 +44,21 @@ const Sidebar: React.FC = () => {
         <NavLink to="/settings">
           <icons.SettingsIcon /> Innstillinger
         </NavLink>
-        <NavLink to="/support">
+        {/* <NavLink to="/support">
           <icons.QuestionIcon /> Hjelpesenter
-        </NavLink>
+        </NavLink> TODO: Enable after first release */}
       </Box>
       <Flex
         sx={{ p: 4, alignItems: 'center', justifyContent: 'space-between' }}
       >
-        <Text>Emil Walter</Text>
-        <IconButton aria-label="user dropdown">
+        <Text>{currentUser?.displayName}</Text>
+        <IconButton
+          aria-label="user logout"
+          onClick={() => {
+            auth?.signOut();
+            window.location.reload();
+          }}
+        >
           <icons.UploadIcon />
         </IconButton>
       </Flex>

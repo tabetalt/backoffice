@@ -37,7 +37,7 @@ const Settings: React.FC = () => {
         >
           <NavLink to="shipping">Leveringsmetoder</NavLink>
           <NavLink to="generic">Butikkinformasjon</NavLink>
-          <NavLink to="discount">Rabatter</NavLink>
+          {/* <NavLink to="discount">Rabatter</NavLink> TODO: Enable after first release*/}
           <NavLink to="payment-method">Betalingsmetoder</NavLink>
         </Box>
         {routes}

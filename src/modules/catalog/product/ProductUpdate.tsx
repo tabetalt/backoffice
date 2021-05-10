@@ -20,7 +20,6 @@ import {
   useGetProductQuery,
   useUpdateProductMutation,
   ProductUpdateInput,
-  CurrencyCode,
 } from '../../../generated/graphql';
 import * as DineroHelper from '../../../helpers';
 
@@ -29,22 +28,24 @@ const ProductUpdate: React.FC = () => {
   const params = useParams();
   const productId = Number(params.productId);
 
-  const { data, loading, error: errorGetProduct } = useGetProductQuery({
+  const {
+    data,
+    loading,
+    error: errorGetProduct,
+  } = useGetProductQuery({
     variables: {
       id: productId,
     },
   });
 
-  const [
-    updateProduct,
-    { error: errorUpdateProduct },
-  ] = useUpdateProductMutation({
-    refetchQueries: [
-      { query: GetProductsDocument },
-      { query: GetProductDocument, variables: { id: productId } },
-      { query: GetCategoriesShortDocument },
-    ],
-  });
+  const [updateProduct, { error: errorUpdateProduct }] =
+    useUpdateProductMutation({
+      refetchQueries: [
+        { query: GetProductsDocument },
+        { query: GetProductDocument, variables: { id: productId } },
+        { query: GetCategoriesShortDocument },
+      ],
+    });
 
   const onSubmit = useCallback(
     async (values) => {
@@ -57,11 +58,7 @@ const ProductUpdate: React.FC = () => {
 
       if (values.price) {
         input.price = {
-          grossAmount: {
-            amount: DineroHelper.valueFromString(values.price),
-            currency: CurrencyCode.Nok,
-            precision: 2,
-          },
+          grossAmount: DineroHelper.moneyFromString(values.price),
         };
       }
       if (values.categories) {
@@ -75,6 +72,9 @@ const ProductUpdate: React.FC = () => {
         }));
       }
       await updateProduct({ variables: { id: productId, input } });
+      navigate(`/catalog/products`, {
+        replace: true,
+      });
     },
     [productId, data, updateProduct]
   );

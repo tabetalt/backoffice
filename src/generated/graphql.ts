@@ -507,6 +507,12 @@ export type QuerySignedUrlArgs = {
   input: QuerySignedUrlInput;
 };
 
+export type QuerySignedUrlInput = {
+  filename: Scalars['String'];
+  contentType: Scalars['String'];
+  contentLength: Scalars['Int'];
+};
+
 export type SignedUrl = {
   __typename?: 'SignedUrl';
   url: Scalars['String'];
@@ -514,79 +520,11 @@ export type SignedUrl = {
   accessUrl: Scalars['String'];
 };
 
-export type VariantsListResponse = {
-  __typename?: 'VariantsListResponse';
-  items: Array<Variant>;
-};
-
-export type TenantCreateInput = {
-  status: Scalars['String'];
-  priceDisplay: Scalars['String'];
-  title: Scalars['String'];
-  displayName: Scalars['String'];
+export type SocialMedia = {
+  __typename?: 'SocialMedia';
+  id: Scalars['Int'];
+  type: SocialMediaType;
   url: Scalars['String'];
-  languageCode?: Maybe<Scalars['String']>;
-};
-
-export type TenantUpdateInput = {
-  status: Scalars['String'];
-  priceDisplay: Scalars['String'];
-  title: Scalars['String'];
-  displayName: Scalars['String'];
-  url: Scalars['String'];
-  languageCode?: Maybe<Scalars['String']>;
-};
-
-export type Variant = {
-  __typename?: 'Variant';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  displayName: Scalars['String'];
-  count?: Maybe<Scalars['Int']>;
-  productId?: Maybe<Price>;
-  product?: Maybe<Product>;
-  attributes?: Maybe<Array<Attribute>>;
-};
-
-export type TenantsListResponse = {
-  __typename?: 'TenantsListResponse';
-  items: Array<Tenant>;
-};
-
-export type VatRate = {
-  __typename?: 'VatRate';
-  id: Scalars['Int'];
-  value: Scalars['Int'];
-  tenantId: Scalars['Int'];
-};
-
-export enum StoreUrlType {
-  StoreUrlTypeUnspecified = 'STORE_URL_TYPE_UNSPECIFIED',
-  CancellationForm = 'CANCELLATION_FORM',
-  TermsAndConditions = 'TERMS_AND_CONDITIONS',
-  PrivacyAgreement = 'PRIVACY_AGREEMENT',
-}
-
-export type StoreUrl = {
-  __typename?: 'StoreUrl';
-  id: Scalars['Int'];
-  type: StoreUrlType;
-  url: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export type QuerySignedUrlInput = {
-  filename: Scalars['String'];
-  contentType: Scalars['String'];
-  contentLength: Scalars['Int'];
-};
-
-export type TrackingTag = {
-  __typename?: 'TrackingTag';
-  id: Scalars['Int'];
-  type: TrackingTagType;
-  value: Scalars['String'];
   tenantId: Scalars['Int'];
   tenant: Tenant;
 };
@@ -602,39 +540,20 @@ export enum SocialMediaType {
   Other = 'OTHER',
 }
 
-export type VariantCreateInput = {
-  name: Scalars['String'];
-  displayName: Scalars['String'];
-  count?: Maybe<Scalars['Int']>;
-  productId?: Maybe<Scalars['Int']>;
-};
-
-export type VariantUpdateInput = {
-  name: Scalars['String'];
-  displayName: Scalars['String'];
-  count?: Maybe<Scalars['Int']>;
-  productId?: Maybe<Scalars['Int']>;
-};
-
-export type SocialMedia = {
-  __typename?: 'SocialMedia';
+export type StoreUrl = {
+  __typename?: 'StoreUrl';
   id: Scalars['Int'];
-  type: SocialMediaType;
+  type: StoreUrlType;
   url: Scalars['String'];
   tenantId: Scalars['Int'];
   tenant: Tenant;
 };
 
-export enum TenantPriceDisplay {
-  IncVat = 'INC_VAT',
-  ExlVat = 'EXL_VAT',
-}
-
-export enum TenantStatus {
-  TenantStatusUnspecified = 'TENANT_STATUS_UNSPECIFIED',
-  Pending = 'PENDING',
-  Active = 'ACTIVE',
-  Inactive = 'INACTIVE',
+export enum StoreUrlType {
+  StoreUrlTypeUnspecified = 'STORE_URL_TYPE_UNSPECIFIED',
+  CancellationForm = 'CANCELLATION_FORM',
+  TermsAndConditions = 'TERMS_AND_CONDITIONS',
+  PrivacyAgreement = 'PRIVACY_AGREEMENT',
 }
 
 export type Tenant = {
@@ -655,6 +574,50 @@ export type Tenant = {
   storeUrls: Array<StoreUrl>;
 };
 
+export type TenantCreateInput = {
+  status: Scalars['String'];
+  priceDisplay: Scalars['String'];
+  title: Scalars['String'];
+  displayName: Scalars['String'];
+  url: Scalars['String'];
+  languageCode?: Maybe<Scalars['String']>;
+};
+
+export enum TenantPriceDisplay {
+  IncVat = 'INC_VAT',
+  ExlVat = 'EXL_VAT',
+}
+
+export enum TenantStatus {
+  TenantStatusUnspecified = 'TENANT_STATUS_UNSPECIFIED',
+  Pending = 'PENDING',
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}
+
+export type TenantUpdateInput = {
+  status: Scalars['String'];
+  priceDisplay: Scalars['String'];
+  title: Scalars['String'];
+  displayName: Scalars['String'];
+  url: Scalars['String'];
+  languageCode?: Maybe<Scalars['String']>;
+};
+
+export type TenantsListResponse = {
+  __typename?: 'TenantsListResponse';
+  items: Array<Tenant>;
+};
+
+export type TrackingTag = {
+  __typename?: 'TrackingTag';
+  id: Scalars['Int'];
+  type: TrackingTagType;
+  value: Scalars['String'];
+  tenantId: Scalars['Int'];
+  tenant: Tenant;
+};
+
 export enum TrackingTagType {
   TrackingTagTypeUnspecified = 'TRACKING_TAG_TYPE_UNSPECIFIED',
   GoogleAnalytics = 'GOOGLE_ANALYTICS',
@@ -663,6 +626,43 @@ export enum TrackingTagType {
   Hubspot = 'HUBSPOT',
   Other = 'OTHER',
 }
+
+export type Variant = {
+  __typename?: 'Variant';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  displayName: Scalars['String'];
+  count?: Maybe<Scalars['Int']>;
+  productId?: Maybe<Price>;
+  product?: Maybe<Product>;
+  attributes?: Maybe<Array<Attribute>>;
+};
+
+export type VariantCreateInput = {
+  name: Scalars['String'];
+  displayName: Scalars['String'];
+  count?: Maybe<Scalars['Int']>;
+  productId?: Maybe<Scalars['Int']>;
+};
+
+export type VariantUpdateInput = {
+  name: Scalars['String'];
+  displayName: Scalars['String'];
+  count?: Maybe<Scalars['Int']>;
+  productId?: Maybe<Scalars['Int']>;
+};
+
+export type VariantsListResponse = {
+  __typename?: 'VariantsListResponse';
+  items: Array<Variant>;
+};
+
+export type VatRate = {
+  __typename?: 'VatRate';
+  id: Scalars['Int'];
+  value: Scalars['Int'];
+  tenantId: Scalars['Int'];
+};
 
 export type CategoryFragment = { __typename?: 'Category' } & Pick<
   Category,
@@ -989,7 +989,8 @@ export function useCreateCategoryMutation(
 export type CreateCategoryMutationHookResult = ReturnType<
   typeof useCreateCategoryMutation
 >;
-export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationResult =
+  Apollo.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<
   CreateCategoryMutation,
   CreateCategoryMutationVariables
@@ -1042,7 +1043,8 @@ export function useUpdateCategoryMutation(
 export type UpdateCategoryMutationHookResult = ReturnType<
   typeof useUpdateCategoryMutation
 >;
-export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
+export type UpdateCategoryMutationResult =
+  Apollo.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<
   UpdateCategoryMutation,
   UpdateCategoryMutationVariables
@@ -1088,7 +1090,8 @@ export function useDeleteCategoryMutation(
 export type DeleteCategoryMutationHookResult = ReturnType<
   typeof useDeleteCategoryMutation
 >;
-export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
+export type DeleteCategoryMutationResult =
+  Apollo.MutationResult<DeleteCategoryMutation>;
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<
   DeleteCategoryMutation,
   DeleteCategoryMutationVariables
@@ -1429,7 +1432,8 @@ export function useDeleteProductMutation(
 export type DeleteProductMutationHookResult = ReturnType<
   typeof useDeleteProductMutation
 >;
-export type DeleteProductMutationResult = Apollo.MutationResult<DeleteProductMutation>;
+export type DeleteProductMutationResult =
+  Apollo.MutationResult<DeleteProductMutation>;
 export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<
   DeleteProductMutation,
   DeleteProductMutationVariables
@@ -1549,7 +1553,8 @@ export function useCreateProductMutation(
 export type CreateProductMutationHookResult = ReturnType<
   typeof useCreateProductMutation
 >;
-export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutation>;
+export type CreateProductMutationResult =
+  Apollo.MutationResult<CreateProductMutation>;
 export type CreateProductMutationOptions = Apollo.BaseMutationOptions<
   CreateProductMutation,
   CreateProductMutationVariables
@@ -1603,7 +1608,8 @@ export function useUpdateProductMutation(
 export type UpdateProductMutationHookResult = ReturnType<
   typeof useUpdateProductMutation
 >;
-export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
+export type UpdateProductMutationResult =
+  Apollo.MutationResult<UpdateProductMutation>;
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<
   UpdateProductMutation,
   UpdateProductMutationVariables

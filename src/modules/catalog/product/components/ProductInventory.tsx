@@ -35,7 +35,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   const form = useFormik<ProductInventoryValues>({
     initialValues: {
       stockControl: product?.stockControl,
-      inStockNum: product?.inStockNum || '',
+      inStockNum: product?.inStockNum || '0',
     } as ProductInventoryValues,
     validationSchema: ProductInventorySchema,
     onSubmit,

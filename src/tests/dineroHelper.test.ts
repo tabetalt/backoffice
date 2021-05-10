@@ -25,4 +25,13 @@ it('DineroHelper test', () => {
   expect(DineroHelper.formatPrice(price)).toEqual('100.00');
   expect(DineroHelper.formatPrice(price, true)).toEqual('102.50');
   expect(DineroHelper.formatPrice()).toEqual('0');
+
+  const e = DineroHelper.moneyFromString('12,53', 2, CurrencyCode.Usd, false);
+  expect(e).toMatchInlineSnapshot(`
+    Object {
+      "amount": 1253,
+      "currency": "USD",
+      "precision": 2,
+    }
+  `);
 });

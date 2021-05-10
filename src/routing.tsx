@@ -14,7 +14,7 @@ const ProductUpdate = lazy(
 const ProductCategories = lazy(
   () => import('./modules/catalog/category/ProductCategories')
 );
-const Dashboard = lazy(() => import('./modules/dashboard/Dashboard'));
+// const Dashboard = lazy(() => import('./modules/dashboard/Dashboard'));  TODO: Enable after first release
 const Orders = lazy(() => import('./modules/order/Orders'));
 const Order = lazy(() => import('./modules/order/Order'));
 const Pages = lazy(() => import('./modules/page/Pages'));
@@ -22,7 +22,7 @@ const Page = lazy(() => import('./modules/page/Page'));
 const Settings = lazy(() => import('./modules/settings/Settings'));
 
 const secureRoutes = [
-  { path: '/', element: <Dashboard /> },
+  // { path: '/', element: <Dashboard /> }, TODO: Enable after first release
   { path: 'account', element: <Account /> },
   {
     path: 'catalog/*',
@@ -46,7 +46,7 @@ const secureRoutes = [
     ],
   },
   { path: 'settings/*', element: <Settings /> },
-  { path: '*', element: <Navigate to="/" /> },
+  { path: '*', element: <Navigate to="catalog/products" /> },
 ];
 
 export const getRoutes = (isLoggedIn: boolean): PartialRouteObject[] => {

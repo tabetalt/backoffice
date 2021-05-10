@@ -1,0 +1,42 @@
+name: Workflow
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+jobs:
+  build_test_lint:
+    name: Build, Test, Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache – NPM packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-14-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-14-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --ignore-optional
+
+      - name: Build website
+        run: yarn build
+        
+      - name: Run tests
+        run: yarn test
+        
+      - name: Run lint
+        run: yarn lint
+        

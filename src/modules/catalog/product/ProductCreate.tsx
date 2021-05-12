@@ -7,30 +7,39 @@ import ProductBasicOptions from './components/ProductBasicOptions';
 import ProductNavigation from './components/ProductNavigation';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
 import {
+  ProductCreateInput,
+  GetProductsDocument,
   GetCategoriesShortDocument,
-  GetProductDocument,
   useCreateProductMutation,
+  ProductCategoryCreateInput,
 } from '../../../generated/graphql';
+import * as DineroHelper from '../../../helpers';
 
 const ProductCreate: React.FC = () => {
   const navigate = useNavigate();
   const [createProduct, { error }] = useCreateProductMutation({
     refetchQueries: [
-      { query: GetProductDocument },
+      { query: GetProductsDocument },
       { query: GetCategoriesShortDocument },
     ],
   });
 
   const onSubmitBasic = useCallback(
     async (values) => {
-      const input = {
+      const input: ProductCreateInput = {
         tenantId: 1,
         ...values,
-        price: values.price.replace(',', '.') * 100,
+        price: {
+          grossAmount: DineroHelper.moneyFromString(values.price),
+        },
+        stockControl: true,
+        inStockNum: 0,
       };
+
       if (values.categories) {
+        console.log(values.categories);
         input.categories = (values.categories as TagProps[]).map(
-          ({ id, name }) => ({ id, title: name })
+          ({ id, name }) => ({ id, title: name } as ProductCategoryCreateInput)
         );
       }
       if (values.images) {
@@ -39,8 +48,8 @@ const ProductCreate: React.FC = () => {
         }));
       }
 
-      const res = await createProduct({ variables: { input } });
-      navigate(`/catalog/product/${res.data?.createProduct?.id}/basic`, {
+      await createProduct({ variables: { input } });
+      navigate(`/catalog/products`, {
         replace: true,
       });
     },

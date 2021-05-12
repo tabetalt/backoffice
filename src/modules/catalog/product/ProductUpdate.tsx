@@ -21,28 +21,31 @@ import {
   useUpdateProductMutation,
   ProductUpdateInput,
 } from '../../../generated/graphql';
+import * as DineroHelper from '../../../helpers';
 
 const ProductUpdate: React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
   const productId = Number(params.productId);
 
-  const { data, loading, error: errorGetProduct } = useGetProductQuery({
+  const {
+    data,
+    loading,
+    error: errorGetProduct,
+  } = useGetProductQuery({
     variables: {
       id: productId,
     },
   });
 
-  const [
-    updateProduct,
-    { error: errorUpdateProduct },
-  ] = useUpdateProductMutation({
-    refetchQueries: [
-      { query: GetProductsDocument },
-      { query: GetProductDocument, variables: { id: productId } },
-      { query: GetCategoriesShortDocument },
-    ],
-  });
+  const [updateProduct, { error: errorUpdateProduct }] =
+    useUpdateProductMutation({
+      refetchQueries: [
+        { query: GetProductsDocument },
+        { query: GetProductDocument, variables: { id: productId } },
+        { query: GetCategoriesShortDocument },
+      ],
+    });
 
   const onSubmit = useCallback(
     async (values) => {
@@ -54,7 +57,9 @@ const ProductUpdate: React.FC = () => {
       ]) as ProductUpdateInput;
 
       if (values.price) {
-        input.price = values.price.replace(',', '.') * 100;
+        input.price = {
+          grossAmount: DineroHelper.moneyFromString(values.price),
+        };
       }
       if (values.categories) {
         input.categories = (values.categories as TagProps[]).map(
@@ -67,6 +72,9 @@ const ProductUpdate: React.FC = () => {
         }));
       }
       await updateProduct({ variables: { id: productId, input } });
+      navigate(`/catalog/products`, {
+        replace: true,
+      });
     },
     [productId, data, updateProduct]
   );

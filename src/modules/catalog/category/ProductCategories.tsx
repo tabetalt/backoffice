@@ -9,13 +9,13 @@ import {
 import CategoriesListing from './CategoriesListing';
 import { CategoryModalContent } from './CategoryModalContent';
 
-export type CategoryItem = GetCategoriesWithParentQuery['categories']['items'][0];
+export type CategoryItem =
+  GetCategoriesWithParentQuery['categories']['items'][0];
 
 const Categories: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState<CategoryItem | null>(
-    null
-  );
+  const [currentCategory, setCurrentCategory] =
+    useState<CategoryItem | null>(null);
   const { data, loading, error } = useGetCategoriesWithParentQuery();
 
   let content = null;

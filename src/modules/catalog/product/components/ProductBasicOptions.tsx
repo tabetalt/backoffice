@@ -13,7 +13,7 @@ import { FormikHelpers, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { TextPosition } from '@tabetalt/kit/build/components/Input/components/prefilled-input-props';
 import { Error } from '../../../../components/common';
-import { formatPrice } from '../../../../helpers';
+import * as DineroHelper from '../../../../helpers';
 import { TagProps } from '@tabetalt/kit/build/components/InputTags/types';
 import gqlClient from '../../../../api/client';
 import {
@@ -83,7 +83,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     initialValues: {
       ...defaultValues,
       ...product,
-      price: formatPrice(product?.price?.formatted, null),
+      price: DineroHelper.formatPrice(product?.price),
       categories: product?.categories.map((category) => ({
         id: category?.id,
         name: category?.title,
@@ -150,7 +150,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     [setFieldValue, form.values.images]
   );
 
-  console.log(form.values);
+  //console.log(form.values);
 
   return (
     <form onSubmit={form.handleSubmit}>

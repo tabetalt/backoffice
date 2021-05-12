@@ -59,7 +59,7 @@ const Sidebar: React.FC = () => {
             window.location.reload();
           }}
         >
-          <icons.UploadIcon />
+          <icons.LogoutIcon />
         </IconButton>
       </Flex>
     </Flex>

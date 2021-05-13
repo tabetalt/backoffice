@@ -21,18 +21,22 @@ const styles = {
 export const SettingsNavigation: React.FC = () => {
   return (
     <Box sx={styles.wrapper}>
-      <NavLink to="general" style={styles.link} activeStyle={styles.linkActive}>
+      <NavLink
+        to="/settings/general"
+        style={styles.link}
+        activeStyle={styles.linkActive}
+      >
         Generelt
       </NavLink>
       <NavLink
-        to="shipping"
+        to="/settings/shipping"
         style={styles.link}
         activeStyle={styles.linkActive}
       >
         Leveringsmetoder
       </NavLink>
       <NavLink
-        to="payment-method"
+        to="/settings/payment-method"
         style={styles.link}
         activeStyle={styles.linkActive}
       >

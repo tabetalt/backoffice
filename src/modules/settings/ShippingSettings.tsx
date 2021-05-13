@@ -1,6 +1,8 @@
 import { Table, icons } from '@tabetalt/kit';
 import React from 'react';
 import { Box, Heading, IconButton, Text } from 'theme-ui';
+import Layout from '../../components/layout/Layout';
+import { SettingsNavigation } from './SettingsNavigation';
 
 const Shipping: React.FC = () => {
   const data = Array(4).fill({
@@ -37,14 +39,27 @@ const Shipping: React.FC = () => {
     },
   ];
   return (
-    <Box>
-      <Heading>Leveringsmetoder</Heading>
-      <Text sx={{ mb: 4 }}>
-        Hvilke leveringsmetoder vil du tilby? Her kan du administrere, sortere,
-        legge til eller slette leveringsmetoder som kundene dine kan bruke.
-      </Text>
-      <Table options={{ columns, data }} />
-    </Box>
+    <Layout
+      header={{
+        links: [
+          {
+            name: 'Innstillinger',
+            to: '/settings/general',
+          },
+        ],
+      }}
+    >
+      <Box sx={{ p: 5 }}>
+        <SettingsNavigation />
+        <Heading>Leveringsmetoder</Heading>
+        <Text sx={{ mb: 4 }}>
+          Hvilke leveringsmetoder vil du tilby? Her kan du administrere,
+          sortere, legge til eller slette leveringsmetoder som kundene dine kan
+          bruke.
+        </Text>
+        <Table options={{ columns, data }} />
+      </Box>
+    </Layout>
   );
 };
 

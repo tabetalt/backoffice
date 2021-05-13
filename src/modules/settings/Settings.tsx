@@ -1,18 +1,15 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { PartialRouteObject } from 'react-router';
-import { useRoutes, Navigate, useLocation } from 'react-router-dom';
-import { Box, Button } from 'theme-ui';
-import Layout from '../../components/layout/Layout';
+import { useRoutes, Navigate } from 'react-router-dom';
+import { Box } from 'theme-ui';
 import ShippingSettings from './ShippingSettings';
 import { GeneralSettings } from './GeneralSettings';
 //import DiscountSettings from './DiscountSettings';
-import { SettingsNavigation } from './SettingsNavigation';
 import PaymentMethodSettings from './PaymentMethodSettings';
 import { useTenants } from '../../context/TenantsContext';
 
 const Settings: React.FC = () => {
   const { currentTenant } = useTenants();
-
   const routes = useRoutes([
     {
       path: 'general',
@@ -23,23 +20,7 @@ const Settings: React.FC = () => {
     { path: '*', element: <Navigate to="general" /> },
   ] as PartialRouteObject[]);
 
-  return (
-    <Layout
-      header={{
-        links: [
-          {
-            name: 'Innstillinger',
-            to: 'general',
-          },
-        ],
-      }}
-    >
-      <Box sx={{ p: 5 }}>
-        <SettingsNavigation />
-        {routes}
-      </Box>
-    </Layout>
-  );
+  return <Box>{routes}</Box>;
 };
 
 export default Settings;

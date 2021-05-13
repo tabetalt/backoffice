@@ -567,11 +567,11 @@ export type Tenant = {
   languageCode: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  emailAddresses: Array<EmailAddress>;
-  addresses: Array<Address>;
-  socialMedias: Array<SocialMedia>;
-  trackingTags: Array<TrackingTag>;
-  storeUrls: Array<StoreUrl>;
+  emailAddresses?: Maybe<Array<EmailAddress>>;
+  addresses?: Maybe<Array<Address>>;
+  socialMedias?: Maybe<Array<SocialMedia>>;
+  trackingTags?: Maybe<Array<TrackingTag>>;
+  storeUrls?: Maybe<Array<StoreUrl>>;
 };
 
 export type TenantCreateInput = {
@@ -846,7 +846,98 @@ export type UpdateProductMutation = { __typename?: 'Mutation' } & {
   } & ProductShortFragment;
 };
 
-export type TenantFragment = { __typename?: 'Tenant' } & Pick<Tenant, 'id'>;
+export type TenantFragment = { __typename?: 'Tenant' } & Pick<
+  Tenant,
+  | 'id'
+  | 'status'
+  | 'priceDisplay'
+  | 'title'
+  | 'displayName'
+  | 'url'
+  | 'languageCode'
+>;
+
+export type EmailAddressFragment = { __typename?: 'EmailAddress' } & Pick<
+  EmailAddress,
+  'id' | 'address'
+>;
+
+export type AddressFragment = { __typename?: 'Address' } & Pick<
+  Address,
+  'id' | 'addressLines'
+>;
+
+export type SocialMediaFragment = { __typename?: 'SocialMedia' } & Pick<
+  SocialMedia,
+  'id' | 'type' | 'url'
+>;
+
+export type GetTenantsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetTenantsQuery = { __typename?: 'Query' } & {
+  tenants: { __typename?: 'TenantsListResponse' } & {
+    items: Array<
+      { __typename?: 'Tenant' } & {
+        emailAddresses?: Maybe<
+          Array<{ __typename?: 'EmailAddress' } & EmailAddressFragment>
+        >;
+        addresses?: Maybe<Array<{ __typename?: 'Address' } & AddressFragment>>;
+        socialMedias?: Maybe<
+          Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+        >;
+      } & TenantFragment
+    >;
+  };
+};
+
+export type DeleteTenantMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteTenantMutation = { __typename?: 'Mutation' } & {
+  deleteTenant: { __typename?: 'Tenant' } & TenantFragment;
+};
+
+export type GetTenantQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type GetTenantQuery = { __typename?: 'Query' } & {
+  tenant: { __typename?: 'Tenant' } & {
+    emailAddresses?: Maybe<
+      Array<{ __typename?: 'EmailAddress' } & EmailAddressFragment>
+    >;
+    addresses?: Maybe<Array<{ __typename?: 'Address' } & AddressFragment>>;
+    socialMedias?: Maybe<
+      Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+    >;
+  } & TenantFragment;
+};
+
+export type CreateTenantMutationVariables = Exact<{
+  input: TenantCreateInput;
+}>;
+
+export type CreateTenantMutation = { __typename?: 'Mutation' } & {
+  createTenant: { __typename?: 'Tenant' } & TenantFragment;
+};
+
+export type UpdateTenantMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: TenantUpdateInput;
+}>;
+
+export type UpdateTenantMutation = { __typename?: 'Mutation' } & {
+  updateTenant: { __typename?: 'Tenant' } & {
+    emailAddresses?: Maybe<
+      Array<{ __typename?: 'EmailAddress' } & EmailAddressFragment>
+    >;
+    addresses?: Maybe<Array<{ __typename?: 'Address' } & AddressFragment>>;
+    socialMedias?: Maybe<
+      Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+    >;
+  } & TenantFragment;
+};
 
 export const CategoryShortFragmentDoc = gql`
   fragment CategoryShort on Category {
@@ -940,6 +1031,31 @@ export const ProductFragmentDoc = gql`
 export const TenantFragmentDoc = gql`
   fragment Tenant on Tenant {
     id
+    status
+    priceDisplay
+    title
+    displayName
+    url
+    languageCode
+  }
+`;
+export const EmailAddressFragmentDoc = gql`
+  fragment EmailAddress on EmailAddress {
+    id
+    address
+  }
+`;
+export const AddressFragmentDoc = gql`
+  fragment Address on Address {
+    id
+    addressLines
+  }
+`;
+export const SocialMediaFragmentDoc = gql`
+  fragment SocialMedia on SocialMedia {
+    id
+    type
+    url
   }
 `;
 export const CreateCategoryDocument = gql`
@@ -1613,6 +1729,301 @@ export type UpdateProductMutationResult =
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<
   UpdateProductMutation,
   UpdateProductMutationVariables
+>;
+export const GetTenantsDocument = gql`
+  query GetTenants {
+    tenants {
+      items {
+        ...Tenant
+        emailAddresses {
+          ...EmailAddress
+        }
+        addresses {
+          ...Address
+        }
+        socialMedias {
+          ...SocialMedia
+        }
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${EmailAddressFragmentDoc}
+  ${AddressFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+
+/**
+ * __useGetTenantsQuery__
+ *
+ * To run a query within a React component, call `useGetTenantsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTenantsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTenantsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTenantsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetTenantsQuery,
+    GetTenantsQueryVariables
+  >
+) {
+  return Apollo.useQuery<GetTenantsQuery, GetTenantsQueryVariables>(
+    GetTenantsDocument,
+    baseOptions
+  );
+}
+export function useGetTenantsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTenantsQuery,
+    GetTenantsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetTenantsQuery, GetTenantsQueryVariables>(
+    GetTenantsDocument,
+    baseOptions
+  );
+}
+export type GetTenantsQueryHookResult = ReturnType<typeof useGetTenantsQuery>;
+export type GetTenantsLazyQueryHookResult = ReturnType<
+  typeof useGetTenantsLazyQuery
+>;
+export type GetTenantsQueryResult = Apollo.QueryResult<
+  GetTenantsQuery,
+  GetTenantsQueryVariables
+>;
+export const DeleteTenantDocument = gql`
+  mutation DeleteTenant($id: Int!) {
+    deleteTenant(id: $id) {
+      ...Tenant
+    }
+  }
+  ${TenantFragmentDoc}
+`;
+export type DeleteTenantMutationFn = Apollo.MutationFunction<
+  DeleteTenantMutation,
+  DeleteTenantMutationVariables
+>;
+
+/**
+ * __useDeleteTenantMutation__
+ *
+ * To run a mutation, you first call `useDeleteTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTenantMutation, { data, loading, error }] = useDeleteTenantMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteTenantMutation,
+    DeleteTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    DeleteTenantMutation,
+    DeleteTenantMutationVariables
+  >(DeleteTenantDocument, baseOptions);
+}
+export type DeleteTenantMutationHookResult = ReturnType<
+  typeof useDeleteTenantMutation
+>;
+export type DeleteTenantMutationResult =
+  Apollo.MutationResult<DeleteTenantMutation>;
+export type DeleteTenantMutationOptions = Apollo.BaseMutationOptions<
+  DeleteTenantMutation,
+  DeleteTenantMutationVariables
+>;
+export const GetTenantDocument = gql`
+  query GetTenant($id: Int!) {
+    tenant(id: $id) {
+      ...Tenant
+      emailAddresses {
+        ...EmailAddress
+      }
+      addresses {
+        ...Address
+      }
+      socialMedias {
+        ...SocialMedia
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${EmailAddressFragmentDoc}
+  ${AddressFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+
+/**
+ * __useGetTenantQuery__
+ *
+ * To run a query within a React component, call `useGetTenantQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTenantQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTenantQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetTenantQuery(
+  baseOptions: Apollo.QueryHookOptions<GetTenantQuery, GetTenantQueryVariables>
+) {
+  return Apollo.useQuery<GetTenantQuery, GetTenantQueryVariables>(
+    GetTenantDocument,
+    baseOptions
+  );
+}
+export function useGetTenantLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTenantQuery,
+    GetTenantQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetTenantQuery, GetTenantQueryVariables>(
+    GetTenantDocument,
+    baseOptions
+  );
+}
+export type GetTenantQueryHookResult = ReturnType<typeof useGetTenantQuery>;
+export type GetTenantLazyQueryHookResult = ReturnType<
+  typeof useGetTenantLazyQuery
+>;
+export type GetTenantQueryResult = Apollo.QueryResult<
+  GetTenantQuery,
+  GetTenantQueryVariables
+>;
+export const CreateTenantDocument = gql`
+  mutation CreateTenant($input: TenantCreateInput!) {
+    createTenant(input: $input) {
+      ...Tenant
+    }
+  }
+  ${TenantFragmentDoc}
+`;
+export type CreateTenantMutationFn = Apollo.MutationFunction<
+  CreateTenantMutation,
+  CreateTenantMutationVariables
+>;
+
+/**
+ * __useCreateTenantMutation__
+ *
+ * To run a mutation, you first call `useCreateTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTenantMutation, { data, loading, error }] = useCreateTenantMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateTenantMutation,
+    CreateTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    CreateTenantMutation,
+    CreateTenantMutationVariables
+  >(CreateTenantDocument, baseOptions);
+}
+export type CreateTenantMutationHookResult = ReturnType<
+  typeof useCreateTenantMutation
+>;
+export type CreateTenantMutationResult =
+  Apollo.MutationResult<CreateTenantMutation>;
+export type CreateTenantMutationOptions = Apollo.BaseMutationOptions<
+  CreateTenantMutation,
+  CreateTenantMutationVariables
+>;
+export const UpdateTenantDocument = gql`
+  mutation UpdateTenant($id: Int!, $input: TenantUpdateInput!) {
+    updateTenant(input: $input, id: $id) {
+      ...Tenant
+      emailAddresses {
+        ...EmailAddress
+      }
+      addresses {
+        ...Address
+      }
+      socialMedias {
+        ...SocialMedia
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${EmailAddressFragmentDoc}
+  ${AddressFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+export type UpdateTenantMutationFn = Apollo.MutationFunction<
+  UpdateTenantMutation,
+  UpdateTenantMutationVariables
+>;
+
+/**
+ * __useUpdateTenantMutation__
+ *
+ * To run a mutation, you first call `useUpdateTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTenantMutation, { data, loading, error }] = useUpdateTenantMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTenantMutation,
+    UpdateTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    UpdateTenantMutation,
+    UpdateTenantMutationVariables
+  >(UpdateTenantDocument, baseOptions);
+}
+export type UpdateTenantMutationHookResult = ReturnType<
+  typeof useUpdateTenantMutation
+>;
+export type UpdateTenantMutationResult =
+  Apollo.MutationResult<UpdateTenantMutation>;
+export type UpdateTenantMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTenantMutation,
+  UpdateTenantMutationVariables
 >;
 
 export interface PossibleTypesResultData {

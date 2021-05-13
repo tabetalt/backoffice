@@ -1,3 +1,90 @@
 fragment Tenant on Tenant {
   id
+  status
+  priceDisplay
+  title
+  displayName
+  url
+  languageCode
+}
+
+fragment EmailAddress on EmailAddress {
+  id
+  address
+}
+
+fragment TrackingTag on TrackingTag {
+  id
+  type
+  value
+}
+
+fragment Address on Address {
+  id
+  addressLines
+}
+
+fragment SocialMedia on SocialMedia {
+  id
+  type
+  url
+}
+
+query GetTenants {
+  tenants {
+    items {
+      ...Tenant
+      emailAddresses {
+        ...EmailAddress
+      }
+      addresses {
+        ...Address
+      }
+      socialMedias {
+        ...SocialMedia
+      }
+    }
+  }
+}
+
+mutation DeleteTenant($id: Int!) {
+  deleteTenant(id: $id) {
+    ...Tenant
+  }
+}
+
+query GetTenant($id: Int!) {
+  tenant(id: $id) {
+    ...Tenant
+    emailAddresses {
+      ...EmailAddress
+    }
+    addresses {
+      ...Address
+    }
+    socialMedias {
+      ...SocialMedia
+    }
+  }
+}
+
+mutation CreateTenant($input: TenantCreateInput!) {
+  createTenant(input: $input) {
+    ...Tenant
+  }
+}
+
+mutation UpdateTenant($id: Int!, $input: TenantUpdateInput!) {
+  updateTenant(input: $input, id: $id) {
+    ...Tenant
+    emailAddresses {
+      ...EmailAddress
+    }
+    addresses {
+      ...Address
+    }
+    socialMedias {
+      ...SocialMedia
+    }
+  }
 }

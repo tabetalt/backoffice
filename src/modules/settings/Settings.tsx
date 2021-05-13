@@ -13,7 +13,6 @@ import { useTenants } from '../../context/TenantsContext';
 const Settings: React.FC = () => {
   const { currentTenant } = useTenants();
 
-
   const routes = useRoutes([
     {
       path: 'general',
@@ -23,24 +22,24 @@ const Settings: React.FC = () => {
     { path: 'payment-method', element: <PaymentMethodSettings /> },
     { path: '*', element: <Navigate to="general" /> },
   ] as PartialRouteObject[]);
-  const layout =  (    <Layout
-    header={{
-      links: [
-        {
-          name: 'Innstillinger',
-          to: 'general',
-        },
-      ],
-    }}
-  >
-    <Box sx={{ p: 5 }}>
-      <SettingsNavigation />
-      {routes}
-    </Box>
-  </Layout>
-  );
-  return (
 
+  return (
+    <Layout
+      header={{
+        links: [
+          {
+            name: 'Innstillinger',
+            to: 'general',
+          },
+        ],
+      }}
+    >
+      <Box sx={{ p: 5 }}>
+        <SettingsNavigation />
+        {routes}
+      </Box>
+    </Layout>
+  );
 };
 
 export default Settings;

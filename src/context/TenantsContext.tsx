@@ -40,7 +40,7 @@ export const TenantsProvider: React.FC = ({ children }) => {
   // TODO: handle errors
   if (error) console.log(error);
   const currentTenant = tenants.length > 0 ? tenants[0] : null;
-  console.log(currentTenant);
+  // console.log(currentTenant);
   const context = {
     tenants,
     currentTenant,

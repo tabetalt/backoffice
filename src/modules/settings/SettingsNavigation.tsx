@@ -35,13 +35,13 @@ export const SettingsNavigation: React.FC = () => {
       >
         Leveringsmetoder
       </NavLink>
-      <NavLink
+      {/* <NavLink
         to="/settings/payment-method"
         style={styles.link}
         activeStyle={styles.linkActive}
       >
         Betalingsmetoder
-      </NavLink>
+      </NavLink> */}
     </Box>
   );
 };

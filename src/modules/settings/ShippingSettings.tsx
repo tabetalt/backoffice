@@ -3,6 +3,24 @@ import React from 'react';
 import { Box, Heading, IconButton, Text } from 'theme-ui';
 import Layout from '../../components/layout/Layout';
 import { SettingsNavigation } from './SettingsNavigation';
+import { useRowSelect } from 'react-table';
+
+const IndeterminateCheckbox = React.forwardRef<HTMLInputElement>(
+  ({ indeterminate, ...rest }: any, ref: any) => {
+    const defaultRef = React.useRef();
+    const resolvedRef = ref || defaultRef;
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
+
+    return (
+      <>
+        <input type="checkbox" ref={resolvedRef} {...rest} />
+      </>
+    );
+  }
+);
 
 const Shipping: React.FC = () => {
   const data = Array(4).fill({
@@ -20,24 +38,51 @@ const Shipping: React.FC = () => {
       </Box>
     ),
   });
-  const columns = [
-    {
-      Header: 'Leveringsmetode',
-      accessor: 'name',
-    },
-    {
-      Header: 'Pris',
-      accessor: 'price',
-    },
-    {
-      Header: 'Status',
-      accessor: 'status',
-    },
-    {
-      Header: '',
-      accessor: 'actions',
-    },
-  ];
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Leveringsmetode',
+        accessor: 'name',
+      },
+      {
+        Header: 'Pris',
+        accessor: 'price',
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+      },
+      {
+        Header: '',
+        accessor: 'actions',
+      },
+    ],
+    []
+  );
+
+  const addCheckbox = (hooks: any) => {
+    hooks.visibleColumns.push((columns: any) => [
+      {
+        id: 'selection',
+        Header: ({ getToggleAllRowsSelectedProps, selectedFlatRows }: any) => {
+          console.log(selectedFlatRows);
+          return (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            </div>
+          );
+        },
+        Cell: ({ row }: any) => (
+          <div>
+            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+          </div>
+        ),
+      },
+      ...columns,
+    ]);
+  };
+
   return (
     <Layout
       header={{
@@ -57,7 +102,10 @@ const Shipping: React.FC = () => {
           sortere, legge til eller slette leveringsmetoder som kundene dine kan
           bruke.
         </Text>
-        <Table options={{ columns, data }} />
+        <Table
+          options={{ columns, data }}
+          plugins={[useRowSelect, addCheckbox]}
+        />
       </Box>
     </Layout>
   );

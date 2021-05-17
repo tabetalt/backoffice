@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@apollo/client": "^3.2.5",
-    "@tabetalt/kit": "^1.19.9",
+    "@tabetalt/kit": "^1.20.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -17,8 +17,8 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-table": "^7.0.25",
     "@types/yup": "^0.29.9",
-    "firebase": "^8.4.3",
     "dinero.js": "^1.8.1",
+    "firebase": "^8.4.3",
     "formik": "^2.2.3",
     "framer-motion": "^2.6.15",
     "graphql": "^15.3.0",

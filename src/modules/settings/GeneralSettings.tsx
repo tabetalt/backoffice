@@ -1,21 +1,15 @@
-import { Field } from '@tabetalt/kit';
-import React, { MutableRefObject, useCallback, useRef } from 'react';
+// import { Field } from '@tabetalt/kit';
+import React, { MutableRefObject, useRef } from 'react';
 import Layout from '../../components/layout/Layout';
-import {
-  Form,
-  Formik,
-  FormikHelpers,
-  useFormik,
-  useFormikContext,
-} from 'formik';
+import { Form, Formik } from 'formik';
 import {
   Box,
   Button,
   Flex,
   Heading,
-  Input,
+  // Input,
   Label,
-  Select,
+  // Select,
   Text,
 } from 'theme-ui';
 import {
@@ -55,46 +49,7 @@ interface GeneralSettingsValues {
 }
 
 export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
-  // const form = useFormik<GeneralSettingsValues>({
-  //   initialValues: {
-  //     ...tenant,
-  //   } as GeneralSettingsValues,
-  //   // validationSchema: ProductSchema,
-  //   onSubmit,
-  // });
-
   const ref: MutableRefObject<any> = useRef();
-  // const onSubmit = useCallback(
-  //   async (values) => {
-  //     const input = _.omit({ tenantId: 1, ...data?.product, ...values }, [
-  //       'id',
-  //       '__typename',
-  //       'price',
-  //       'categories',
-  //     ]) as ProductUpdateInput;
-
-  //     if (values.price) {
-  //       input.price = {
-  //         grossAmount: DineroHelper.moneyFromString(values.price),
-  //       };
-  //     }
-  //     if (values.categories) {
-  //       input.categories = (values.categories as TagProps[]).map(
-  //         ({ id, name }) => ({ id: id as number, title: name })
-  //       );
-  //     }
-  //     if (values.images) {
-  //       input.images = values.images.map(({ url }: { url: string }) => ({
-  //         url,
-  //       }));
-  //     }
-  //     await updateProduct({ variables: { id: productId, input } });
-  //     navigate(`/catalog/products`, {
-  //       replace: true,
-  //     });
-  //   },
-  //   [productId, data, updateProduct]
-  // );
 
   if (!tenant)
     return (
@@ -185,11 +140,6 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                   </Box>
                 </Flex>
                 <FormField name="vatSats" label="MVA-sats" />
-                {/* <Field
-                  label="MVA-sats"
-                  name="vatSats"
-                  value={tenant.priceDisplay}
-                /> */}
                 <Flex sx={{ alignItems: 'center' }}>
                   <Label htmlFor="" sx={{ width: 'auto', minWidth: '8.75rem' }}>
                     Pris og valuta
@@ -199,28 +149,10 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                       name="vat"
                       options={['Inkl. MVA', 'Eksl. MVA']}
                     />
-                    {/* <Select
-                      name="vat"
-                      value={tenant.priceDisplay}
-                      sx={{ width: '100%' }}
-                    >
-                      <option value={TenantPriceDisplay.IncVat}>
-                        Inkl. MVA
-                      </option>
-                      <option value={TenantPriceDisplay.ExlVat}>
-                        Eksl. MVA
-                      </option>
-                    </Select> */}
                   </Box>
                   <Box sx={{ flex: 5, ml: 3 }}>
                     <FormSelect name="currency" options={['NOK']} />
-                    {/* <Select name="currency" sx={{ width: '100%' }}>
-                      <option>NOK</option>
-                    </Select> */}
                   </Box>
-                  {/* <Field label="Språk" name="lang" placeholder="Velg språk" as={Select}>
-            <option>Hello</option>
-          </Field> */}
                 </Flex>
               </Box>
               <Heading>Kontaktinformasjon</Heading>
@@ -230,24 +162,16 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
               </Text>
               <Box sx={{ '>div': { mb: 3, mt: 3 } }}>
                 <FormField name="companyName" label="Firmanavn" />
-                {/* <Field
-                  label="Firmanavn"
-                  name="companyName"
-                  value={tenant.displayName}
-                /> */}
                 <FormField name="companyAddress" label="Gateadresse" />
-                {/* <Field label="Gateadresse" name="companyAddress" value="" /> */}
                 <Flex sx={{ alignItems: 'center' }}>
                   <Label htmlFor="" sx={{ width: 'auto', minWidth: '8.75rem' }}>
                     Postnr. og sted
                   </Label>
                   <Box sx={{ flex: 3 }}>
                     <FormInput name="postalCode" placeholder="1234" />
-                    {/* <Input name="postalCode" placeholder="1234" /> */}
                   </Box>
                   <Box sx={{ flex: 8, ml: 3 }}>
                     <FormInput name="postalAddress" placeholder="Sted" />
-                    {/* <Input name="postalAddress" placeholder="Sted" /> */}
                   </Box>
                 </Flex>
                 <FormField
@@ -255,23 +179,11 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                   label="Evnt. org.nummer"
                   placeholder="NO 123 456 789 MVA"
                 />
-                {/* <Field
-                  label="Evnt. org.nummer"
-                  name="vatNumber"
-                  placeholder="NO 123 456 789 MVA"
-                  value=""
-                /> */}
                 <FormField
                   name="email"
                   label="Kontakt e-post"
                   placeholder="epostadresse@post.no"
                 />
-                {/* <Field
-                  label="Kontakt e-post"
-                  name="email"
-                  placeholder="epostadresse@post.no"
-                  value=""
-                /> */}
               </Box>
               <Heading>Angrerettskjema</Heading>
               <Text sx={{ mb: 3 }}>
@@ -291,35 +203,10 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
               </Text>
               <Box sx={{ '>div': { mb: 3 } }}>
                 <FormField name="facebook" label="Facebook" />
-                {/* <Field
-                  label="Facebook"
-                  name="facebook"
-                /> */}
-
                 <FormField name="twitter" label="Twitter" />
-                {/* <Field
-                  label="Twitter"
-                  name="twitter"
-                  value={tenant.socialMedias.twitter}
-                /> */}
                 {/* <FormField name="googlePlus" label="Google +" /> */}
-                {/* <Field
-                  label="Google +"
-                  name="googlePlus"
-                  value={tenant.googlePlus}
-                /> */}
                 <FormField name="instagram" label="Instagram" />
-                {/* <Field
-                  label="Instagram"
-                  name="instagram"
-                  value={tenant.instagram}
-                /> */}
                 <FormField name="linkedin" label="LinkedIn" />
-                {/* <Field
-                  label="LinkedIn"
-                  name="linkedin"
-                  value={tenant.linkedin}
-                /> */}
               </Box>
               <Heading>Google Analytics</Heading>
               <Text sx={{ mb: 3 }}>
@@ -327,11 +214,6 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
               </Text>
               <Box sx={{ '>div': { mb: 3 } }}>
                 <FormField name="trackingId" label="Tracking-ID" />
-                {/* <Field
-                  label="Tracking-ID"
-                  name="trackingId"
-                  // value={tenant.trackingId}
-                /> */}
               </Box>
             </Box>
             {/* <Box sx={{ border: '1px solid', m: 5, p: 5, borderColor: 'error' }}>

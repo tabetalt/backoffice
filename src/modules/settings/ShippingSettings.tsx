@@ -3,9 +3,9 @@ import React from 'react';
 import { Box, Heading, IconButton, Text } from 'theme-ui';
 import Layout from '../../components/layout/Layout';
 import { SettingsNavigation } from './SettingsNavigation';
-import { useRowSelect } from 'react-table';
+import { Hooks, useRowSelect, UseRowSelectInstanceProps } from 'react-table';
 
-const IndeterminateCheckbox = React.forwardRef<HTMLInputElement>(
+const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }: any, ref: any) => {
     const defaultRef = React.useRef();
     const resolvedRef = ref || defaultRef;
@@ -61,11 +61,14 @@ const Shipping: React.FC = () => {
     []
   );
 
-  const addCheckbox = (hooks: any) => {
-    hooks.visibleColumns.push((columns: any) => [
+  const addCheckbox = (hooks: Hooks<any>) => {
+    hooks.visibleColumns.push((columns: Array<any>) => [
       {
         id: 'selection',
-        Header: ({ getToggleAllRowsSelectedProps, selectedFlatRows }: any) => {
+        Header: ({
+          getToggleAllRowsSelectedProps,
+          selectedFlatRows,
+        }: UseRowSelectInstanceProps<any>) => {
           console.log(selectedFlatRows);
           return (
             <div>

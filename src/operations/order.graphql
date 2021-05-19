@@ -1,0 +1,76 @@
+fragment Money on Money {
+  amount
+  currency
+  precision
+}
+
+fragment ProductPartial on Product {
+  id
+  title
+}
+
+fragment OrderToProduct on OrderToProduct {
+  product {
+    ...ProductPartial
+  }
+  count
+}
+
+fragment OrderShort on Order {
+  id
+  orderTime
+  status
+  paymentStatus
+  tenantId
+  totalSum {
+    ...Money
+  }
+}
+
+fragment Payment on Payment {
+  id
+  paymentTime
+  status
+  processingId
+  processingCode
+}
+
+fragment Order on Order {
+  ...OrderShort
+  products {
+    ...OrderToProduct
+  }
+  payments {
+    ...Payment
+  }
+}
+
+query GetOrders {
+  orders {
+    items {
+      ...OrderShort
+    }
+  }
+}
+
+mutation DeleteOrder($id: Int!) {
+  deleteOrder(id: $id)
+}
+
+query GetOrder($id: Int!) {
+  order(id: $id) {
+    ...Order
+  }
+}
+
+mutation CreateOrder($input: OrderCreateInput!) {
+  createOrder(input: $input) {
+    ...Order
+  }
+}
+
+mutation UpdateOrder($id: Int!, $input: OrderUpdateInput!) {
+  updateOrder(id: $id, input: $input) {
+    ...Order
+  }
+}

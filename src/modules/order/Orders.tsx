@@ -1,34 +1,37 @@
 import React from 'react';
 import { CellProps, LoaderIcon, Table } from '@tabetalt/kit';
 import Layout from '../../components/layout/Layout';
-import { Badge, Box, Button } from 'theme-ui';
+import { Box, Button } from 'theme-ui';
 import { useNavigate } from 'react-router-dom';
-import { GetProductsQuery, useGetProductsQuery } from '../../generated/graphql';
-
-export type ProductItem = GetProductsQuery['products']['items'][0];
+import { GetOrdersQuery, useGetOrdersQuery } from '../../generated/graphql';
+import * as DineroHelper from '../../helpers';
+import moment from 'moment';
+export type OrderItem = GetOrdersQuery['orders']['items'][0];
 
 const Orders: React.FC = () => {
   const navigate = useNavigate();
 
-  const { data, loading, error } = useGetProductsQuery();
+  const { data, loading, error } = useGetOrdersQuery();
 
   const columns = React.useMemo(
     () => [
       {
         Header: 'Ordre',
-        accessor: 'orderNumber',
+        accessor: 'id',
       },
       {
         Header: 'Dato',
-        accessor: 'orderDate',
+        accessor: 'orderTime',
+        Cell: ({ row: { original: order } }: CellProps<OrderItem>) =>
+          moment(order.orderTime).format('DD.MM.YYYY hh:mm'),
       },
       {
         Header: 'Kunde',
-        accessor: 'customer',
+        accessor: 'tenantId',
       },
       {
         Header: 'Ordrestatus',
-        accessor: 'orderStatus',
+        accessor: 'status',
       },
       {
         Header: 'Betaling',
@@ -36,16 +39,19 @@ const Orders: React.FC = () => {
       },
       {
         Header: 'Totalsum',
-        accessor: 'total',
+        accessor: 'totalSum.amount',
+        Cell: ({ row: { original: order } }: CellProps<OrderItem>) =>
+          DineroHelper.formatMoney(order?.totalSum),
       },
+
       {
         Header: '',
         accessor: 'actions',
-        Cell: ({ row: { original: product } }: CellProps<ProductItem>) => (
+        Cell: ({ row: { original: order } }: CellProps<OrderItem>) => (
           <Box sx={{ textAlign: 'right' }}>
             <Button
               variant="outline"
-              onClick={() => navigate(`/order/${product.id}`)}
+              onClick={() => navigate(`/order/${order.id}`)}
             >
               Vis
             </Button>
@@ -62,17 +68,12 @@ const Orders: React.FC = () => {
   } else if (error) {
     content = <span>Error getting order list</span>; // TODO: improve error message
   } else {
-    content = (
-      <Table options={{ columns, data: data?.products?.items || [] }} />
-    );
+    content = <Table options={{ columns, data: data?.orders.items || [] }} />;
   }
 
   return (
     <Layout>
-      <Box sx={{ p: 5 }}>
-        {/* <Table options={{ columns, data }} /> */}
-        {content}
-      </Box>
+      <Box sx={{ p: 5 }}>{content}</Box>
     </Layout>
   );
 };

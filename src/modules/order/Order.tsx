@@ -3,20 +3,20 @@ import { Badge, Box, Button, Flex, Heading, Link, Text } from 'theme-ui';
 import { icons, Table } from '@tabetalt/kit';
 import Layout from '../../components/layout/Layout';
 import { useParams } from 'react-router';
-import { useGetProductQuery } from '../../generated/graphql';
+import { useGetOrderQuery } from '../../generated/graphql';
 
 const columns = [
   {
     Header: 'Produkt',
-    accessor: 'name',
+    accessor: 'product.title',
   },
   {
     Header: 'Pris',
-    accessor: 'price',
+    accessor: 'product.price',
   },
   {
     Header: 'Antall',
-    accessor: 'amount',
+    accessor: 'count',
   },
   {
     Header: 'Totalt',
@@ -28,24 +28,11 @@ const Order: React.FC = () => {
   const params = useParams();
   const orderId = Number(params.orderId);
 
-  const {
-    data,
-    loading,
-    error: errorGetProduct,
-  } = useGetProductQuery({
+  const { data, loading, error } = useGetOrderQuery({
     variables: {
       id: orderId,
     },
   });
-
-  const data1 = [
-    {
-      name: 'Testproduktnavn',
-      price: '299,90 NOK',
-      amount: '1',
-      total: '299,90 NOK',
-    },
-  ];
 
   return (
     <Layout>
@@ -92,7 +79,7 @@ const Order: React.FC = () => {
               </Flex>
               <Flex sx={{ width: '100%', justifyContent: 'center', py: 3 }}>
                 <Text sx={{ flexGrow: 1 }}>Betalingstype:</Text>
-                <Text>Faktura</Text>
+                <Text>Manuell fakturering</Text>
               </Flex>
               <hr />
               <Box sx={{ '> a': { mr: 2 } }}>
@@ -101,7 +88,7 @@ const Order: React.FC = () => {
               </Box>
             </Box>
 
-            {/* <Box sx={{ mb: 5 }}>
+            <Box sx={{ mb: 5 }}>
               <Flex sx={{ width: '100%', justifyContent: 'center' }}>
                 <Heading as="h3" sx={{ flexGrow: 1 }}>
                   Ordrestatus
@@ -117,7 +104,7 @@ const Order: React.FC = () => {
                 <Link>Marker som sendt</Link>
                 <Link>Marker som bekreftet</Link>
               </Box>
-            </Box> */}
+            </Box>
             {/* <Box>
               <Heading as="h3" sx={{ flexGrow: 1 }}>
                 Kommentar fra kunde
@@ -140,7 +127,7 @@ const Order: React.FC = () => {
         </Flex>
 
         <Box sx={{ mt: 5 }}>
-          <Table options={{ columns, data: data1 }} />
+          <Table options={{ columns, data: data?.order.products || [] }} />
         </Box>
         <Box
           sx={{
@@ -170,7 +157,7 @@ const Order: React.FC = () => {
           </Flex>
           <Flex sx={{ pt: 3, '> div': { fontSize: 2 } }}>
             <Text>Totalt</Text>
-            <Text>1 060,70 NOK</Text>
+            <Text>{data?.order.totalSum}</Text>
           </Flex>
         </Box>
       </Box>

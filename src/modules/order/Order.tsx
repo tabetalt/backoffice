@@ -93,7 +93,7 @@ const Order: React.FC = () => {
                 <Heading as="h3" sx={{ flexGrow: 1 }}>
                   Ordrestatus
                 </Heading>
-                <Badge variant="error">Ubekreftet</Badge>
+                <Badge variant="error">{data?.order.status}</Badge>
               </Flex>
               <Flex sx={{ width: '100%', justifyContent: 'center', py: 3 }}>
                 <Text sx={{ flexGrow: 1 }}>Leveringsmetode:</Text>

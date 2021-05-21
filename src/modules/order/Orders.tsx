@@ -1,7 +1,7 @@
 import React from 'react';
 import { CellProps, LoaderIcon, Table } from '@tabetalt/kit';
 import Layout from '../../components/layout/Layout';
-import { Box, Button } from 'theme-ui';
+import { Badge, Box, Button } from 'theme-ui';
 import { useNavigate } from 'react-router-dom';
 import { GetOrdersQuery, useGetOrdersQuery } from '../../generated/graphql';
 import * as DineroHelper from '../../helpers';
@@ -32,10 +32,28 @@ const Orders: React.FC = () => {
       {
         Header: 'Ordrestatus',
         accessor: 'status',
+        Cell: ({ row: { original: order } }: CellProps<OrderItem>) => {
+          const statusVariant =
+            order.status === 'CONFIRMED'
+              ? 'success'
+              : order.status === 'UNCONFIRMED'
+              ? 'warning'
+              : 'error';
+          return <Badge variant={statusVariant}>{order.status}</Badge>;
+        },
       },
       {
         Header: 'Betaling',
         accessor: 'paymentStatus',
+        Cell: ({ row: { original: order } }: CellProps<OrderItem>) => {
+          const statusVariant =
+            order.paymentStatus === 'PAID'
+              ? 'success'
+              : order.paymentStatus === 'PENDING'
+              ? 'warning'
+              : 'error';
+          return <Badge variant={statusVariant}>{order.paymentStatus}</Badge>;
+        },
       },
       {
         Header: 'Totalsum',

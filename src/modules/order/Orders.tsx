@@ -57,9 +57,9 @@ const Orders: React.FC = () => {
       },
       {
         Header: 'Totalsum',
-        accessor: 'totalSum.amount',
+        accessor: 'totalPrice.amount',
         Cell: ({ row: { original: order } }: CellProps<OrderItem>) =>
-          DineroHelper.formatMoney(order?.totalSum),
+          DineroHelper.formatPrice(order?.totalPrice),
       },
 
       {

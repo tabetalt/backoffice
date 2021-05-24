@@ -4,6 +4,8 @@ import { icons, Table } from '@tabetalt/kit';
 import Layout from '../../components/layout/Layout';
 import { useParams } from 'react-router';
 import { useGetOrderQuery } from '../../generated/graphql';
+import * as DineroHelper from '../../helpers';
+import moment from 'moment';
 
 const columns = [
   {
@@ -40,7 +42,10 @@ const Order: React.FC = () => {
         <Flex sx={{ width: '100%' }}>
           <Box sx={{ flex: '7', mr: 4 }}>
             <Heading sx={{ mb: 3 }}>Oppsummering av ordre</Heading>
-            <Text sx={{ mb: 4 }}>Bestilt den 27.05.2020 kl. 19:37</Text>
+            <Text sx={{ mb: 4 }}>
+              Bestilt den{' '}
+              {moment(data?.order.orderTime).format('DD.MM.YYYY hh:mm')}
+            </Text>
             <Flex
               sx={{
                 mt: 4,
@@ -157,7 +162,11 @@ const Order: React.FC = () => {
           </Flex>
           <Flex sx={{ pt: 3, '> div': { fontSize: 2 } }}>
             <Text>Totalt</Text>
-            <Text>{data?.order.totalSum}</Text>
+            <Text>
+              {DineroHelper.formatPrice(data?.order.totalPrice)}{' '}
+              {/* {data?.order.totalPrice.currency} */}
+              NOK
+            </Text>
           </Flex>
         </Box>
       </Box>

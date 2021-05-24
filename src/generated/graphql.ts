@@ -29,10 +29,10 @@ export type Address = {
   sortingCode: Scalars['String'];
   administrativeArea: Scalars['String'];
   locality: Scalars['String'];
-  addressLines: Scalars['String'];
-  recipients: Scalars['String'];
+  addressLines: Array<Scalars['String']>;
+  recipients: Array<Scalars['String']>;
   organization: Scalars['String'];
-  current: Scalars['String'];
+  tenantId: Scalars['Int'];
 };
 
 export enum AddressType {
@@ -251,24 +251,42 @@ export enum CurrencyCode {
   Zwl = 'ZWL',
 }
 
-export type EmailAddress = {
-  __typename?: 'EmailAddress';
+export type DeliveryMethod = {
+  __typename?: 'DeliveryMethod';
   id: Scalars['Int'];
-  type: EmailAddressType;
-  address: Scalars['String'];
+  name: Scalars['String'];
+  price: Money;
+  digitalDelivery: Scalars['Boolean'];
+  status: DeliveryMethodStatus;
   tenantId: Scalars['Int'];
-  tenant: Tenant;
 };
 
-export enum EmailAddressType {
-  EmailAddressTypeUnspecified = 'EMAIL_ADDRESS_TYPE_UNSPECIFIED',
-  Primary = 'PRIMARY',
-  CatchAll = 'CATCH_ALL',
-  Order = 'ORDER',
-  Announcement = 'ANNOUNCEMENT',
-  Recovery = 'RECOVERY',
-  CustomerFacing = 'CUSTOMER_FACING',
+export type DeliveryMethodCreateInput = {
+  name: Scalars['String'];
+  price: MoneyInput;
+  digitalDelivery?: Maybe<Scalars['Boolean']>;
+  status?: Maybe<DeliveryMethodStatus>;
+  tenantId: Scalars['Int'];
+};
+
+export enum DeliveryMethodStatus {
+  DeliveryMethodStatusUnspecified = 'DELIVERY_METHOD_STATUS_UNSPECIFIED',
+  Pending = 'PENDING',
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
 }
+
+export type DeliveryMethodUpdateInput = {
+  name?: Maybe<Scalars['String']>;
+  price?: Maybe<MoneyInput>;
+  digitalDelivery?: Maybe<Scalars['Boolean']>;
+  status?: Maybe<DeliveryMethodStatus>;
+};
+
+export type DeliveryMethodsListResponse = {
+  __typename?: 'DeliveryMethodsListResponse';
+  items: Array<DeliveryMethod>;
+};
 
 export type ImageCreateInput = {
   id?: Maybe<Scalars['Int']>;
@@ -279,13 +297,13 @@ export type ImageCreateInput = {
 
 export type Money = {
   __typename?: 'Money';
-  amount: Scalars['Int'];
+  amount?: Maybe<Scalars['Int']>;
   currency?: Maybe<CurrencyCode>;
   precision?: Maybe<Scalars['Int']>;
 };
 
 export type MoneyInput = {
-  amount: Scalars['Int'];
+  amount?: Maybe<Scalars['Int']>;
   currency?: Maybe<CurrencyCode>;
   precision?: Maybe<Scalars['Int']>;
 };
@@ -294,7 +312,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   createTenant: Tenant;
   updateTenant: Tenant;
-  deleteTenant: Tenant;
+  deleteTenant: Scalars['Boolean'];
+  createDeliveryMethod: DeliveryMethod;
+  updateDeliveryMethod: DeliveryMethod;
+  deleteDeliveryMethod: Scalars['Boolean'];
   createCategory: Category;
   updateCategory: Category;
   deleteCategory: Scalars['Boolean'];
@@ -326,6 +347,19 @@ export type MutationUpdateTenantArgs = {
 };
 
 export type MutationDeleteTenantArgs = {
+  id: Scalars['Int'];
+};
+
+export type MutationCreateDeliveryMethodArgs = {
+  input: DeliveryMethodCreateInput;
+};
+
+export type MutationUpdateDeliveryMethodArgs = {
+  input: DeliveryMethodUpdateInput;
+  id: Scalars['Int'];
+};
+
+export type MutationDeleteDeliveryMethodArgs = {
   id: Scalars['Int'];
 };
 
@@ -419,16 +453,22 @@ export type Order = {
   paymentStatus: PaymentStatus;
   tenantId: Scalars['Int'];
   tenant: Tenant;
-  totalSum: Money;
+  totalPrice?: Maybe<Price>;
   products: Array<OrderToProduct>;
   payments: Array<Payment>;
+  deliveryMethodId: Scalars['Int'];
+  deliveryMethod?: Maybe<DeliveryMethod>;
+  deliveryAddressId?: Maybe<Scalars['Int']>;
+  deliveryAddress?: Maybe<Address>;
+  orderAddressId?: Maybe<Scalars['Int']>;
+  orderAddress?: Maybe<Address>;
 };
 
 export type OrderCreateInput = {
   status?: Maybe<OrderStatus>;
   paymentStatus?: Maybe<PaymentStatus>;
   tenantId: Scalars['Int'];
-  totalSum?: Maybe<MoneyInput>;
+  totalPrice?: Maybe<PriceInput>;
   products?: Maybe<Array<OrderProductCreateInput>>;
 };
 
@@ -451,12 +491,13 @@ export type OrderToProduct = {
   productId: Scalars['Int'];
   product: Product;
   count: Scalars['Int'];
+  totalPrice: Price;
 };
 
 export type OrderUpdateInput = {
   status?: Maybe<OrderStatus>;
   paymentStatus?: Maybe<PaymentStatus>;
-  totalSum?: Maybe<MoneyInput>;
+  totalPrice?: Maybe<PriceInput>;
   products?: Maybe<Array<OrderProductCreateInput>>;
 };
 
@@ -592,6 +633,8 @@ export type Query = {
   __typename?: 'Query';
   tenants: TenantsListResponse;
   tenant: Tenant;
+  deliveryMethods: DeliveryMethodsListResponse;
+  deliveryMethod: DeliveryMethod;
   categories: CategoriesListResponse;
   category: Category;
   products: ProductsListResponse;
@@ -608,6 +651,10 @@ export type Query = {
 };
 
 export type QueryTenantArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryDeliveryMethodArgs = {
   id: Scalars['Int'];
 };
 
@@ -661,6 +708,12 @@ export type SocialMedia = {
   tenant: Tenant;
 };
 
+export type SocialMediaCreateInput = {
+  tenantId?: Maybe<Scalars['Int']>;
+  type: SocialMediaType;
+  url: Scalars['String'];
+};
+
 export enum SocialMediaType {
   SocialMediaTypeUnspecified = 'SOCIAL_MEDIA_TYPE_UNSPECIFIED',
   Facebook = 'FACEBOOK',
@@ -670,22 +723,6 @@ export enum SocialMediaType {
   Linkedin = 'LINKEDIN',
   Pinterest = 'PINTEREST',
   Other = 'OTHER',
-}
-
-export type StoreUrl = {
-  __typename?: 'StoreUrl';
-  id: Scalars['Int'];
-  type: StoreUrlType;
-  url: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export enum StoreUrlType {
-  StoreUrlTypeUnspecified = 'STORE_URL_TYPE_UNSPECIFIED',
-  CancellationForm = 'CANCELLATION_FORM',
-  TermsAndConditions = 'TERMS_AND_CONDITIONS',
-  PrivacyAgreement = 'PRIVACY_AGREEMENT',
 }
 
 export type Tenant = {
@@ -699,21 +736,30 @@ export type Tenant = {
   languageCode: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  emailAddresses: Array<EmailAddress>;
-  addresses: Array<Address>;
+  email: Scalars['String'];
+  postalCode: Scalars['String'];
+  postalAddress: Scalars['String'];
+  address: Scalars['String'];
+  orgNumber: Scalars['String'];
   socialMedias: Array<SocialMedia>;
-  trackingTags: Array<TrackingTag>;
-  storeUrls: Array<StoreUrl>;
   orders?: Maybe<Array<Order>>;
+  vatRate?: Maybe<VatRate>;
 };
 
 export type TenantCreateInput = {
-  status: Scalars['String'];
-  priceDisplay: Scalars['String'];
+  status?: Maybe<TenantStatus>;
+  priceDisplay?: Maybe<TenantPriceDisplay>;
   title: Scalars['String'];
   displayName: Scalars['String'];
   url: Scalars['String'];
   languageCode?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  postalAddress?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  orgNumber?: Maybe<Scalars['String']>;
+  socialMedias?: Maybe<Array<SocialMediaCreateInput>>;
+  vatRate?: Maybe<VatRateCreateInput>;
 };
 
 export enum TenantPriceDisplay {
@@ -729,36 +775,25 @@ export enum TenantStatus {
 }
 
 export type TenantUpdateInput = {
-  status: Scalars['String'];
-  priceDisplay: Scalars['String'];
-  title: Scalars['String'];
-  displayName: Scalars['String'];
-  url: Scalars['String'];
+  status?: Maybe<TenantStatus>;
+  priceDisplay?: Maybe<TenantPriceDisplay>;
+  title?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
   languageCode?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  postalAddress?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  orgNumber?: Maybe<Scalars['String']>;
+  socialMedias?: Maybe<Array<SocialMediaCreateInput>>;
+  vatRate?: Maybe<VatRateUpdateInput>;
 };
 
 export type TenantsListResponse = {
   __typename?: 'TenantsListResponse';
   items: Array<Tenant>;
 };
-
-export type TrackingTag = {
-  __typename?: 'TrackingTag';
-  id: Scalars['Int'];
-  type: TrackingTagType;
-  value: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export enum TrackingTagType {
-  TrackingTagTypeUnspecified = 'TRACKING_TAG_TYPE_UNSPECIFIED',
-  GoogleAnalytics = 'GOOGLE_ANALYTICS',
-  GoogleTagManager = 'GOOGLE_TAG_MANAGER',
-  FacebookPixel = 'FACEBOOK_PIXEL',
-  Hubspot = 'HUBSPOT',
-  Other = 'OTHER',
-}
 
 export type Variant = {
   __typename?: 'Variant';
@@ -793,8 +828,18 @@ export type VariantsListResponse = {
 export type VatRate = {
   __typename?: 'VatRate';
   id: Scalars['Int'];
-  value: Scalars['Int'];
+  value: Money;
   tenantId: Scalars['Int'];
+};
+
+export type VatRateCreateInput = {
+  value: MoneyInput;
+  tenantId?: Maybe<Scalars['Int']>;
+};
+
+export type VatRateUpdateInput = {
+  value?: Maybe<MoneyInput>;
+  tenantId?: Maybe<Scalars['Int']>;
 };
 
 export type CategoryFragment = { __typename?: 'Category' } & Pick<
@@ -898,7 +943,7 @@ export type OrderToProductFragment = { __typename?: 'OrderToProduct' } & Pick<
 export type OrderShortFragment = { __typename?: 'Order' } & Pick<
   Order,
   'id' | 'orderTime' | 'status' | 'paymentStatus' | 'tenantId'
-> & { totalSum: { __typename?: 'Money' } & MoneyFragment };
+> & { totalPrice?: Maybe<{ __typename?: 'Price' } & PriceFragment> };
 
 export type PaymentFragment = { __typename?: 'Payment' } & Pick<
   Payment,
@@ -1061,6 +1106,20 @@ export const MoneyFragmentDoc = gql`
     precision
   }
 `;
+export const PriceFragmentDoc = gql`
+  fragment Price on Price {
+    vatAmount {
+      ...Money
+    }
+    grossAmount {
+      ...Money
+    }
+    netAmount {
+      ...Money
+    }
+  }
+  ${MoneyFragmentDoc}
+`;
 export const OrderShortFragmentDoc = gql`
   fragment OrderShort on Order {
     id
@@ -1068,11 +1127,11 @@ export const OrderShortFragmentDoc = gql`
     status
     paymentStatus
     tenantId
-    totalSum {
-      ...Money
+    totalPrice {
+      ...Price
     }
   }
-  ${MoneyFragmentDoc}
+  ${PriceFragmentDoc}
 `;
 export const ProductPartialFragmentDoc = gql`
   fragment ProductPartial on Product {
@@ -1128,20 +1187,6 @@ export const ProductShortFragmentDoc = gql`
     stockControl
     inStockNum
   }
-`;
-export const PriceFragmentDoc = gql`
-  fragment Price on Price {
-    vatAmount {
-      ...Money
-    }
-    grossAmount {
-      ...Money
-    }
-    netAmount {
-      ...Money
-    }
-  }
-  ${MoneyFragmentDoc}
 `;
 export const VariantFragmentDoc = gql`
   fragment Variant on Variant {

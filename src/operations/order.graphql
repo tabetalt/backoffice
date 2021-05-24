@@ -22,8 +22,8 @@ fragment OrderShort on Order {
   status
   paymentStatus
   tenantId
-  totalSum {
-    ...Money
+  totalPrice {
+    ...Price
   }
 }
 

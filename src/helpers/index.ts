@@ -15,6 +15,15 @@ export const formatPrice = (
   return amount;
 };
 
+export const formatMoney = (value?: Money | null): string => {
+  if (!value) return '0';
+
+  const priceValue = value as DineroObject;
+
+  const amount = priceValue ? Dinero(priceValue).toFormat('0.00') : '0';
+  return amount;
+};
+
 export const valueFromString = (
   value: string,
   precision = 2,

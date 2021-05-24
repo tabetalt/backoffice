@@ -20,7 +20,9 @@ import {
   SocialMediaType,
   SocialMedia,
   CurrencyCode,
+  VatRateUpdateInput,
 } from '../../generated/graphql';
+import * as DineroHelper from '../../helpers';
 import { TenantItem } from '../../context/TenantsContext';
 import { SettingsNavigation } from './SettingsNavigation';
 import { FormField } from '../../components/common/FormField';
@@ -116,9 +118,12 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
         title: tenant.title || '',
         url: tenant.url || '',
         languageCode: tenant.languageCode || '',
-        vatRateAmount: tenant.vatRate?.value.amount || '',
-        vatRateCurrency: tenant.vatRate?.value.currency || '',
-        priceDisplay: tenant.priceDisplay || '',
+        vatRateAmount: DineroHelper.formatMoney(tenant.vatRate?.value),
+        vatRateCurrency: tenant.vatRate?.value.currency || CurrencyCode.Nok,
+        priceDisplay:
+          tenant.priceDisplay == TenantPriceDisplay.IncVat
+            ? 'Inkl. MVA'
+            : 'Eksl. MVA',
         displayName: tenant.displayName || '',
         address: tenant.address || '',
         postalCode: tenant.postalCode || '',
@@ -134,9 +139,11 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
       onSubmit={async (values, { setSubmitting }) => {
         console.log(values);
 
-        const tenantPriceDisplay = TenantPriceDisplay.IncVat; ///todo
-        // for (let index = 0; index < 4; index++) {}
-        // const socialMedias: Array<SocialMedia> = [{type: SocialMediaType.Linkedin, url:""}]
+        const tenantPriceDisplay =
+          values.priceDisplay === 'Inkl. MVA'
+            ? TenantPriceDisplay.IncVat
+            : TenantPriceDisplay.ExlVat; ///todo
+
         const input: TenantUpdateInput = {
           priceDisplay: tenantPriceDisplay,
           title: values.title,
@@ -148,8 +155,19 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
           postalCode: values.postalCode,
           postalAddress: values.postalAddress,
           orgNumber: values.orgNumber,
-          socialMedias: tenant.socialMedias,
-          vatRate: tenant.vatRate,
+          socialMedias: [
+            { type: SocialMediaType.Facebook, url: values.facebook },
+            { type: SocialMediaType.Instagram, url: values.instagram },
+            { type: SocialMediaType.Linkedin, url: values.linkedin },
+            { type: SocialMediaType.Twitter, url: values.twitter },
+          ],
+          vatRate: {
+            value: DineroHelper.moneyFromString(
+              values.vatRateAmount,
+              2,
+              values.vatRateCurrency
+            ),
+          },
         };
         onSubmitGeneral(input);
       }}

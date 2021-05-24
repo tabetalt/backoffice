@@ -6,22 +6,24 @@ fragment Tenant on Tenant {
   displayName
   url
   languageCode
-}
-
-fragment EmailAddress on EmailAddress {
-  id
+  email
+  postalCode
+  postalAddress
   address
+  orgNumber
 }
 
-fragment TrackingTag on TrackingTag {
-  id
-  type
-  value
+fragment Money on Money {
+  amount
+  currency
+  precision
 }
 
-fragment Address on Address {
+fragment VatRate on VatRate {
   id
-  addressLines
+  value{
+    ...Money
+  }
 }
 
 fragment SocialMedia on SocialMedia {
@@ -30,37 +32,28 @@ fragment SocialMedia on SocialMedia {
   url
 }
 
+
+
 query GetTenants {
   tenants {
     items {
       ...Tenant
-      emailAddresses {
-        ...EmailAddress
-      }
-      addresses {
-        ...Address
-      }
-      socialMedias {
-        ...SocialMedia
+      vatRate {
+        ...VatRate
       }
     }
   }
 }
 
 mutation DeleteTenant($id: Int!) {
-  deleteTenant(id: $id) {
-    ...Tenant
-  }
+  deleteTenant(id: $id)
 }
 
 query GetTenant($id: Int!) {
   tenant(id: $id) {
     ...Tenant
-    emailAddresses {
-      ...EmailAddress
-    }
-    addresses {
-      ...Address
+    vatRate {
+      ...VatRate
     }
     socialMedias {
       ...SocialMedia
@@ -77,11 +70,8 @@ mutation CreateTenant($input: TenantCreateInput!) {
 mutation UpdateTenant($id: Int!, $input: TenantUpdateInput!) {
   updateTenant(input: $input, id: $id) {
     ...Tenant
-    emailAddresses {
-      ...EmailAddress
-    }
-    addresses {
-      ...Address
+    vatRate {
+      ...VatRate
     }
     socialMedias {
       ...SocialMedia

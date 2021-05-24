@@ -736,12 +736,12 @@ export type Tenant = {
   languageCode: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  email: Scalars['String'];
-  postalCode: Scalars['String'];
-  postalAddress: Scalars['String'];
-  address: Scalars['String'];
-  orgNumber: Scalars['String'];
-  socialMedias: Array<SocialMedia>;
+  email?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  postalAddress?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  orgNumber?: Maybe<Scalars['String']>;
+  socialMedias?: Maybe<Array<SocialMedia>>;
   orders?: Maybe<Array<Order>>;
   vatRate?: Maybe<VatRate>;
 };
@@ -1057,6 +1057,9 @@ export type GetTenantsQuery = { __typename?: 'Query' } & {
     items: Array<
       { __typename?: 'Tenant' } & {
         vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
+        socialMedias?: Maybe<
+          Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+        >;
       } & TenantFragment
     >;
   };
@@ -1078,7 +1081,9 @@ export type GetTenantQueryVariables = Exact<{
 export type GetTenantQuery = { __typename?: 'Query' } & {
   tenant: { __typename?: 'Tenant' } & {
     vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
-    socialMedias: Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>;
+    socialMedias?: Maybe<
+      Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+    >;
   } & TenantFragment;
 };
 
@@ -1098,7 +1103,9 @@ export type UpdateTenantMutationVariables = Exact<{
 export type UpdateTenantMutation = { __typename?: 'Mutation' } & {
   updateTenant: { __typename?: 'Tenant' } & {
     vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
-    socialMedias: Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>;
+    socialMedias?: Maybe<
+      Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+    >;
   } & TenantFragment;
 };
 
@@ -1903,11 +1910,15 @@ export const GetTenantsDocument = gql`
         vatRate {
           ...VatRate
         }
+        socialMedias {
+          ...SocialMedia
+        }
       }
     }
   }
   ${TenantFragmentDoc}
   ${VatRateFragmentDoc}
+  ${SocialMediaFragmentDoc}
 `;
 
 /**

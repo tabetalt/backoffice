@@ -21,7 +21,7 @@ fragment Money on Money {
 
 fragment VatRate on VatRate {
   id
-  value{
+  value {
     ...Money
   }
 }
@@ -32,14 +32,15 @@ fragment SocialMedia on SocialMedia {
   url
 }
 
-
-
 query GetTenants {
   tenants {
     items {
       ...Tenant
       vatRate {
         ...VatRate
+      }
+      socialMedias {
+        ...SocialMedia
       }
     }
   }

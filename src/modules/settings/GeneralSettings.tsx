@@ -1,5 +1,5 @@
 // import { Field } from '@tabetalt/kit';
-import React, { MutableRefObject, useRef } from 'react';
+import React, { MutableRefObject, useCallback, useRef } from 'react';
 import Layout from '../../components/layout/Layout';
 import { Form, Formik } from 'formik';
 import {
@@ -19,37 +19,90 @@ import {
   Address,
   StoreUrl,
   TrackingTag,
+  TenantUpdateInput,
+  Tenant,
+  TenantStatus,
+  useUpdateTenantMutation,
 } from '../../generated/graphql';
 import { TenantItem } from '../../context/TenantsContext';
 import { SettingsNavigation } from './SettingsNavigation';
 import { FormField } from '../../components/common/FormField';
 import { FormSelect } from '../../components/common/FormSelect';
 import { FormInput } from '../../components/common/FormInput';
+import * as Yup from 'yup';
 
 interface GeneralSettingsProps {
   tenant?: TenantItem | null;
-  // onSubmit: (
-  //   values: GeneralSettingsValues,
-  //   formikHelpers: FormikHelpers<GeneralSettingsValues>
-  // ) => void;
-  // error?: boolean;
 }
 
-interface GeneralSettingsValues {
-  priceDisplay: TenantPriceDisplay;
-  title: string;
-  displayName: string;
-  url: string;
-  languageCode: string;
-  emailAddresses?: EmailAddress[];
-  addresses?: Address[];
-  socialMedias?: SocialMedia[];
-  trackingTags?: TrackingTag[];
-  storeUrls?: StoreUrl[];
-}
+const TenantSchema = Yup.object().shape({
+  title: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .required('Required!'),
+  url: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .required('Required!'),
+  languageCode: Yup.string(),
+  vatSats: Yup.string(),
+  vat: Yup.string(),
+  displayName: Yup.string(),
+  addresses: Yup.string(),
+  postalCode: Yup.string(),
+  postalAddress: Yup.string(),
+  vatNumber: Yup.string(),
+  emailAddresses: Yup.string(),
+  angrerettskjema: Yup.string(),
+  facebook: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .url()
+    .required('Required!'),
+  twitter: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .url()
+    .required('Required!'),
+  instagram: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .url()
+    .required('Required!'),
+  linkedin: Yup.string()
+    .min(2, 'Too Short!')
+    .max(255, 'Too Long!')
+    .url()
+    .required('Required!'),
+  trackingId: Yup.string(),
+});
 
 export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
   const ref: MutableRefObject<any> = useRef();
+
+  const [updateTenant, { error }] = useUpdateTenantMutation({});
+
+  const onSubmitGeneral = useCallback(
+    async (values) => {
+      const input: TenantUpdateInput = {
+        // id: tenant.id,
+        status: TenantStatus.Active,
+        priceDisplay: TenantPriceDisplay.IncVat,
+        title: values.title,
+        displayName: values.displayName,
+        url: values.url,
+        languageCode: values.languageCode,
+        // emailAddresses: values.emailAddresses,
+        // addresses: values.addresses,
+        // socialMedias: values.socialMedias,
+        // trackingTags: Maybe<Array<TrackingTag>>;
+        // storeUrls: Maybe<Array<StoreUrl>>;
+      };
+
+      await updateTenant({ variables: { id: 1, input } });
+    },
+    [updateTenant]
+  );
 
   if (!tenant)
     return (
@@ -74,15 +127,15 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
       initialValues={{
         title: tenant.title,
         url: tenant.url,
-        lang: tenant.languageCode,
+        languageCode: tenant.languageCode,
         vatSats: tenant.priceDisplay,
         vat: tenant.priceDisplay,
-        companyName: tenant.displayName,
-        companyAddress: '',
+        displayName: tenant.displayName,
+        addresses: '',
         postalCode: '',
         postalAddress: '',
         vatNumber: '',
-        email: '',
+        emailAddresses: '',
         angrerettskjema: '',
         facebook: '',
         twitter: '',
@@ -90,9 +143,10 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
         linkedin: '',
         trackingId: '',
       }}
-      // validationSchema={{}}
+      validationSchema={TenantSchema}
       onSubmit={async (values, { setSubmitting }) => {
         console.log(values);
+        onSubmitGeneral(values);
       }}
     >
       <Layout
@@ -132,8 +186,11 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                     Språk
                   </Label>
                   <Box sx={{ flex: 5, ml: 3 }}>
-                    <FormSelect name="lang" options={['Norsk', 'ru', 'en']} />
-                    {/* <Select name="lang" sx={{ width: '100%' }}>
+                    <FormSelect
+                      name="languageCode"
+                      options={['Norsk', 'ru', 'en']}
+                    />
+                    {/* <Select name="languageCode" sx={{ width: '100%' }}>
                       <option>Norsk</option>
                       <option>Ru</option>
                     </Select> */}
@@ -161,8 +218,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                 og ordrebekreftelser.
               </Text>
               <Box sx={{ '>div': { mb: 3, mt: 3 } }}>
-                <FormField name="companyName" label="Firmanavn" />
-                <FormField name="companyAddress" label="Gateadresse" />
+                <FormField name="displayName" label="Firmanavn" />
+                <FormField name="addresses" label="Gateadresse" />
                 <Flex sx={{ alignItems: 'center' }}>
                   <Label htmlFor="" sx={{ width: 'auto', minWidth: '8.75rem' }}>
                     Postnr. og sted
@@ -180,7 +237,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                   placeholder="NO 123 456 789 MVA"
                 />
                 <FormField
-                  name="email"
+                  name="emailAddresses"
                   label="Kontakt e-post"
                   placeholder="epostadresse@post.no"
                 />

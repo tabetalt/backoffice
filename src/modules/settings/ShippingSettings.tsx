@@ -1,6 +1,6 @@
 import { Table, icons } from '@tabetalt/kit';
 import React from 'react';
-import { Box, Heading, IconButton, Text } from 'theme-ui';
+import { Box, Button, Heading, IconButton, Text } from 'theme-ui';
 import Layout from '../../components/layout/Layout';
 import { SettingsNavigation } from './SettingsNavigation';
 import { Hooks, useRowSelect, UseRowSelectInstanceProps } from 'react-table';
@@ -95,6 +95,11 @@ const Shipping: React.FC = () => {
             to: '/settings/general',
           },
         ],
+        children: (
+          <Box>
+            <Button sx={{ ml: 3 }}>Legg til ny leveringsmetode</Button>
+          </Box>
+        ),
       }}
     >
       <Box sx={{ p: 5 }}>

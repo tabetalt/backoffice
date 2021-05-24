@@ -14,15 +14,12 @@ import {
 } from 'theme-ui';
 import {
   TenantPriceDisplay,
-  SocialMedia,
-  EmailAddress,
-  Address,
-  StoreUrl,
-  TrackingTag,
   TenantUpdateInput,
-  Tenant,
   TenantStatus,
   useUpdateTenantMutation,
+  SocialMediaType,
+  SocialMedia,
+  CurrencyCode,
 } from '../../generated/graphql';
 import { TenantItem } from '../../context/TenantsContext';
 import { SettingsNavigation } from './SettingsNavigation';
@@ -35,47 +32,47 @@ interface GeneralSettingsProps {
   tenant?: TenantItem | null;
 }
 
-const TenantSchema = Yup.object().shape({
-  title: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .required('Required!'),
-  url: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .required('Required!'),
-  languageCode: Yup.string(),
-  vatSats: Yup.string(),
-  vat: Yup.string(),
-  displayName: Yup.string(),
-  addresses: Yup.string(),
-  postalCode: Yup.string(),
-  postalAddress: Yup.string(),
-  vatNumber: Yup.string(),
-  emailAddresses: Yup.string(),
-  angrerettskjema: Yup.string(),
-  facebook: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .url()
-    .required('Required!'),
-  twitter: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .url()
-    .required('Required!'),
-  instagram: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .url()
-    .required('Required!'),
-  linkedin: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .url()
-    .required('Required!'),
-  trackingId: Yup.string(),
-});
+// const TenantSchema = Yup.object().shape({
+//   title: Yup.string()
+//     .min(2, 'Too Short!')
+//     .max(255, 'Too Long!')
+//     .required('Required!'),
+//   url: Yup.string()
+//     .min(2, 'Too Short!')
+//     .max(255, 'Too Long!')
+//     .required('Required!'),
+//   languageCode: Yup.string(),
+//   vatSats: Yup.string(),
+//   vat: Yup.string(),
+//   displayName: Yup.string(),
+//   addresses: Yup.string(),
+//   postalCode: Yup.string(),
+//   postalAddress: Yup.string(),
+//   vatNumber: Yup.string(),
+//   emailAddresses: Yup.string(),
+//   angrerettskjema: Yup.string(),
+//   facebook: Yup.string()
+//     .min(2, 'Too Short!')
+//     .max(255, 'Too Long!')
+//     .url()
+//     .required('Required!'),
+//   twitter: Yup.string()
+//     .min(2, 'Too Short!')
+//     .max(255, 'Too Long!')
+//     .url()
+//     .required('Required!'),
+//   instagram: Yup.string()
+//     .min(2, 'Too Short!')
+//     .max(255, 'Too Long!')
+//     .url()
+//     .required('Required!'),
+//   linkedin: Yup.string()
+//     .min(2, 'Too Short!')
+//     .max(255, 'Too Long!')
+//     .url()
+//     .required('Required!'),
+//   trackingId: Yup.string(),
+// });
 
 export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
   const ref: MutableRefObject<any> = useRef();
@@ -83,26 +80,15 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
   const [updateTenant, { error }] = useUpdateTenantMutation({});
 
   const onSubmitGeneral = useCallback(
-    async (values) => {
-      const input: TenantUpdateInput = {
-        // id: tenant.id,
-        status: TenantStatus.Active,
-        priceDisplay: TenantPriceDisplay.IncVat,
-        title: values.title,
-        displayName: values.displayName,
-        url: values.url,
-        languageCode: values.languageCode,
-        // emailAddresses: values.emailAddresses,
-        // addresses: values.addresses,
-        // socialMedias: values.socialMedias,
-        // trackingTags: Maybe<Array<TrackingTag>>;
-        // storeUrls: Maybe<Array<StoreUrl>>;
-      };
-
-      await updateTenant({ variables: { id: 1, input } });
+    async (input) => {
+      await updateTenant({ variables: { id: tenant?.id || 1, input } });
     },
     [updateTenant]
   );
+
+  const findSocialMediaByName = (type: SocialMediaType) => {
+    return tenant?.socialMedias?.find((item) => item.type === type)?.url || '';
+  };
 
   if (!tenant)
     return (
@@ -125,28 +111,47 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
   return (
     <Formik
       initialValues={{
-        title: tenant.title,
-        url: tenant.url,
-        languageCode: tenant.languageCode,
-        vatSats: tenant.priceDisplay,
-        vat: tenant.priceDisplay,
-        displayName: tenant.displayName,
-        addresses: '',
-        postalCode: '',
-        postalAddress: '',
-        vatNumber: '',
-        emailAddresses: '',
-        angrerettskjema: '',
-        facebook: '',
-        twitter: '',
-        instagram: '',
-        linkedin: '',
-        trackingId: '',
+        // socialMedias: values.socialMedias,
+
+        title: tenant.title || '',
+        url: tenant.url || '',
+        languageCode: tenant.languageCode || '',
+        vatRateAmount: tenant.vatRate?.value.amount || '',
+        vatRateCurrency: tenant.vatRate?.value.currency || '',
+        priceDisplay: tenant.priceDisplay || '',
+        displayName: tenant.displayName || '',
+        address: tenant.address || '',
+        postalCode: tenant.postalCode || '',
+        postalAddress: tenant.postalAddress || '',
+        orgNumber: tenant.orgNumber || '',
+        email: tenant.email || '',
+        facebook: findSocialMediaByName(SocialMediaType.Facebook) || '',
+        twitter: findSocialMediaByName(SocialMediaType.Twitter) || '',
+        instagram: findSocialMediaByName(SocialMediaType.Instagram) || '',
+        linkedin: findSocialMediaByName(SocialMediaType.Linkedin) || '',
       }}
-      validationSchema={TenantSchema}
+      // validationSchema={TenantSchema}
       onSubmit={async (values, { setSubmitting }) => {
         console.log(values);
-        onSubmitGeneral(values);
+
+        const tenantPriceDisplay = TenantPriceDisplay.IncVat; ///todo
+        // for (let index = 0; index < 4; index++) {}
+        // const socialMedias: Array<SocialMedia> = [{type: SocialMediaType.Linkedin, url:""}]
+        const input: TenantUpdateInput = {
+          priceDisplay: tenantPriceDisplay,
+          title: values.title,
+          displayName: values.displayName,
+          url: values.url,
+          languageCode: values.languageCode,
+          email: values.email,
+          address: values.address,
+          postalCode: values.postalCode,
+          postalAddress: values.postalAddress,
+          orgNumber: values.orgNumber,
+          socialMedias: tenant.socialMedias,
+          vatRate: tenant.vatRate,
+        };
+        onSubmitGeneral(input);
       }}
     >
       <Layout
@@ -179,8 +184,6 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
               <Box sx={{ '>div': { mb: 3 } }}>
                 <FormField name="title" label="Navn på butikken" />
                 <FormField name="url" label="Butikkens URL" />
-                {/* <Field label="Navn på butikken" name="title" /> */}
-                {/* <Field label="Butikkens URL" name="url" /> */}
                 <Flex sx={{ alignItems: 'center' }}>
                   <Label htmlFor="" sx={{ width: 'auto', minWidth: '7.75rem' }}>
                     Språk
@@ -190,25 +193,21 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                       name="languageCode"
                       options={['Norsk', 'ru', 'en']}
                     />
-                    {/* <Select name="languageCode" sx={{ width: '100%' }}>
-                      <option>Norsk</option>
-                      <option>Ru</option>
-                    </Select> */}
                   </Box>
                 </Flex>
-                <FormField name="vatSats" label="MVA-sats" />
+                <FormField name="vatRateAmount" label="MVA-sats" />
                 <Flex sx={{ alignItems: 'center' }}>
                   <Label htmlFor="" sx={{ width: 'auto', minWidth: '8.75rem' }}>
                     Pris og valuta
                   </Label>
                   <Box sx={{ flex: 5 }}>
                     <FormSelect
-                      name="vat"
+                      name="priceDisplay"
                       options={['Inkl. MVA', 'Eksl. MVA']}
                     />
                   </Box>
                   <Box sx={{ flex: 5, ml: 3 }}>
-                    <FormSelect name="currency" options={['NOK']} />
+                    <FormSelect name="vatRateCurrency" options={['NOK']} />
                   </Box>
                 </Flex>
               </Box>
@@ -219,7 +218,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
               </Text>
               <Box sx={{ '>div': { mb: 3, mt: 3 } }}>
                 <FormField name="displayName" label="Firmanavn" />
-                <FormField name="addresses" label="Gateadresse" />
+                <FormField name="address" label="Gateadresse" />
                 <Flex sx={{ alignItems: 'center' }}>
                   <Label htmlFor="" sx={{ width: 'auto', minWidth: '8.75rem' }}>
                     Postnr. og sted
@@ -232,17 +231,17 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                   </Box>
                 </Flex>
                 <FormField
-                  name="vatNumber"
+                  name="orgNumber"
                   label="Evnt. org.nummer"
                   placeholder="NO 123 456 789 MVA"
                 />
                 <FormField
-                  name="emailAddresses"
+                  name="email"
                   label="Kontakt e-post"
                   placeholder="epostadresse@post.no"
                 />
               </Box>
-              <Heading>Angrerettskjema</Heading>
+              {/* <Heading>Angrerettskjema</Heading>
               <Text sx={{ mb: 3 }}>
                 Angrerettsskjemaet vil etter opplastning bli vedlagt med
                 ordrebekreftelsen til kunden. Husk å legg inn din virksomhets
@@ -252,8 +251,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
               </Text>
               <Box sx={{ '>div': { mb: 3 } }}>
                 <FormField name="angrerettskjema" label="Last opp" />
-                {/* <Field label="Last opp" name="angrerettskjema" value="" /> */}
-              </Box>
+                <Field label="Last opp" name="angrerettskjema" value="" />
+              </Box>*/}
               <Heading>Sosiale Medier</Heading>
               <Text sx={{ mb: 3 }}>
                 Denne informasjonen vises i footer i nettbutikken.
@@ -269,9 +268,9 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
               <Text sx={{ mb: 3 }}>
                 Koble nettbutikken din opp mot Google Analytics.
               </Text>
-              <Box sx={{ '>div': { mb: 3 } }}>
+              {/* <Box sx={{ '>div': { mb: 3 } }}>
                 <FormField name="trackingId" label="Tracking-ID" />
-              </Box>
+              </Box> */}
             </Box>
             {/* <Box sx={{ border: '1px solid', m: 5, p: 5, borderColor: 'error' }}>
               <Heading sx={{ fontWeight: 'normal', mb: 4 }}>FARESONEN</Heading>

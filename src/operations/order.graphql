@@ -4,6 +4,18 @@ fragment Money on Money {
   precision
 }
 
+fragment Price on Price {
+  vatAmount {
+    ...Money
+  }
+  grossAmount {
+    ...Money
+  }
+  netAmount {
+    ...Money
+  }
+}
+
 fragment ProductPartial on Product {
   id
   title

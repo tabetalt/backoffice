@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
-import { Box, Button } from 'theme-ui';
+import { Box, Button, Label } from 'theme-ui';
 import {
   Field,
   InputTags,
@@ -25,7 +25,7 @@ import {
   useGetCategoriesShortQuery,
 } from '../../../../generated/graphql';
 import { useTenants } from '../../../../context/TenantsContext';
-import Dinero, { DineroObject } from 'dinero.js';
+import { DineroObject } from 'dinero.js';
 
 export type Product = GetProductQuery['product'];
 
@@ -208,16 +208,13 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
           {form.touched.price && form.errors.price && (
             <Error message={form.errors.price} />
           )}
-        </div>
-        <div>
-          <span style={{ color: 'grey' }}>
-            {currentTenant?.vatRate &&
-              form.values &&
-              DineroHelper.vatRateCalculation(
-                currentTenant?.vatRate.value as DineroObject,
+          <Label sx={{ color: 'gray', ml: 158 }}>
+            {'Pris eks. MVA: ' +
+              DineroHelper.priceWithoutRate(
+                currentTenant?.vatRate?.value as DineroObject,
                 form.values.price
               )}
-          </span>
+          </Label>
         </div>
         <div>
           <Field

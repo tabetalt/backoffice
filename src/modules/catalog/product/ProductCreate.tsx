@@ -37,7 +37,6 @@ const ProductCreate: React.FC = () => {
       };
 
       if (values.categories) {
-        console.log(values.categories);
         input.categories = (values.categories as TagProps[]).map(
           ({ id, name }) => ({ id, title: name } as ProductCategoryCreateInput)
         );

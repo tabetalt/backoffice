@@ -34,9 +34,10 @@ const Products: React.FC = () => {
   } else if (error) {
     content = <span>Error getting product list</span>; // TODO: improve error message
   } else {
+    console.log('qweqweqeqweqw');
+    console.log(data);
     content = <ProductsListing data={data?.products?.items} />;
   }
-
   const onExport = () => null;
   const onImport = () => null;
   const onAdd = () => navigate('/catalog/product/new/basic');

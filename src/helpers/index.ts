@@ -6,7 +6,6 @@ export const formatPrice = (
   isVatRequired = false
 ): string => {
   if (!price) return '0';
-
   const priceValue = (
     isVatRequired ? price.netAmount : price.grossAmount
   ) as DineroObject;
@@ -54,7 +53,18 @@ export const vatRateCalculation = (
   vatRateObject: DineroObject,
   price: string
 ): string => {
-  return Dinero(vatRateObject as DineroObject)
-    .multiply(valueFromString(price))
-    .toFormat('0.00');
+  const dineroPrice = Dinero(moneyFromString(price) as DineroObject);
+  const vatAmount = dineroPrice.multiply(vatRateObject.amount / 100);
+
+  return dineroPrice.add(vatAmount).toFormat('0.00');
+};
+
+export const priceWithoutRate = (
+  vatRateObject: DineroObject,
+  price: string
+): string => {
+  const dineroPrice = Dinero(moneyFromString(price) as DineroObject);
+  console.log(vatRateObject);
+
+  return dineroPrice.divide(vatRateObject.amount / 100 + 1).toFormat('0.00');
 };

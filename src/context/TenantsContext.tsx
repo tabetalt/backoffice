@@ -7,11 +7,15 @@ export type TenantItem = GetTenantsQuery['tenants']['items'][0];
 interface TenantContextValue {
   tenants: TenantItem[];
   currentTenant: TenantItem | null;
+  updateRequired: () => void;
 }
 
 export const TenantsContext = React.createContext<TenantContextValue>({
   tenants: [],
   currentTenant: null,
+  updateRequired: () => {
+    // Dummy function
+  },
 } as TenantContextValue);
 
 export function useTenants(): TenantContextValue {
@@ -27,6 +31,7 @@ export const TenantsProvider: React.FC = ({ children }) => {
   const authContext = useAuthContext();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentUserId, setUserId] = useState<string>();
+  const [tenantUpdateState, updateTenant] = useState(true);
 
   useEffect(() => {
     setUserId(authContext.currentUser?.uid);
@@ -40,12 +45,16 @@ export const TenantsProvider: React.FC = ({ children }) => {
   // TODO: handle errors
   if (error) console.log(error);
   const currentTenant = tenants.length > 0 ? tenants[0] : null;
-  // console.log(currentTenant);
+
+  function updateRequired() {
+    updateTenant(!tenantUpdateState);
+  }
+
   const context = {
     tenants,
     currentTenant,
+    updateRequired,
   };
-
   return (
     <TenantsContext.Provider value={context}>
       {children}

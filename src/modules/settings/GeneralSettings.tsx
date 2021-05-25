@@ -15,6 +15,7 @@ import { SettingsNavigation } from './SettingsNavigation';
 import { FormField } from '../../components/common/FormField';
 import { FormSelect } from '../../components/common/FormSelect';
 import { FormInput } from '../../components/common/FormInput';
+import { useTenants } from '../../context/TenantsContext';
 import * as Yup from 'yup';
 
 interface GeneralSettingsProps {
@@ -36,19 +37,10 @@ const TenantSchema = Yup.object().shape({
   vatRateCurrency: Yup.string().required('Required!'),
   displayName: Yup.string().required('Required!'),
   priceDisplay: Yup.string().required('Required!'),
-  address: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .required('Required!'),
-  postalCode: Yup.number().required('Required!'),
-  postalAddress: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .required('Required!'),
-  orgNumber: Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .required('Required!'),
+  address: Yup.string().min(2, 'Too Short!').max(255, 'Too Long!'),
+  postalCode: Yup.string(),
+  postalAddress: Yup.string().min(2, 'Too Short!').max(255, 'Too Long!'),
+  orgNumber: Yup.string().min(2, 'Too Short!').max(255, 'Too Long!'),
   email: Yup.string().email('Must be a email'),
   facebook: Yup.string().min(2, 'Too Short!').max(255, 'Too Long!').url(),
   twitter: Yup.string().min(2, 'Too Short!').max(255, 'Too Long!').url(),
@@ -57,6 +49,7 @@ const TenantSchema = Yup.object().shape({
 });
 
 export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
+  const { updateRequired } = useTenants();
   const ref: MutableRefObject<any> = useRef();
 
   const [updateTenant, { error }] = useUpdateTenantMutation({});
@@ -64,6 +57,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
   const onSubmitGeneral = useCallback(
     async (input) => {
       await updateTenant({ variables: { id: tenant?.id || 1, input } });
+      updateRequired();
     },
     [updateTenant]
   );
@@ -131,7 +125,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
           ],
           vatRate: {
             value: DineroHelper.moneyFromString(
-              values.vatRateAmount,
+              values.vatRateAmount.toString(),
               2,
               values.vatRateCurrency
             ),

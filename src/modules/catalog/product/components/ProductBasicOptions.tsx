@@ -24,6 +24,8 @@ import {
   ProductStatus,
   useGetCategoriesShortQuery,
 } from '../../../../generated/graphql';
+import { useTenants } from '../../../../context/TenantsContext';
+import Dinero, { DineroObject } from 'dinero.js';
 
 export type Product = GetProductQuery['product'];
 
@@ -78,6 +80,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   error,
   product,
 }) => {
+  const { currentTenant } = useTenants();
   const [inputTagsSuggetions] = useState<TagProps[]>([]);
   const form = useFormik<ProductBasicOptionsValues>({
     initialValues: {
@@ -162,7 +165,13 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             placeholder="Strikket genser"
             name="title"
             value={form.values.title}
-            onChange={form.handleChange}
+            onChange={(e: React.ChangeEvent<any>) => {
+              form.handleChange(e);
+              form.setFieldValue(
+                'slug',
+                e.currentTarget.value.toLowerCase().replaceAll(' ', '-')
+              );
+            }}
             onBlur={form.handleBlur}
           />
           {form.touched.title && form.errors.title && (
@@ -199,6 +208,16 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
           {form.touched.price && form.errors.price && (
             <Error message={form.errors.price} />
           )}
+        </div>
+        <div>
+          <span style={{ color: 'grey' }}>
+            {currentTenant?.vatRate &&
+              form.values &&
+              DineroHelper.vatRateCalculation(
+                currentTenant?.vatRate.value as DineroObject,
+                form.values.price
+              )}
+          </span>
         </div>
         <div>
           <Field

@@ -49,3 +49,12 @@ export const moneyFromString = (
 
   return price;
 };
+
+export const vatRateCalculation = (
+  vatRateObject: DineroObject,
+  price: string
+): string => {
+  return Dinero(vatRateObject as DineroObject)
+    .multiply(valueFromString(price))
+    .toFormat('0.00');
+};

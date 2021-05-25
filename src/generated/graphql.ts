@@ -914,6 +914,62 @@ export type GetCategoryQuery = { __typename?: 'Query' } & {
   } & CategoryFragment;
 };
 
+export type MoneyFragment = { __typename?: 'Money' } & Pick<
+  Money,
+  'amount' | 'currency' | 'precision'
+>;
+
+export type DeliveryMethodFragment = { __typename?: 'DeliveryMethod' } & Pick<
+  DeliveryMethod,
+  'id' | 'name' | 'digitalDelivery' | 'status' | 'tenantId'
+> & { price: { __typename?: 'Money' } & MoneyFragment };
+
+export type GetDeliveryMethodsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetDeliveryMethodsQuery = { __typename?: 'Query' } & {
+  deliveryMethods: { __typename?: 'DeliveryMethodsListResponse' } & {
+    items: Array<{ __typename?: 'DeliveryMethod' } & DeliveryMethodFragment>;
+  };
+};
+
+export type DeleteDeliveryMethodMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteDeliveryMethodMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'deleteDeliveryMethod'
+>;
+
+export type GetDeliveryMethodQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type GetDeliveryMethodQuery = { __typename?: 'Query' } & {
+  deliveryMethod: { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment;
+};
+
+export type CreateDeliveryMethodMutationVariables = Exact<{
+  input: DeliveryMethodCreateInput;
+}>;
+
+export type CreateDeliveryMethodMutation = { __typename?: 'Mutation' } & {
+  createDeliveryMethod: {
+    __typename?: 'DeliveryMethod';
+  } & DeliveryMethodFragment;
+};
+
+export type UpdateDeliveryMethodMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: DeliveryMethodUpdateInput;
+}>;
+
+export type UpdateDeliveryMethodMutation = { __typename?: 'Mutation' } & {
+  updateDeliveryMethod: {
+    __typename?: 'DeliveryMethod';
+  } & DeliveryMethodFragment;
+};
+
 export type GetSignedUrlQueryVariables = Exact<{
   input: QuerySignedUrlInput;
 }>;
@@ -940,11 +996,6 @@ export type ProductShortFragment = { __typename?: 'Product' } & Pick<
   | 'count'
   | 'stockControl'
   | 'inStockNum'
->;
-
-export type MoneyFragment = { __typename?: 'Money' } & Pick<
-  Money,
-  'amount' | 'currency' | 'precision'
 >;
 
 export type PriceFragment = { __typename?: 'Price' } & {
@@ -1115,6 +1166,26 @@ export const CategoryShortFragmentDoc = gql`
     title
   }
 `;
+export const MoneyFragmentDoc = gql`
+  fragment Money on Money {
+    amount
+    currency
+    precision
+  }
+`;
+export const DeliveryMethodFragmentDoc = gql`
+  fragment DeliveryMethod on DeliveryMethod {
+    id
+    name
+    price {
+      ...Money
+    }
+    digitalDelivery
+    status
+    tenantId
+  }
+  ${MoneyFragmentDoc}
+`;
 export const ProductShortFragmentDoc = gql`
   fragment ProductShort on Product {
     id
@@ -1130,13 +1201,6 @@ export const ProductShortFragmentDoc = gql`
     count
     stockControl
     inStockNum
-  }
-`;
-export const MoneyFragmentDoc = gql`
-  fragment Money on Money {
-    amount
-    currency
-    precision
   }
 `;
 export const PriceFragmentDoc = gql`
@@ -1560,6 +1624,269 @@ export type GetCategoryLazyQueryHookResult = ReturnType<
 export type GetCategoryQueryResult = Apollo.QueryResult<
   GetCategoryQuery,
   GetCategoryQueryVariables
+>;
+export const GetDeliveryMethodsDocument = gql`
+  query GetDeliveryMethods {
+    deliveryMethods {
+      items {
+        ...DeliveryMethod
+      }
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+
+/**
+ * __useGetDeliveryMethodsQuery__
+ *
+ * To run a query within a React component, call `useGetDeliveryMethodsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeliveryMethodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeliveryMethodsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDeliveryMethodsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >(GetDeliveryMethodsDocument, baseOptions);
+}
+export function useGetDeliveryMethodsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >(GetDeliveryMethodsDocument, baseOptions);
+}
+export type GetDeliveryMethodsQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodsQuery
+>;
+export type GetDeliveryMethodsLazyQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodsLazyQuery
+>;
+export type GetDeliveryMethodsQueryResult = Apollo.QueryResult<
+  GetDeliveryMethodsQuery,
+  GetDeliveryMethodsQueryVariables
+>;
+export const DeleteDeliveryMethodDocument = gql`
+  mutation DeleteDeliveryMethod($id: Int!) {
+    deleteDeliveryMethod(id: $id)
+  }
+`;
+export type DeleteDeliveryMethodMutationFn = Apollo.MutationFunction<
+  DeleteDeliveryMethodMutation,
+  DeleteDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useDeleteDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useDeleteDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteDeliveryMethodMutation, { data, loading, error }] = useDeleteDeliveryMethodMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteDeliveryMethodMutation,
+    DeleteDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    DeleteDeliveryMethodMutation,
+    DeleteDeliveryMethodMutationVariables
+  >(DeleteDeliveryMethodDocument, baseOptions);
+}
+export type DeleteDeliveryMethodMutationHookResult = ReturnType<
+  typeof useDeleteDeliveryMethodMutation
+>;
+export type DeleteDeliveryMethodMutationResult =
+  Apollo.MutationResult<DeleteDeliveryMethodMutation>;
+export type DeleteDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  DeleteDeliveryMethodMutation,
+  DeleteDeliveryMethodMutationVariables
+>;
+export const GetDeliveryMethodDocument = gql`
+  query GetDeliveryMethod($id: Int!) {
+    deliveryMethod(id: $id) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+
+/**
+ * __useGetDeliveryMethodQuery__
+ *
+ * To run a query within a React component, call `useGetDeliveryMethodQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeliveryMethodQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeliveryMethodQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetDeliveryMethodQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >(GetDeliveryMethodDocument, baseOptions);
+}
+export function useGetDeliveryMethodLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >(GetDeliveryMethodDocument, baseOptions);
+}
+export type GetDeliveryMethodQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodQuery
+>;
+export type GetDeliveryMethodLazyQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodLazyQuery
+>;
+export type GetDeliveryMethodQueryResult = Apollo.QueryResult<
+  GetDeliveryMethodQuery,
+  GetDeliveryMethodQueryVariables
+>;
+export const CreateDeliveryMethodDocument = gql`
+  mutation CreateDeliveryMethod($input: DeliveryMethodCreateInput!) {
+    createDeliveryMethod(input: $input) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+export type CreateDeliveryMethodMutationFn = Apollo.MutationFunction<
+  CreateDeliveryMethodMutation,
+  CreateDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useCreateDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useCreateDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDeliveryMethodMutation, { data, loading, error }] = useCreateDeliveryMethodMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDeliveryMethodMutation,
+    CreateDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    CreateDeliveryMethodMutation,
+    CreateDeliveryMethodMutationVariables
+  >(CreateDeliveryMethodDocument, baseOptions);
+}
+export type CreateDeliveryMethodMutationHookResult = ReturnType<
+  typeof useCreateDeliveryMethodMutation
+>;
+export type CreateDeliveryMethodMutationResult =
+  Apollo.MutationResult<CreateDeliveryMethodMutation>;
+export type CreateDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  CreateDeliveryMethodMutation,
+  CreateDeliveryMethodMutationVariables
+>;
+export const UpdateDeliveryMethodDocument = gql`
+  mutation UpdateDeliveryMethod($id: Int!, $input: DeliveryMethodUpdateInput!) {
+    updateDeliveryMethod(input: $input, id: $id) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+export type UpdateDeliveryMethodMutationFn = Apollo.MutationFunction<
+  UpdateDeliveryMethodMutation,
+  UpdateDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useUpdateDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useUpdateDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDeliveryMethodMutation, { data, loading, error }] = useUpdateDeliveryMethodMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateDeliveryMethodMutation,
+    UpdateDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    UpdateDeliveryMethodMutation,
+    UpdateDeliveryMethodMutationVariables
+  >(UpdateDeliveryMethodDocument, baseOptions);
+}
+export type UpdateDeliveryMethodMutationHookResult = ReturnType<
+  typeof useUpdateDeliveryMethodMutation
+>;
+export type UpdateDeliveryMethodMutationResult =
+  Apollo.MutationResult<UpdateDeliveryMethodMutation>;
+export type UpdateDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  UpdateDeliveryMethodMutation,
+  UpdateDeliveryMethodMutationVariables
 >;
 export const GetSignedUrlDocument = gql`
   query GetSignedUrl($input: QuerySignedUrlInput!) {

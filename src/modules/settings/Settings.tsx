@@ -15,7 +15,7 @@ const Settings: React.FC = () => {
       path: 'general',
       element: <GeneralSettings tenant={currentTenant} />,
     },
-    { path: 'shipping', element: <ShippingSettings /> },
+    { path: 'shipping', element: <ShippingSettings tenant={currentTenant} /> },
     { path: 'payment-method', element: <PaymentMethodSettings /> },
     { path: '*', element: <Navigate to="general" /> },
   ] as PartialRouteObject[]);

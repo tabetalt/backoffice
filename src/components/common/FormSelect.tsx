@@ -1,8 +1,9 @@
 import { Select } from '@theme-ui/components';
 import { useField } from 'formik';
 import React from 'react';
+import Error from './Error';
 
-export const FormSelect: React.FC<any> = ({ options, ...props }) => {
+export const FormSelect: React.FC<any> = ({ options, labels, ...props }) => {
   const [field, meta] = useField(props);
 
   return (
@@ -10,13 +11,11 @@ export const FormSelect: React.FC<any> = ({ options, ...props }) => {
       <Select sx={{ width: '100%' }} {...field} {...props}>
         {options.map((option: string, index: number) => (
           <option value={option} key={index}>
-            {option}
+            {labels ? labels[index] : option}
           </option>
         ))}
       </Select>
-      {meta.touched && meta.error ? (
-        <span className="validate-error">{meta.error}</span>
-      ) : null}
+      {meta.touched && meta.error ? <Error message={meta.error} /> : null}
     </>
   );
 };

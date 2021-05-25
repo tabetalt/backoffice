@@ -1,0 +1,46 @@
+fragment Money on Money {
+  amount
+  currency
+  precision
+}
+
+fragment DeliveryMethod on DeliveryMethod {
+  id
+  name
+  price {
+    ...Money
+  }
+  digitalDelivery
+  status
+  tenantId
+}
+
+query GetDeliveryMethods {
+  deliveryMethods {
+    items {
+      ...DeliveryMethod
+    }
+  }
+}
+
+mutation DeleteDeliveryMethod($id: Int!) {
+  deleteDeliveryMethod(id: $id)
+}
+
+query GetDeliveryMethod($id: Int!) {
+  deliveryMethod(id: $id) {
+    ...DeliveryMethod
+  }
+}
+
+mutation CreateDeliveryMethod($input: DeliveryMethodCreateInput!) {
+  createDeliveryMethod(input: $input) {
+    ...DeliveryMethod
+  }
+}
+
+mutation UpdateDeliveryMethod($id: Int!, $input: DeliveryMethodUpdateInput!) {
+  updateDeliveryMethod(input: $input, id: $id) {
+    ...DeliveryMethod
+  }
+}

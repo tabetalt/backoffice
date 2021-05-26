@@ -62,7 +62,7 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
         Header: 'Produktpris',
         accessor: 'price',
         Cell: ({ row: { original: product } }: CellProps<ProductItem>) =>
-          DineroHelper.formatPrice(product?.price),
+          DineroHelper.formatPrice(product?.price).grossAmount,
       },
       {
         Header: 'Lagerstatus',

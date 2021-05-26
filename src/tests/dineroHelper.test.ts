@@ -22,9 +22,18 @@ it('DineroHelper test', () => {
     grossAmount: { amount: 10000, precision: 2, currency: CurrencyCode.Nok },
     netAmount: { amount: 10250, precision: 2, currency: CurrencyCode.Nok },
   } as Price;
-  expect(DineroHelper.formatPrice(price)).toEqual('100.00');
-  expect(DineroHelper.formatPrice(price, true)).toEqual('102.50');
-  expect(DineroHelper.formatPrice()).toEqual('0');
+
+  const formatPrice = {
+    vatAmount: '2.50',
+    grossAmount: '100.00',
+    netAmount: '102.50',
+  };
+  expect(DineroHelper.formatPrice(price)).toEqual(formatPrice);
+  expect(DineroHelper.formatPrice()).toEqual({
+    vatAmount: '0',
+    grossAmount: '0',
+    netAmount: '0',
+  });
 
   const e = DineroHelper.moneyFromString('12,53', 2, CurrencyCode.Usd, false);
   expect(e).toMatchInlineSnapshot(`

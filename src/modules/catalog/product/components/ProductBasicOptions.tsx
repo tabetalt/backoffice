@@ -83,7 +83,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     initialValues: {
       ...defaultValues,
       ...product,
-      price: DineroHelper.formatPrice(product?.price),
+      price: DineroHelper.formatPrice(product?.price).grossAmount,
       categories: product?.categories.map((category) => ({
         id: category?.id,
         name: category?.title,

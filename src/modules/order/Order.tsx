@@ -36,6 +36,19 @@ const Order: React.FC = () => {
     },
   });
 
+  function setStatus(status = ''): string {
+    switch (status) {
+      case 'PAID':
+      case 'CONFIRMED':
+        return 'success';
+      case 'PENDING':
+      case 'UNCONFIRMED':
+        return 'warning';
+      default:
+        return 'error';
+    }
+  }
+
   return (
     <Layout>
       <Box sx={{ p: 5 }}>
@@ -80,7 +93,9 @@ const Order: React.FC = () => {
                 <Heading as="h3" sx={{ flexGrow: 1 }}>
                   Betalingsstatus
                 </Heading>
-                <Badge variant="error">Ikke betalt</Badge>
+                <Badge variant={setStatus(data?.order.status)}>
+                  {data?.order.paymentStatus}
+                </Badge>
               </Flex>
               <Flex sx={{ width: '100%', justifyContent: 'center', py: 3 }}>
                 <Text sx={{ flexGrow: 1 }}>Betalingstype:</Text>
@@ -98,7 +113,9 @@ const Order: React.FC = () => {
                 <Heading as="h3" sx={{ flexGrow: 1 }}>
                   Ordrestatus
                 </Heading>
-                <Badge variant="error">{data?.order.status}</Badge>
+                <Badge variant={setStatus(data?.order.status)}>
+                  {data?.order.status}
+                </Badge>
               </Flex>
               <Flex sx={{ width: '100%', justifyContent: 'center', py: 3 }}>
                 <Text sx={{ flexGrow: 1 }}>Leveringsmetode:</Text>
@@ -142,28 +159,36 @@ const Order: React.FC = () => {
         >
           <Flex>
             <Text>Delsum</Text>
-            <Text>899,70 NOK</Text>
+            <Text>
+              {DineroHelper.formatPrice(data?.order.totalPrice).netAmount} NOK
+            </Text>
           </Flex>
           <Flex>
             <Text>Fraktavgifter</Text>
-            <Text>79,00 NOK</Text>
+            <Text>NOK</Text>
           </Flex>
           <Flex sx={{ mt: 4 }}>
             <Text>25% MVA</Text>
-            <Text>68,00 NOK</Text>
+            <Text>
+              {DineroHelper.formatPrice(data?.order.totalPrice).vatAmount} NOK
+            </Text>
           </Flex>
           <Flex>
             <Text>Pris eks. MVA</Text>
-            <Text>978,70 NOK</Text>
+            <Text>
+              {DineroHelper.formatPrice(data?.order.totalPrice).grossAmount} NOK
+            </Text>
           </Flex>
           <Flex>
             <Text>Pris inkl. MVA</Text>
-            <Text>1 060,70 NOK</Text>
+            <Text>
+              {DineroHelper.formatPrice(data?.order.totalPrice).netAmount} NOK
+            </Text>
           </Flex>
           <Flex sx={{ pt: 3, '> div': { fontSize: 2 } }}>
             <Text>Totalt</Text>
             <Text>
-              {DineroHelper.formatPrice(data?.order.totalPrice)}{' '}
+              {DineroHelper.formatPrice(data?.order.totalPrice).netAmount}
               {/* {data?.order.totalPrice.currency} */}
               NOK
             </Text>

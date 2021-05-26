@@ -1,18 +1,28 @@
 import Dinero, { DineroObject } from 'dinero.js';
 import { Price, Money, CurrencyCode } from '../generated/graphql';
 
-export const formatPrice = (
-  price?: Price | null,
-  isVatRequired = false
-): string => {
-  if (!price) return '0';
+type FormatPrice = {
+  netAmount: string;
+  grossAmount: string;
+  vatAmount: string;
+};
 
-  const priceValue = (
-    isVatRequired ? price.netAmount : price.grossAmount
-  ) as DineroObject;
+export const formatPrice = (price?: Price | null): FormatPrice => {
+  const priceNetAmountValue = price?.netAmount as DineroObject;
+  const priceGrossAmountValue = price?.grossAmount as DineroObject;
+  const priceVatAmountValue = price?.vatAmount as DineroObject;
 
-  const amount = priceValue ? Dinero(priceValue).toFormat('0.00') : '0';
-  return amount;
+  return {
+    netAmount: priceNetAmountValue
+      ? Dinero(priceNetAmountValue).toFormat('0.00')
+      : '0',
+    grossAmount: priceGrossAmountValue
+      ? Dinero(priceGrossAmountValue).toFormat('0.00')
+      : '0',
+    vatAmount: priceVatAmountValue
+      ? Dinero(priceVatAmountValue).toFormat('0.00')
+      : '0',
+  };
 };
 
 export const formatMoney = (money?: Money | null): string => {

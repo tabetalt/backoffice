@@ -14,7 +14,7 @@ const columns = [
   },
   {
     Header: 'Pris',
-    accessor: 'product.price',
+    accessor: 'product.price.netAmount.amount',
   },
   {
     Header: 'Antall',
@@ -22,7 +22,7 @@ const columns = [
   },
   {
     Header: 'Totalt',
-    accessor: 'total',
+    accessor: 'total.netAmount.amount',
   },
 ];
 
@@ -30,7 +30,7 @@ const Order: React.FC = () => {
   const params = useParams();
   const orderId = Number(params.orderId);
 
-  const { data, loading, error } = useGetOrderQuery({
+  const { data } = useGetOrderQuery({
     variables: {
       id: orderId,
     },
@@ -72,18 +72,18 @@ const Order: React.FC = () => {
             >
               <Box>
                 <Heading as="h5">Kunde</Heading>
-                <Text>Simen A. W. Olsen</Text>
-                <Text>so@bjerk.io</Text>
+                <Text>{data?.order.clientName}</Text>
+                <Text>{data?.order.clientEmail}</Text>
               </Box>
               <Box>
                 <Heading as="h5">Betalingsadresse</Heading>
-                <Text>Simen A. W. Olsen</Text>
-                <Text>Ørsnesalleen 2B, 3120 Nøtterøy</Text>
+                <Text>{data?.order.clientName}</Text>
+                <Text>{data?.order.orderAddress}</Text>
               </Box>
               <Box>
                 <Heading as="h5">Leveringsadresse</Heading>
-                <Text>Simen A. W. Olsen</Text>
-                <Text>Ørsnesalleen 2B, 3120 Nøtterøy</Text>
+                <Text>{data?.order.clientName}</Text>
+                <Text>{data?.order.deliveryAddress}</Text>
               </Box>
             </Flex>
           </Box>
@@ -160,15 +160,23 @@ const Order: React.FC = () => {
           <Flex>
             <Text>Delsum</Text>
             <Text>
-              {DineroHelper.formatPrice(data?.order.totalPrice).netAmount} NOK
+              {
+                DineroHelper.formatPrice(data?.order.totalProductsPrice)
+                  .netAmount
+              }{' '}
+              NOK
             </Text>
           </Flex>
           <Flex>
             <Text>Fraktavgifter</Text>
-            <Text>NOK</Text>
+            <Text>
+              {DineroHelper.formatMoney(data?.order.deliveryMethod?.price)} NOK
+            </Text>
           </Flex>
           <Flex sx={{ mt: 4 }}>
-            <Text>25% MVA</Text>
+            <Text>
+              {data?.order.products[0]?.product.vatRate?.value.amount}% MVA
+            </Text>
             <Text>
               {DineroHelper.formatPrice(data?.order.totalPrice).vatAmount} NOK
             </Text>

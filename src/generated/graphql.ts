@@ -19,29 +19,6 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type Address = {
-  __typename?: 'Address';
-  id: Scalars['Int'];
-  regionCode: Scalars['Int'];
-  type: AddressType;
-  languageCode: Scalars['String'];
-  postalCode: Scalars['String'];
-  sortingCode: Scalars['String'];
-  administrativeArea: Scalars['String'];
-  locality: Scalars['String'];
-  addressLines: Array<Scalars['String']>;
-  recipients: Array<Scalars['String']>;
-  organization: Scalars['String'];
-  tenantId: Scalars['Int'];
-};
-
-export enum AddressType {
-  AddressTypeUnspecified = 'ADDRESS_TYPE_UNSPECIFIED',
-  Invoice = 'INVOICE',
-  Postal = 'POSTAL',
-  Visitor = 'VISITOR',
-}
-
 export type Attachment = {
   __typename?: 'Attachment';
   id: Scalars['Int'];
@@ -313,6 +290,7 @@ export type Mutation = {
   createTenant: Tenant;
   updateTenant: Tenant;
   deleteTenant: Scalars['Boolean'];
+  uploadTenant: Scalars['Boolean'];
   createDeliveryMethod: DeliveryMethod;
   updateDeliveryMethod: DeliveryMethod;
   deleteDeliveryMethod: Scalars['Boolean'];
@@ -347,6 +325,10 @@ export type MutationUpdateTenantArgs = {
 };
 
 export type MutationDeleteTenantArgs = {
+  id: Scalars['Int'];
+};
+
+export type MutationUploadTenantArgs = {
   id: Scalars['Int'];
 };
 
@@ -454,22 +436,29 @@ export type Order = {
   tenantId: Scalars['Int'];
   tenant: Tenant;
   totalPrice?: Maybe<Price>;
+  totalProductsPrice?: Maybe<Price>;
+  productsTotal?: Maybe<Money>;
   products: Array<OrderToProduct>;
-  payments: Array<Payment>;
-  deliveryMethodId: Scalars['Int'];
+  payments?: Maybe<Array<Payment>>;
+  deliveryMethodId?: Maybe<Scalars['Int']>;
   deliveryMethod?: Maybe<DeliveryMethod>;
-  deliveryAddressId?: Maybe<Scalars['Int']>;
-  deliveryAddress?: Maybe<Address>;
-  orderAddressId?: Maybe<Scalars['Int']>;
-  orderAddress?: Maybe<Address>;
+  deliveryAddress?: Maybe<Scalars['String']>;
+  orderAddress?: Maybe<Scalars['String']>;
+  clientName?: Maybe<Scalars['String']>;
+  clientEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrderCreateInput = {
   status?: Maybe<OrderStatus>;
   paymentStatus?: Maybe<PaymentStatus>;
   tenantId: Scalars['Int'];
+  deliveryMethodId?: Maybe<Scalars['Int']>;
   totalPrice?: Maybe<PriceInput>;
   products?: Maybe<Array<OrderProductCreateInput>>;
+  deliveryAddress?: Maybe<Scalars['String']>;
+  orderAddress?: Maybe<Scalars['String']>;
+  clientName?: Maybe<Scalars['String']>;
+  clientEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrderProductCreateInput = {
@@ -491,14 +480,19 @@ export type OrderToProduct = {
   productId: Scalars['Int'];
   product: Product;
   count: Scalars['Int'];
-  totalPrice: Price;
+  total?: Maybe<Price>;
 };
 
 export type OrderUpdateInput = {
   status?: Maybe<OrderStatus>;
   paymentStatus?: Maybe<PaymentStatus>;
+  deliveryMethodId?: Maybe<Scalars['Int']>;
   totalPrice?: Maybe<PriceInput>;
   products?: Maybe<Array<OrderProductCreateInput>>;
+  deliveryAddress?: Maybe<Scalars['String']>;
+  orderAddress?: Maybe<Scalars['String']>;
+  clientName?: Maybe<Scalars['String']>;
+  clientEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrdersListResponse = {
@@ -736,12 +730,12 @@ export type Tenant = {
   languageCode: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  email: Scalars['String'];
-  postalCode: Scalars['String'];
-  postalAddress: Scalars['String'];
-  address: Scalars['String'];
-  orgNumber: Scalars['String'];
-  socialMedias: Array<SocialMedia>;
+  email?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  postalAddress?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  orgNumber?: Maybe<Scalars['String']>;
+  socialMedias?: Maybe<Array<SocialMedia>>;
   orders?: Maybe<Array<Order>>;
   vatRate?: Maybe<VatRate>;
 };
@@ -930,20 +924,54 @@ export type MoneyFragment = { __typename?: 'Money' } & Pick<
   'amount' | 'currency' | 'precision'
 >;
 
+export type PriceFragment = { __typename?: 'Price' } & {
+  vatAmount: { __typename?: 'Money' } & MoneyFragment;
+  grossAmount: { __typename?: 'Money' } & MoneyFragment;
+  netAmount: { __typename?: 'Money' } & MoneyFragment;
+};
+
+export type DeliveryMethodFragment = { __typename?: 'DeliveryMethod' } & Pick<
+  DeliveryMethod,
+  'name'
+> & { price: { __typename?: 'Money' } & MoneyFragment };
+
 export type ProductPartialFragment = { __typename?: 'Product' } & Pick<
   Product,
   'id' | 'title'
->;
+> & {
+    price?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
+    vatRate?: Maybe<
+      { __typename?: 'VatRate' } & {
+        value: { __typename?: 'Money' } & MoneyFragment;
+      }
+    >;
+  };
 
 export type OrderToProductFragment = { __typename?: 'OrderToProduct' } & Pick<
   OrderToProduct,
   'count'
-> & { product: { __typename?: 'Product' } & ProductPartialFragment };
+> & {
+    product: { __typename?: 'Product' } & ProductPartialFragment;
+    total?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
+  };
 
 export type OrderShortFragment = { __typename?: 'Order' } & Pick<
   Order,
-  'id' | 'orderTime' | 'status' | 'paymentStatus' | 'tenantId'
-> & { totalPrice?: Maybe<{ __typename?: 'Price' } & PriceFragment> };
+  | 'id'
+  | 'orderTime'
+  | 'status'
+  | 'paymentStatus'
+  | 'tenantId'
+  | 'deliveryAddress'
+  | 'orderAddress'
+  | 'clientName'
+  | 'clientEmail'
+> & {
+    deliveryMethod?: Maybe<
+      { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment
+    >;
+    totalPrice?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
+  };
 
 export type PaymentFragment = { __typename?: 'Payment' } & Pick<
   Payment,
@@ -951,8 +979,12 @@ export type PaymentFragment = { __typename?: 'Payment' } & Pick<
 >;
 
 export type OrderFragment = { __typename?: 'Order' } & {
+  totalProductsPrice?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
+  deliveryMethod?: Maybe<
+    { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment
+  >;
   products: Array<{ __typename?: 'OrderToProduct' } & OrderToProductFragment>;
-  payments: Array<{ __typename?: 'Payment' } & PaymentFragment>;
+  payments?: Maybe<Array<{ __typename?: 'Payment' } & PaymentFragment>>;
 } & OrderShortFragment;
 
 export type GetOrdersQueryVariables = Exact<{ [key: string]: never }>;
@@ -1013,12 +1045,6 @@ export type ProductShortFragment = { __typename?: 'Product' } & Pick<
   | 'stockControl'
   | 'inStockNum'
 >;
-
-export type PriceFragment = { __typename?: 'Price' } & {
-  vatAmount: { __typename?: 'Money' } & MoneyFragment;
-  grossAmount: { __typename?: 'Money' } & MoneyFragment;
-  netAmount: { __typename?: 'Money' } & MoneyFragment;
-};
 
 export type VariantFragment = { __typename?: 'Variant' } & Pick<Variant, 'id'>;
 
@@ -1106,6 +1132,15 @@ export const MoneyFragmentDoc = gql`
     precision
   }
 `;
+export const DeliveryMethodFragmentDoc = gql`
+  fragment DeliveryMethod on DeliveryMethod {
+    name
+    price {
+      ...Money
+    }
+  }
+  ${MoneyFragmentDoc}
+`;
 export const PriceFragmentDoc = gql`
   fragment Price on Price {
     vatAmount {
@@ -1127,17 +1162,35 @@ export const OrderShortFragmentDoc = gql`
     status
     paymentStatus
     tenantId
+    deliveryAddress
+    orderAddress
+    clientName
+    clientEmail
+    deliveryMethod {
+      ...DeliveryMethod
+    }
     totalPrice {
       ...Price
     }
   }
+  ${DeliveryMethodFragmentDoc}
   ${PriceFragmentDoc}
 `;
 export const ProductPartialFragmentDoc = gql`
   fragment ProductPartial on Product {
     id
     title
+    price {
+      ...Price
+    }
+    vatRate {
+      value {
+        ...Money
+      }
+    }
   }
+  ${PriceFragmentDoc}
+  ${MoneyFragmentDoc}
 `;
 export const OrderToProductFragmentDoc = gql`
   fragment OrderToProduct on OrderToProduct {
@@ -1145,8 +1198,12 @@ export const OrderToProductFragmentDoc = gql`
       ...ProductPartial
     }
     count
+    total {
+      ...Price
+    }
   }
   ${ProductPartialFragmentDoc}
+  ${PriceFragmentDoc}
 `;
 export const PaymentFragmentDoc = gql`
   fragment Payment on Payment {
@@ -1160,6 +1217,12 @@ export const PaymentFragmentDoc = gql`
 export const OrderFragmentDoc = gql`
   fragment Order on Order {
     ...OrderShort
+    totalProductsPrice {
+      ...Price
+    }
+    deliveryMethod {
+      ...DeliveryMethod
+    }
     products {
       ...OrderToProduct
     }
@@ -1168,6 +1231,8 @@ export const OrderFragmentDoc = gql`
     }
   }
   ${OrderShortFragmentDoc}
+  ${PriceFragmentDoc}
+  ${DeliveryMethodFragmentDoc}
   ${OrderToProductFragmentDoc}
   ${PaymentFragmentDoc}
 `;

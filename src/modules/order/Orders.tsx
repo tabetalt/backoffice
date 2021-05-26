@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { GetOrdersQuery, useGetOrdersQuery } from '../../generated/graphql';
 import * as DineroHelper from '../../helpers';
 import moment from 'moment';
+
 export type OrderItem = GetOrdersQuery['orders']['items'][0];
 
 const Orders: React.FC = () => {

@@ -16,9 +16,25 @@ fragment Price on Price {
   }
 }
 
+fragment DeliveryMethod on DeliveryMethod {
+  name
+  price{ 
+    ...Money
+  }
+
+}
+
 fragment ProductPartial on Product {
   id
   title
+  price{
+    ...Price
+  }
+  vatRate{
+    value{
+      ...Money
+    }
+  }
 }
 
 fragment OrderToProduct on OrderToProduct {
@@ -26,6 +42,9 @@ fragment OrderToProduct on OrderToProduct {
     ...ProductPartial
   }
   count
+  total{
+    ...Price
+  }
 }
 
 fragment OrderShort on Order {
@@ -34,6 +53,13 @@ fragment OrderShort on Order {
   status
   paymentStatus
   tenantId
+  deliveryAddress
+  orderAddress
+  clientName
+  clientEmail
+  deliveryMethod{
+    ...DeliveryMethod
+  }
   totalPrice {
     ...Price
   }
@@ -49,6 +75,12 @@ fragment Payment on Payment {
 
 fragment Order on Order {
   ...OrderShort
+  totalProductsPrice {
+    ...Price
+  }
+  deliveryMethod{
+    ...DeliveryMethod
+  }
   products {
     ...OrderToProduct
   }

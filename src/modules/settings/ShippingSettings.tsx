@@ -16,7 +16,7 @@ import {
   useDeleteDeliveryMethodMutation,
   useGetDeliveryMethodsQuery,
 } from '../../generated/graphql';
-import { TenantItem } from '../../context/TenantsContext';
+import { TenantItem } from '../../context/TenantContext';
 
 export type DeliveryMethodItem =
   GetDeliveryMethodsQuery['deliveryMethods']['items'][0];

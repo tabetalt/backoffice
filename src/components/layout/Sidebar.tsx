@@ -3,11 +3,11 @@ import { Box, Flex, Avatar, Text, IconButton } from 'theme-ui';
 import NavLink from './NavLink';
 import { icons } from '@tabetalt/kit';
 import { useAuth } from '../../context/AuthContext';
-import { useTenants } from '../../context/TenantsContext';
+import { useTenant } from '../../context/TenantContext';
 
 const Sidebar: React.FC = () => {
   const { auth, currentUser } = useAuth();
-  const { currentTenant } = useTenants();
+  const { currentTenant } = useTenant();
   return (
     <Flex
       sx={{

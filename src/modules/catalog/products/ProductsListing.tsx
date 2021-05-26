@@ -9,7 +9,7 @@ import {
   TenantPriceDisplay,
   useDeleteProductMutation,
 } from '../../../generated/graphql';
-import { useTenants } from '../../../context/TenantsContext';
+import { useTenant } from '../../../context/TenantContext';
 import { ProductItem } from './Products';
 
 const { OpenIcon, TrashIcon, PencilIcon } = icons;
@@ -53,7 +53,7 @@ export interface ProductsListingProps {
 }
 
 const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
-  const { currentTenant } = useTenants();
+  const { currentTenant } = useTenant();
   const columns = useMemo(
     () => [
       {

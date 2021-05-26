@@ -24,7 +24,7 @@ import {
   ProductStatus,
   useGetCategoriesShortQuery,
 } from '../../../../generated/graphql';
-import { useTenants } from '../../../../context/TenantsContext';
+import { useTenant } from '../../../../context/TenantContext';
 import { DineroObject } from 'dinero.js';
 
 export type Product = GetProductQuery['product'];
@@ -80,7 +80,7 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   error,
   product,
 }) => {
-  const { currentTenant } = useTenants();
+  const { currentTenant } = useTenant();
   const [inputTagsSuggetions] = useState<TagProps[]>([]);
   const form = useFormik<ProductBasicOptionsValues>({
     initialValues: {

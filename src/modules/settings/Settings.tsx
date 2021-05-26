@@ -6,10 +6,10 @@ import ShippingSettings from './ShippingSettings';
 import { GeneralSettings } from './GeneralSettings';
 //import DiscountSettings from './DiscountSettings';
 import PaymentMethodSettings from './PaymentMethodSettings';
-import { useTenants } from '../../context/TenantsContext';
+import { useTenant } from '../../context/TenantContext';
 
 const Settings: React.FC = () => {
-  const { currentTenant } = useTenants();
+  const { currentTenant } = useTenant();
   const routes = useRoutes([
     {
       path: 'general',

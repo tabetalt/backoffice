@@ -10,12 +10,12 @@ import {
   CurrencyCode,
 } from '../../generated/graphql';
 import * as DineroHelper from '../../helpers';
-import { TenantItem } from '../../context/TenantsContext';
+import { TenantItem } from '../../context/TenantContext';
 import { SettingsNavigation } from './SettingsNavigation';
 import { FormField } from '../../components/common/FormField';
 import { FormSelect } from '../../components/common/FormSelect';
 import { FormInput } from '../../components/common/FormInput';
-import { useTenants } from '../../context/TenantsContext';
+import { useTenant } from '../../context/TenantContext';
 import * as Yup from 'yup';
 
 interface GeneralSettingsProps {
@@ -49,7 +49,7 @@ const TenantSchema = Yup.object().shape({
 });
 
 export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
-  const { updateRequired } = useTenants();
+  const { updateRequired } = useTenant();
   const ref: MutableRefObject<any> = useRef();
 
   const [updateTenant, { error }] = useUpdateTenantMutation({});

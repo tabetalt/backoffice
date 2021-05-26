@@ -10,7 +10,7 @@ interface TenantContextValue {
   updateRequired: () => void;
 }
 
-export const TenantsContext = React.createContext<TenantContextValue>({
+export const TenantContext = React.createContext<TenantContextValue>({
   tenants: [],
   currentTenant: null,
   updateRequired: () => {
@@ -18,8 +18,8 @@ export const TenantsContext = React.createContext<TenantContextValue>({
   },
 } as TenantContextValue);
 
-export function useTenants(): TenantContextValue {
-  return useContext(TenantsContext);
+export function useTenant(): TenantContextValue {
+  return useContext(TenantContext);
 }
 
 function useAuthContext() {
@@ -27,7 +27,7 @@ function useAuthContext() {
   return context;
 }
 
-export const TenantsProvider: React.FC = ({ children }) => {
+export const TenantProvider: React.FC = ({ children }) => {
   const authContext = useAuthContext();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentUserId, setUserId] = useState<string>();
@@ -56,8 +56,6 @@ export const TenantsProvider: React.FC = ({ children }) => {
     updateRequired,
   };
   return (
-    <TenantsContext.Provider value={context}>
-      {children}
-    </TenantsContext.Provider>
+    <TenantContext.Provider value={context}>{children}</TenantContext.Provider>
   );
 };

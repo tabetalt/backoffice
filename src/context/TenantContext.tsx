@@ -26,8 +26,7 @@ function useAuthContext() {
 
 export const TenantProvider: React.FC = ({ children }) => {
   const authContext = useAuthContext();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentUserId, setUserId] = useState<string>();
+  const [, setUserId] = useState<string>();
   const [tenantUpdateState, updateTenant] = useState(true);
 
   useEffect(() => {

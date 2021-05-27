@@ -22,6 +22,7 @@ import {
   GetSignedUrlQuery,
   GetSignedUrlQueryVariables,
   ProductStatus,
+  TenantPriceDisplay,
   useGetCategoriesShortQuery,
 } from '../../../../generated/graphql';
 import { useTenant } from '../../../../context/TenantContext';
@@ -86,7 +87,10 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     initialValues: {
       ...defaultValues,
       ...product,
-      price: DineroHelper.formatPrice(product?.price),
+      price: DineroHelper.formatPrice(
+        product?.price,
+        currentTenant?.priceDisplay === TenantPriceDisplay.IncVat
+      ),
       categories: product?.categories.map((category) => ({
         id: category?.id,
         name: category?.title,
@@ -195,7 +199,11 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
         </div>
         <div>
           <PrefilledInput
-            label="Pris inkl. MVA"
+            label={
+              currentTenant?.priceDisplay === TenantPriceDisplay.IncVat
+                ? 'Pris inkl. MVA'
+                : 'Pris'
+            }
             prefilledText="NOK"
             prefilledTextPosition={TextPosition.RIGHT}
             placeholder="258,00"
@@ -208,13 +216,15 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
           {form.touched.price && form.errors.price && (
             <Error message={form.errors.price} />
           )}
-          <Label sx={{ color: 'gray', ml: 158 }}>
-            {'Pris eks. MVA: ' +
-              DineroHelper.priceWithoutRate(
-                currentTenant?.vatRate?.value as DineroObject,
-                form.values.price
-              )}
-          </Label>
+          {currentTenant?.priceDisplay === TenantPriceDisplay.IncVat && (
+            <Label sx={{ color: 'gray', ml: 158 }}>
+              {'Pris eks. MVA: ' +
+                DineroHelper.priceWithoutRate(
+                  currentTenant?.vatRate?.value as DineroObject,
+                  form.values.price
+                )}
+            </Label>
+          )}
         </div>
         <div>
           <Field

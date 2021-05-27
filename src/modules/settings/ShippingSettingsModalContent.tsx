@@ -31,10 +31,8 @@ export const ShippingSettingsModalContent: React.FC<{
   tenantId: number | null | undefined;
   onRequestClose: () => void;
 }> = ({ currentDeliveryMethod, onRequestClose, tenantId }) => {
-  const [updateDeliveryMethod, { error: updateError }] =
-    useUpdateDeliveryMethodMutation();
-  const [createDeliveryMethod, { error: createError }] =
-    useCreateDeliveryMethodMutation();
+  const [updateDeliveryMethod] = useUpdateDeliveryMethodMutation();
+  const [createDeliveryMethod] = useCreateDeliveryMethodMutation();
 
   const update = async (
     currentDeliveryMethod: DeliveryMethodItem,
@@ -68,14 +66,14 @@ export const ShippingSettingsModalContent: React.FC<{
     <Formik
       initialValues={{
         name: currentDeliveryMethod?.name || '',
-        price: currentDeliveryMethod?.price.amount || '',
+        price: DineroHelper.formatMoney(currentDeliveryMethod?.price) || '',
         status:
           currentDeliveryMethod?.status ||
           DeliveryMethodStatus.DeliveryMethodStatusUnspecified,
         digitalDelivery: currentDeliveryMethod?.digitalDelivery || false,
       }}
       validationSchema={DeliveryMethodSchema}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values) => {
         const input = {
           name: values.name,
           price: DineroHelper.moneyFromString(String(values.price)),

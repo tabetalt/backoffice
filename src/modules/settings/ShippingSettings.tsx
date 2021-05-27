@@ -17,6 +17,7 @@ import {
   useGetDeliveryMethodsQuery,
 } from '../../generated/graphql';
 import { TenantItem } from '../../context/TenantContext';
+import * as DineroHelper from '../../helpers';
 
 export type DeliveryMethodItem =
   GetDeliveryMethodsQuery['deliveryMethods']['items'][0];
@@ -86,6 +87,10 @@ const Shipping: React.FC<ShippingSettingsProps> = ({ tenant }) => {
       {
         Header: 'Pris',
         accessor: 'price.amount',
+        Cell: ({
+          row: { original: deliveryMethod },
+        }: CellProps<DeliveryMethodItem>) =>
+          DineroHelper.formatMoney(deliveryMethod?.price),
       },
       {
         Header: 'Status',

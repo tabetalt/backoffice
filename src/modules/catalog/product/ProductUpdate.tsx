@@ -20,10 +20,14 @@ import {
   useGetProductQuery,
   useUpdateProductMutation,
   ProductUpdateInput,
+  TenantPriceDisplay,
 } from '../../../generated/graphql';
 import * as DineroHelper from '../../../helpers';
+import { DineroObject } from 'dinero.js';
+import { useTenant } from '../../../context/TenantContext';
 
 const ProductUpdate: React.FC = () => {
+  const { currentTenant } = useTenant();
   const navigate = useNavigate();
   const params = useParams();
   const productId = Number(params.productId);
@@ -49,16 +53,26 @@ const ProductUpdate: React.FC = () => {
 
   const onSubmit = useCallback(
     async (values) => {
-      const input = _.omit({ tenantId: 1, ...data?.product, ...values }, [
-        'id',
-        '__typename',
-        'price',
-        'categories',
-      ]) as ProductUpdateInput;
+      const input = _.omit(
+        {
+          tenantId: currentTenant?.id,
+          ...data?.product,
+          ...values,
+        },
+        ['id', '__typename', 'price', 'categories']
+      ) as ProductUpdateInput;
 
       if (values.price) {
         input.price = {
-          grossAmount: DineroHelper.moneyFromString(values.price),
+          grossAmount:
+            currentTenant?.priceDisplay === TenantPriceDisplay.ExlVat
+              ? DineroHelper.moneyFromString(values.price)
+              : DineroHelper.moneyFromString(
+                  DineroHelper.priceWithoutRate(
+                    currentTenant?.vatRate?.value as DineroObject,
+                    values.price
+                  )
+                ),
         };
       }
       if (values.categories) {

@@ -215,11 +215,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
                     Postnr. og sted
                   </Label>
                   <Box sx={{ flex: 3 }}>
-                    <FormInput
-                      name="postalCode"
-                      type="number"
-                      placeholder="1234"
-                    />
+                    <FormInput name="postalCode" placeholder="1234" />
                   </Box>
                   <Box sx={{ flex: 8, ml: 3 }}>
                     <FormInput name="postalAddress" placeholder="Sted" />

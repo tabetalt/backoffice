@@ -93,7 +93,7 @@ const Order: React.FC = () => {
                 <Heading as="h3" sx={{ flexGrow: 1 }}>
                   Betalingsstatus
                 </Heading>
-                <Badge variant={setStatus(data?.order.status)}>
+                <Badge variant={setStatus(data?.order.paymentStatus)}>
                   {data?.order.paymentStatus}
                 </Badge>
               </Flex>

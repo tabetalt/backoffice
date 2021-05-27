@@ -57,7 +57,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
   const onSubmitGeneral = useCallback(
     async (input) => {
       await updateTenant({ variables: { id: tenant?.id || 1, input } });
-      updateRequired();
+      if (updateRequired) updateRequired();
     },
     [updateTenant]
   );
@@ -105,7 +105,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ tenant }) => {
         linkedin: findSocialMediaByName(SocialMediaType.Linkedin) || '',
       }}
       validationSchema={TenantSchema}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values) => {
         const input: TenantUpdateInput = {
           priceDisplay: values.priceDisplay,
           title: values.title,

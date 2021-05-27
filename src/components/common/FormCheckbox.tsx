@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import React from 'react';
 import Error from './Error';
-import { Box, Checkbox, Flex, Label } from '@theme-ui/components';
+import { Box, Flex, Label } from '@theme-ui/components';
 import { Switch } from '@tabetalt/kit';
 
 export const FormCheckbox: React.FC<any> = ({ label, ...props }: any) => {

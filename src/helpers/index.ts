@@ -14,11 +14,8 @@ export const formatPrice = (
   return amount;
 };
 
-export const formatMoney = (value?: Money | null): string => {
-  if (!value) return '0';
-
-  const amount = value as DineroObject ? Dinero(priceValue).toFormat('0.00') : '0';
-  return amount;
+export const formatMoney = (value?: Money): string => {
+  return value ? Dinero(value as DineroObject).toFormat('0.00') : '0';
 };
 
 export const valueFromString = (

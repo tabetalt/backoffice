@@ -7,15 +7,12 @@ export type TenantItem = GetTenantsQuery['tenants']['items'][0];
 interface TenantContextValue {
   tenants: TenantItem[];
   currentTenant: TenantItem | null;
-  updateRequired: () => void;
+  updateRequired?: () => void;
 }
 
 export const TenantContext = React.createContext<TenantContextValue>({
   tenants: [],
   currentTenant: null,
-  updateRequired: () => {
-    // Dummy function
-  },
 } as TenantContextValue);
 
 export function useTenant(): TenantContextValue {

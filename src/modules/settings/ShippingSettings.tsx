@@ -46,7 +46,7 @@ const Shipping: React.FC<ShippingSettingsProps> = ({ tenant }) => {
   const [openModal, setOpenModal] = useState(false);
   const [currentDeliveryMethod, setCurrentDeliveryMethod] =
     useState<DeliveryMethodItem | null>(null);
-  const { data, loading, error } = useGetDeliveryMethodsQuery();
+  const { data } = useGetDeliveryMethodsQuery();
   const [deleteDeliveryMethod, { loading: deleteLoading }] =
     useDeleteDeliveryMethodMutation({
       refetchQueries: [{ query: GetDeliveryMethodsDocument }],

@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Badge, Box, Button, Flex, Heading, Link, Text } from 'theme-ui';
-import { icons, Table } from '@tabetalt/kit';
+import { CellProps, icons, Table } from '@tabetalt/kit';
 import Layout from '../../components/layout/Layout';
-import { useParams } from 'react-router';
-import { useGetOrderQuery } from '../../generated/graphql';
+import { useNavigate, useParams } from 'react-router';
+import {
+  GetOrdersDocument,
+  OrderUpdateInput,
+  useDeleteOrderMutation,
+  useGetOrderQuery,
+  useUpdateOrderMutation,
+} from '../../generated/graphql';
 import * as DineroHelper from '../../helpers';
 import moment from 'moment';
 
@@ -14,7 +20,8 @@ const columns = [
   },
   {
     Header: 'Pris',
-    accessor: 'product.price.netAmount.amount',
+    Cell: ({ row: { original: order } }: CellProps<any>) =>
+      DineroHelper.formatPrice(order?.product.price).netAmount,
   },
   {
     Header: 'Antall',
@@ -23,11 +30,14 @@ const columns = [
   {
     Header: 'Totalt',
     accessor: 'total.netAmount.amount',
+    Cell: ({ row: { original: order } }: CellProps<any>) =>
+      DineroHelper.formatPrice(order?.total).netAmount,
   },
 ];
 
 const Order: React.FC = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const orderId = Number(params.orderId);
 
   const { data } = useGetOrderQuery({
@@ -35,6 +45,22 @@ const Order: React.FC = () => {
       id: orderId,
     },
   });
+  const [updateOrder, { error: updateError }] = useUpdateOrderMutation();
+  const [deleteOrder, { error: deleteError }] = useDeleteOrderMutation({
+    refetchQueries: [{ query: GetOrdersDocument }],
+  });
+
+  const handleOrderStatusChange = useCallback((name: string, value: string) => {
+    const input: OrderUpdateInput = { [name]: value };
+    updateOrder({ variables: { id: orderId, input } });
+  }, []);
+
+  const handleDeleteOrder = useCallback(async () => {
+    await deleteOrder({ variables: { id: orderId } });
+    navigate(`/order`, {
+      replace: true,
+    });
+  }, []);
 
   function setStatus(status = ''): string {
     switch (status) {
@@ -103,8 +129,33 @@ const Order: React.FC = () => {
               </Flex>
               <hr />
               <Box sx={{ '> a': { mr: 2 } }}>
-                <Link>Marker som sendt</Link>
-                <Link>Marker som betalt</Link>
+                {data?.order.paymentStatus !== 'PAID' && (
+                  <Link
+                    onClick={() =>
+                      handleOrderStatusChange('paymentStatus', 'PAID')
+                    }
+                  >
+                    Marker som PAID
+                  </Link>
+                )}
+                {data?.order.paymentStatus !== 'FAILED' && (
+                  <Link
+                    onClick={() =>
+                      handleOrderStatusChange('paymentStatus', 'FAILED')
+                    }
+                  >
+                    Marker som FAILED
+                  </Link>
+                )}
+                {data?.order.paymentStatus !== 'PENDING' && (
+                  <Link
+                    onClick={() =>
+                      handleOrderStatusChange('paymentStatus', 'PENDING')
+                    }
+                  >
+                    Marker som PENDING
+                  </Link>
+                )}
               </Box>
             </Box>
 
@@ -123,8 +174,33 @@ const Order: React.FC = () => {
               </Flex>
               <hr />
               <Box sx={{ '> a': { mr: 2 } }}>
-                <Link>Marker som sendt</Link>
-                <Link>Marker som bekreftet</Link>
+                {data?.order.status !== 'CONFIRMED' && (
+                  <Link
+                    onClick={() =>
+                      handleOrderStatusChange('status', 'CONFIRMED')
+                    }
+                  >
+                    Marker som sendt
+                  </Link>
+                )}
+                {data?.order.status !== 'UNCONFIRMED' && (
+                  <Link
+                    onClick={() =>
+                      handleOrderStatusChange('status', 'UNCONFIRMED')
+                    }
+                  >
+                    Marker som bekreftet
+                  </Link>
+                )}
+                {data?.order.status !== 'CANCELED' && (
+                  <Link
+                    onClick={() =>
+                      handleOrderStatusChange('status', 'CANCELED')
+                    }
+                  >
+                    Marker som avbryt
+                  </Link>
+                )}
               </Box>
             </Box>
             {/* <Box>
@@ -140,6 +216,7 @@ const Order: React.FC = () => {
               <Button
                 variant="outline"
                 sx={{ display: 'flex', alignItems: 'center' }}
+                onClick={handleDeleteOrder}
               >
                 <Text>Slett ordre</Text>
                 <icons.TrashIcon sx={{ ml: 2 }} />

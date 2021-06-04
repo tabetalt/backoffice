@@ -1,18 +1,27 @@
 import Dinero, { DineroObject } from 'dinero.js';
 import { Price, Money, CurrencyCode } from '../generated/graphql';
 
+export const dineroFromMoney = (value: Money): Dinero.Dinero => {
+  return Dinero(value as DineroObject);
+};
+
+export const dineroFromString = (value: string): Dinero.Dinero => {
+  return dineroFromMoney(moneyFromString(value));
+};
+
 export const formatPrice = (
   price?: Price | null,
   isVatRequired = false
 ): string => {
   if (!price) return '0';
-
-  const priceValue = (
+  const priceValue = dineroFromMoney(
     isVatRequired ? price.netAmount : price.grossAmount
-  ) as DineroObject;
+  );
+  return priceValue ? priceValue.toFormat('0.00') : '0';
+};
 
-  const amount = priceValue ? Dinero(priceValue).toFormat('0.00') : '0';
-  return amount;
+export const formatMoney = (value?: Money): string => {
+  return value ? dineroFromMoney(value).toFormat('0.00') : '0';
 };
 
 export const valueFromString = (
@@ -39,4 +48,22 @@ export const moneyFromString = (
   };
 
   return price;
+};
+
+export const vatRateCalculation = (
+  vatRateObject: DineroObject,
+  price: string
+): string => {
+  const dineroPrice = dineroFromString(price);
+  const vatAmount = dineroPrice.multiply(vatRateObject.amount / 100);
+
+  return dineroPrice.add(vatAmount).toFormat('0.00');
+};
+
+export const priceWithoutRate = (
+  vatRateObject: DineroObject,
+  price: string
+): string => {
+  const dineroPrice = dineroFromString(price);
+  return dineroPrice.divide(vatRateObject.amount / 100 + 1).toFormat('0.00');
 };

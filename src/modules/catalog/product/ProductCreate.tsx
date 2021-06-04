@@ -12,10 +12,14 @@ import {
   GetCategoriesShortDocument,
   useCreateProductMutation,
   ProductCategoryCreateInput,
+  TenantPriceDisplay,
 } from '../../../generated/graphql';
 import * as DineroHelper from '../../../helpers';
+import { DineroObject } from 'dinero.js';
+import { useTenant } from '../../../context/TenantContext';
 
 const ProductCreate: React.FC = () => {
+  const { currentTenant } = useTenant();
   const navigate = useNavigate();
   const [createProduct, { error }] = useCreateProductMutation({
     refetchQueries: [
@@ -27,17 +31,25 @@ const ProductCreate: React.FC = () => {
   const onSubmitBasic = useCallback(
     async (values) => {
       const input: ProductCreateInput = {
-        tenantId: 1,
+        tenantId: currentTenant?.id,
         ...values,
         price: {
-          grossAmount: DineroHelper.moneyFromString(values.price),
+          grossAmount:
+            currentTenant?.priceDisplay === TenantPriceDisplay.ExlVat
+              ? DineroHelper.moneyFromString(values.price)
+              : DineroHelper.moneyFromString(
+                  DineroHelper.priceWithoutRate(
+                    currentTenant?.vatRate?.value as DineroObject,
+                    values.price
+                  )
+                ),
         },
         stockControl: true,
         inStockNum: 0,
+        vatRateId: currentTenant?.vatRate?.id,
       };
 
       if (values.categories) {
-        console.log(values.categories);
         input.categories = (values.categories as TagProps[]).map(
           ({ id, name }) => ({ id, title: name } as ProductCategoryCreateInput)
         );

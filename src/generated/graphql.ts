@@ -29,10 +29,10 @@ export type Address = {
   sortingCode: Scalars['String'];
   administrativeArea: Scalars['String'];
   locality: Scalars['String'];
-  addressLines: Scalars['String'];
-  recipients: Scalars['String'];
+  addressLines: Array<Scalars['String']>;
+  recipients: Array<Scalars['String']>;
   organization: Scalars['String'];
-  current: Scalars['String'];
+  tenantId: Scalars['Int'];
 };
 
 export enum AddressType {
@@ -251,24 +251,42 @@ export enum CurrencyCode {
   Zwl = 'ZWL',
 }
 
-export type EmailAddress = {
-  __typename?: 'EmailAddress';
+export type DeliveryMethod = {
+  __typename?: 'DeliveryMethod';
   id: Scalars['Int'];
-  type: EmailAddressType;
-  address: Scalars['String'];
+  name: Scalars['String'];
+  price: Money;
+  digitalDelivery: Scalars['Boolean'];
+  status: DeliveryMethodStatus;
   tenantId: Scalars['Int'];
-  tenant: Tenant;
 };
 
-export enum EmailAddressType {
-  EmailAddressTypeUnspecified = 'EMAIL_ADDRESS_TYPE_UNSPECIFIED',
-  Primary = 'PRIMARY',
-  CatchAll = 'CATCH_ALL',
-  Order = 'ORDER',
-  Announcement = 'ANNOUNCEMENT',
-  Recovery = 'RECOVERY',
-  CustomerFacing = 'CUSTOMER_FACING',
+export type DeliveryMethodCreateInput = {
+  name: Scalars['String'];
+  price: MoneyInput;
+  digitalDelivery?: Maybe<Scalars['Boolean']>;
+  status?: Maybe<DeliveryMethodStatus>;
+  tenantId: Scalars['Int'];
+};
+
+export enum DeliveryMethodStatus {
+  DeliveryMethodStatusUnspecified = 'DELIVERY_METHOD_STATUS_UNSPECIFIED',
+  Pending = 'PENDING',
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
 }
+
+export type DeliveryMethodUpdateInput = {
+  name?: Maybe<Scalars['String']>;
+  price?: Maybe<MoneyInput>;
+  digitalDelivery?: Maybe<Scalars['Boolean']>;
+  status?: Maybe<DeliveryMethodStatus>;
+};
+
+export type DeliveryMethodsListResponse = {
+  __typename?: 'DeliveryMethodsListResponse';
+  items: Array<DeliveryMethod>;
+};
 
 export type ImageCreateInput = {
   id?: Maybe<Scalars['Int']>;
@@ -279,13 +297,13 @@ export type ImageCreateInput = {
 
 export type Money = {
   __typename?: 'Money';
-  amount: Scalars['Int'];
+  amount?: Maybe<Scalars['Int']>;
   currency?: Maybe<CurrencyCode>;
   precision?: Maybe<Scalars['Int']>;
 };
 
 export type MoneyInput = {
-  amount: Scalars['Int'];
+  amount?: Maybe<Scalars['Int']>;
   currency?: Maybe<CurrencyCode>;
   precision?: Maybe<Scalars['Int']>;
 };
@@ -294,7 +312,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   createTenant: Tenant;
   updateTenant: Tenant;
-  deleteTenant: Tenant;
+  deleteTenant: Scalars['Boolean'];
+  createDeliveryMethod: DeliveryMethod;
+  updateDeliveryMethod: DeliveryMethod;
+  deleteDeliveryMethod: Scalars['Boolean'];
   createCategory: Category;
   updateCategory: Category;
   deleteCategory: Scalars['Boolean'];
@@ -307,6 +328,12 @@ export type Mutation = {
   createAttribute: Attribute;
   updateAttribute: Attribute;
   deleteAttribute: Scalars['Boolean'];
+  createOrder: Order;
+  updateOrder: Order;
+  deleteOrder: Scalars['Boolean'];
+  createPayment: Payment;
+  updatePayment: Payment;
+  deletePayment: Scalars['Boolean'];
   createAttachments: AttachmentsListResponse;
 };
 
@@ -320,6 +347,19 @@ export type MutationUpdateTenantArgs = {
 };
 
 export type MutationDeleteTenantArgs = {
+  id: Scalars['Int'];
+};
+
+export type MutationCreateDeliveryMethodArgs = {
+  input: DeliveryMethodCreateInput;
+};
+
+export type MutationUpdateDeliveryMethodArgs = {
+  input: DeliveryMethodUpdateInput;
+  id: Scalars['Int'];
+};
+
+export type MutationDeleteDeliveryMethodArgs = {
   id: Scalars['Int'];
 };
 
@@ -375,8 +415,129 @@ export type MutationDeleteAttributeArgs = {
   id: Scalars['Int'];
 };
 
+export type MutationCreateOrderArgs = {
+  input: OrderCreateInput;
+};
+
+export type MutationUpdateOrderArgs = {
+  input: OrderUpdateInput;
+  id: Scalars['Int'];
+};
+
+export type MutationDeleteOrderArgs = {
+  id: Scalars['Int'];
+};
+
+export type MutationCreatePaymentArgs = {
+  input: PaymentCreateInput;
+};
+
+export type MutationUpdatePaymentArgs = {
+  input: PaymentUpdateInput;
+  id: Scalars['Int'];
+};
+
+export type MutationDeletePaymentArgs = {
+  id: Scalars['Int'];
+};
+
 export type MutationCreateAttachmentsArgs = {
   input: Array<AttachmentCreateInput>;
+};
+
+export type Order = {
+  __typename?: 'Order';
+  id: Scalars['Int'];
+  orderTime: Scalars['DateTime'];
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  tenantId: Scalars['Int'];
+  tenant: Tenant;
+  totalPrice?: Maybe<Price>;
+  products: Array<OrderToProduct>;
+  payments?: Maybe<Array<Payment>>;
+  deliveryMethodId?: Maybe<Scalars['Int']>;
+  deliveryMethod?: Maybe<DeliveryMethod>;
+  deliveryAddressId?: Maybe<Scalars['Int']>;
+  deliveryAddress?: Maybe<Address>;
+  orderAddressId?: Maybe<Scalars['Int']>;
+  orderAddress?: Maybe<Address>;
+};
+
+export type OrderCreateInput = {
+  status?: Maybe<OrderStatus>;
+  paymentStatus?: Maybe<PaymentStatus>;
+  tenantId: Scalars['Int'];
+  totalPrice?: Maybe<PriceInput>;
+  products?: Maybe<Array<OrderProductCreateInput>>;
+};
+
+export type OrderProductCreateInput = {
+  orderId?: Maybe<Scalars['Int']>;
+  productId: Scalars['Int'];
+  count?: Maybe<Scalars['Int']>;
+};
+
+export enum OrderStatus {
+  OrderStatusUnspecified = 'ORDER_STATUS_UNSPECIFIED',
+  Confirmed = 'CONFIRMED',
+  Unconfirmed = 'UNCONFIRMED',
+  Canceled = 'CANCELED',
+}
+
+export type OrderToProduct = {
+  __typename?: 'OrderToProduct';
+  orderId: Scalars['Int'];
+  productId: Scalars['Int'];
+  product: Product;
+  count: Scalars['Int'];
+  totalPrice: Price;
+};
+
+export type OrderUpdateInput = {
+  status?: Maybe<OrderStatus>;
+  paymentStatus?: Maybe<PaymentStatus>;
+  totalPrice?: Maybe<PriceInput>;
+  products?: Maybe<Array<OrderProductCreateInput>>;
+};
+
+export type OrdersListResponse = {
+  __typename?: 'OrdersListResponse';
+  items: Array<Order>;
+};
+
+export type Payment = {
+  __typename?: 'Payment';
+  id: Scalars['Int'];
+  paymentTime: Scalars['DateTime'];
+  status: PaymentStatus;
+  processingId: Scalars['String'];
+  processingCode: Scalars['String'];
+  orderId: Scalars['Int'];
+};
+
+export type PaymentCreateInput = {
+  status?: Maybe<PaymentStatus>;
+  processingId?: Maybe<Scalars['String']>;
+  processingCode?: Maybe<Scalars['String']>;
+  orderId: Scalars['Float'];
+};
+
+export enum PaymentStatus {
+  Pending = 'PENDING',
+  Paid = 'PAID',
+  Failed = 'FAILED',
+}
+
+export type PaymentUpdateInput = {
+  status?: Maybe<PaymentStatus>;
+  processingId?: Maybe<Scalars['String']>;
+  processingCode?: Maybe<Scalars['String']>;
+};
+
+export type PaymentsListResponse = {
+  __typename?: 'PaymentsListResponse';
+  items: Array<Payment>;
 };
 
 export type Price = {
@@ -472,6 +633,8 @@ export type Query = {
   __typename?: 'Query';
   tenants: TenantsListResponse;
   tenant: Tenant;
+  deliveryMethods: DeliveryMethodsListResponse;
+  deliveryMethod: DeliveryMethod;
   categories: CategoriesListResponse;
   category: Category;
   products: ProductsListResponse;
@@ -480,10 +643,18 @@ export type Query = {
   variant: Variant;
   attributes: AttributesListResponse;
   attribute: Attribute;
+  orders: OrdersListResponse;
+  order: Order;
+  payments: PaymentsListResponse;
+  payment: Payment;
   signedUrl: SignedUrl;
 };
 
 export type QueryTenantArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryDeliveryMethodArgs = {
   id: Scalars['Int'];
 };
 
@@ -500,6 +671,14 @@ export type QueryVariantArgs = {
 };
 
 export type QueryAttributeArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryOrderArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryPaymentArgs = {
   id: Scalars['Int'];
 };
 
@@ -529,6 +708,12 @@ export type SocialMedia = {
   tenant: Tenant;
 };
 
+export type SocialMediaCreateInput = {
+  tenantId?: Maybe<Scalars['Int']>;
+  type: SocialMediaType;
+  url: Scalars['String'];
+};
+
 export enum SocialMediaType {
   SocialMediaTypeUnspecified = 'SOCIAL_MEDIA_TYPE_UNSPECIFIED',
   Facebook = 'FACEBOOK',
@@ -538,22 +723,6 @@ export enum SocialMediaType {
   Linkedin = 'LINKEDIN',
   Pinterest = 'PINTEREST',
   Other = 'OTHER',
-}
-
-export type StoreUrl = {
-  __typename?: 'StoreUrl';
-  id: Scalars['Int'];
-  type: StoreUrlType;
-  url: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export enum StoreUrlType {
-  StoreUrlTypeUnspecified = 'STORE_URL_TYPE_UNSPECIFIED',
-  CancellationForm = 'CANCELLATION_FORM',
-  TermsAndConditions = 'TERMS_AND_CONDITIONS',
-  PrivacyAgreement = 'PRIVACY_AGREEMENT',
 }
 
 export type Tenant = {
@@ -567,20 +736,30 @@ export type Tenant = {
   languageCode: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  emailAddresses: Array<EmailAddress>;
-  addresses: Array<Address>;
-  socialMedias: Array<SocialMedia>;
-  trackingTags: Array<TrackingTag>;
-  storeUrls: Array<StoreUrl>;
+  email?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  postalAddress?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  orgNumber?: Maybe<Scalars['String']>;
+  socialMedias?: Maybe<Array<SocialMedia>>;
+  orders?: Maybe<Array<Order>>;
+  vatRate?: Maybe<VatRate>;
 };
 
 export type TenantCreateInput = {
-  status: Scalars['String'];
-  priceDisplay: Scalars['String'];
+  status?: Maybe<TenantStatus>;
+  priceDisplay?: Maybe<TenantPriceDisplay>;
   title: Scalars['String'];
   displayName: Scalars['String'];
   url: Scalars['String'];
   languageCode?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  postalAddress?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  orgNumber?: Maybe<Scalars['String']>;
+  socialMedias?: Maybe<Array<SocialMediaCreateInput>>;
+  vatRate?: Maybe<VatRateCreateInput>;
 };
 
 export enum TenantPriceDisplay {
@@ -596,36 +775,25 @@ export enum TenantStatus {
 }
 
 export type TenantUpdateInput = {
-  status: Scalars['String'];
-  priceDisplay: Scalars['String'];
-  title: Scalars['String'];
-  displayName: Scalars['String'];
-  url: Scalars['String'];
+  status?: Maybe<TenantStatus>;
+  priceDisplay?: Maybe<TenantPriceDisplay>;
+  title?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
   languageCode?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  postalAddress?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  orgNumber?: Maybe<Scalars['String']>;
+  socialMedias?: Maybe<Array<SocialMediaCreateInput>>;
+  vatRate?: Maybe<VatRateUpdateInput>;
 };
 
 export type TenantsListResponse = {
   __typename?: 'TenantsListResponse';
   items: Array<Tenant>;
 };
-
-export type TrackingTag = {
-  __typename?: 'TrackingTag';
-  id: Scalars['Int'];
-  type: TrackingTagType;
-  value: Scalars['String'];
-  tenantId: Scalars['Int'];
-  tenant: Tenant;
-};
-
-export enum TrackingTagType {
-  TrackingTagTypeUnspecified = 'TRACKING_TAG_TYPE_UNSPECIFIED',
-  GoogleAnalytics = 'GOOGLE_ANALYTICS',
-  GoogleTagManager = 'GOOGLE_TAG_MANAGER',
-  FacebookPixel = 'FACEBOOK_PIXEL',
-  Hubspot = 'HUBSPOT',
-  Other = 'OTHER',
-}
 
 export type Variant = {
   __typename?: 'Variant';
@@ -660,8 +828,18 @@ export type VariantsListResponse = {
 export type VatRate = {
   __typename?: 'VatRate';
   id: Scalars['Int'];
-  value: Scalars['Int'];
+  value: Money;
   tenantId: Scalars['Int'];
+};
+
+export type VatRateCreateInput = {
+  value: MoneyInput;
+  tenantId?: Maybe<Scalars['Int']>;
+};
+
+export type VatRateUpdateInput = {
+  value?: Maybe<MoneyInput>;
+  tenantId?: Maybe<Scalars['Int']>;
 };
 
 export type CategoryFragment = { __typename?: 'Category' } & Pick<
@@ -736,6 +914,62 @@ export type GetCategoryQuery = { __typename?: 'Query' } & {
   } & CategoryFragment;
 };
 
+export type MoneyFragment = { __typename?: 'Money' } & Pick<
+  Money,
+  'amount' | 'currency' | 'precision'
+>;
+
+export type DeliveryMethodFragment = { __typename?: 'DeliveryMethod' } & Pick<
+  DeliveryMethod,
+  'id' | 'name' | 'digitalDelivery' | 'status' | 'tenantId'
+> & { price: { __typename?: 'Money' } & MoneyFragment };
+
+export type GetDeliveryMethodsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetDeliveryMethodsQuery = { __typename?: 'Query' } & {
+  deliveryMethods: { __typename?: 'DeliveryMethodsListResponse' } & {
+    items: Array<{ __typename?: 'DeliveryMethod' } & DeliveryMethodFragment>;
+  };
+};
+
+export type DeleteDeliveryMethodMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteDeliveryMethodMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'deleteDeliveryMethod'
+>;
+
+export type GetDeliveryMethodQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type GetDeliveryMethodQuery = { __typename?: 'Query' } & {
+  deliveryMethod: { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment;
+};
+
+export type CreateDeliveryMethodMutationVariables = Exact<{
+  input: DeliveryMethodCreateInput;
+}>;
+
+export type CreateDeliveryMethodMutation = { __typename?: 'Mutation' } & {
+  createDeliveryMethod: {
+    __typename?: 'DeliveryMethod';
+  } & DeliveryMethodFragment;
+};
+
+export type UpdateDeliveryMethodMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: DeliveryMethodUpdateInput;
+}>;
+
+export type UpdateDeliveryMethodMutation = { __typename?: 'Mutation' } & {
+  updateDeliveryMethod: {
+    __typename?: 'DeliveryMethod';
+  } & DeliveryMethodFragment;
+};
+
 export type GetSignedUrlQueryVariables = Exact<{
   input: QuerySignedUrlInput;
 }>;
@@ -762,11 +996,6 @@ export type ProductShortFragment = { __typename?: 'Product' } & Pick<
   | 'count'
   | 'stockControl'
   | 'inStockNum'
->;
-
-export type MoneyFragment = { __typename?: 'Money' } & Pick<
-  Money,
-  'amount' | 'currency' | 'precision'
 >;
 
 export type PriceFragment = { __typename?: 'Price' } & {
@@ -846,13 +1075,116 @@ export type UpdateProductMutation = { __typename?: 'Mutation' } & {
   } & ProductShortFragment;
 };
 
-export type TenantFragment = { __typename?: 'Tenant' } & Pick<Tenant, 'id'>;
+export type TenantFragment = { __typename?: 'Tenant' } & Pick<
+  Tenant,
+  | 'id'
+  | 'status'
+  | 'priceDisplay'
+  | 'title'
+  | 'displayName'
+  | 'url'
+  | 'languageCode'
+  | 'email'
+  | 'postalCode'
+  | 'postalAddress'
+  | 'address'
+  | 'orgNumber'
+>;
+
+export type VatRateFragment = { __typename?: 'VatRate' } & Pick<
+  VatRate,
+  'id'
+> & { value: { __typename?: 'Money' } & MoneyFragment };
+
+export type SocialMediaFragment = { __typename?: 'SocialMedia' } & Pick<
+  SocialMedia,
+  'id' | 'type' | 'url'
+>;
+
+export type GetTenantsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetTenantsQuery = { __typename?: 'Query' } & {
+  tenants: { __typename?: 'TenantsListResponse' } & {
+    items: Array<
+      { __typename?: 'Tenant' } & {
+        vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
+        socialMedias?: Maybe<
+          Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+        >;
+      } & TenantFragment
+    >;
+  };
+};
+
+export type DeleteTenantMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteTenantMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'deleteTenant'
+>;
+
+export type GetTenantQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type GetTenantQuery = { __typename?: 'Query' } & {
+  tenant: { __typename?: 'Tenant' } & {
+    vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
+    socialMedias?: Maybe<
+      Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+    >;
+  } & TenantFragment;
+};
+
+export type CreateTenantMutationVariables = Exact<{
+  input: TenantCreateInput;
+}>;
+
+export type CreateTenantMutation = { __typename?: 'Mutation' } & {
+  createTenant: { __typename?: 'Tenant' } & TenantFragment;
+};
+
+export type UpdateTenantMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: TenantUpdateInput;
+}>;
+
+export type UpdateTenantMutation = { __typename?: 'Mutation' } & {
+  updateTenant: { __typename?: 'Tenant' } & {
+    vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
+    socialMedias?: Maybe<
+      Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+    >;
+  } & TenantFragment;
+};
 
 export const CategoryShortFragmentDoc = gql`
   fragment CategoryShort on Category {
     id
     title
   }
+`;
+export const MoneyFragmentDoc = gql`
+  fragment Money on Money {
+    amount
+    currency
+    precision
+  }
+`;
+export const DeliveryMethodFragmentDoc = gql`
+  fragment DeliveryMethod on DeliveryMethod {
+    id
+    name
+    price {
+      ...Money
+    }
+    digitalDelivery
+    status
+    tenantId
+  }
+  ${MoneyFragmentDoc}
 `;
 export const ProductShortFragmentDoc = gql`
   fragment ProductShort on Product {
@@ -869,13 +1201,6 @@ export const ProductShortFragmentDoc = gql`
     count
     stockControl
     inStockNum
-  }
-`;
-export const MoneyFragmentDoc = gql`
-  fragment Money on Money {
-    amount
-    currency
-    precision
   }
 `;
 export const PriceFragmentDoc = gql`
@@ -940,6 +1265,33 @@ export const ProductFragmentDoc = gql`
 export const TenantFragmentDoc = gql`
   fragment Tenant on Tenant {
     id
+    status
+    priceDisplay
+    title
+    displayName
+    url
+    languageCode
+    email
+    postalCode
+    postalAddress
+    address
+    orgNumber
+  }
+`;
+export const VatRateFragmentDoc = gql`
+  fragment VatRate on VatRate {
+    id
+    value {
+      ...Money
+    }
+  }
+  ${MoneyFragmentDoc}
+`;
+export const SocialMediaFragmentDoc = gql`
+  fragment SocialMedia on SocialMedia {
+    id
+    type
+    url
   }
 `;
 export const CreateCategoryDocument = gql`
@@ -1272,6 +1624,269 @@ export type GetCategoryLazyQueryHookResult = ReturnType<
 export type GetCategoryQueryResult = Apollo.QueryResult<
   GetCategoryQuery,
   GetCategoryQueryVariables
+>;
+export const GetDeliveryMethodsDocument = gql`
+  query GetDeliveryMethods {
+    deliveryMethods {
+      items {
+        ...DeliveryMethod
+      }
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+
+/**
+ * __useGetDeliveryMethodsQuery__
+ *
+ * To run a query within a React component, call `useGetDeliveryMethodsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeliveryMethodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeliveryMethodsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDeliveryMethodsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >(GetDeliveryMethodsDocument, baseOptions);
+}
+export function useGetDeliveryMethodsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >(GetDeliveryMethodsDocument, baseOptions);
+}
+export type GetDeliveryMethodsQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodsQuery
+>;
+export type GetDeliveryMethodsLazyQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodsLazyQuery
+>;
+export type GetDeliveryMethodsQueryResult = Apollo.QueryResult<
+  GetDeliveryMethodsQuery,
+  GetDeliveryMethodsQueryVariables
+>;
+export const DeleteDeliveryMethodDocument = gql`
+  mutation DeleteDeliveryMethod($id: Int!) {
+    deleteDeliveryMethod(id: $id)
+  }
+`;
+export type DeleteDeliveryMethodMutationFn = Apollo.MutationFunction<
+  DeleteDeliveryMethodMutation,
+  DeleteDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useDeleteDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useDeleteDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteDeliveryMethodMutation, { data, loading, error }] = useDeleteDeliveryMethodMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteDeliveryMethodMutation,
+    DeleteDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    DeleteDeliveryMethodMutation,
+    DeleteDeliveryMethodMutationVariables
+  >(DeleteDeliveryMethodDocument, baseOptions);
+}
+export type DeleteDeliveryMethodMutationHookResult = ReturnType<
+  typeof useDeleteDeliveryMethodMutation
+>;
+export type DeleteDeliveryMethodMutationResult =
+  Apollo.MutationResult<DeleteDeliveryMethodMutation>;
+export type DeleteDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  DeleteDeliveryMethodMutation,
+  DeleteDeliveryMethodMutationVariables
+>;
+export const GetDeliveryMethodDocument = gql`
+  query GetDeliveryMethod($id: Int!) {
+    deliveryMethod(id: $id) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+
+/**
+ * __useGetDeliveryMethodQuery__
+ *
+ * To run a query within a React component, call `useGetDeliveryMethodQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeliveryMethodQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeliveryMethodQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetDeliveryMethodQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >(GetDeliveryMethodDocument, baseOptions);
+}
+export function useGetDeliveryMethodLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >(GetDeliveryMethodDocument, baseOptions);
+}
+export type GetDeliveryMethodQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodQuery
+>;
+export type GetDeliveryMethodLazyQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodLazyQuery
+>;
+export type GetDeliveryMethodQueryResult = Apollo.QueryResult<
+  GetDeliveryMethodQuery,
+  GetDeliveryMethodQueryVariables
+>;
+export const CreateDeliveryMethodDocument = gql`
+  mutation CreateDeliveryMethod($input: DeliveryMethodCreateInput!) {
+    createDeliveryMethod(input: $input) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+export type CreateDeliveryMethodMutationFn = Apollo.MutationFunction<
+  CreateDeliveryMethodMutation,
+  CreateDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useCreateDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useCreateDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDeliveryMethodMutation, { data, loading, error }] = useCreateDeliveryMethodMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDeliveryMethodMutation,
+    CreateDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    CreateDeliveryMethodMutation,
+    CreateDeliveryMethodMutationVariables
+  >(CreateDeliveryMethodDocument, baseOptions);
+}
+export type CreateDeliveryMethodMutationHookResult = ReturnType<
+  typeof useCreateDeliveryMethodMutation
+>;
+export type CreateDeliveryMethodMutationResult =
+  Apollo.MutationResult<CreateDeliveryMethodMutation>;
+export type CreateDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  CreateDeliveryMethodMutation,
+  CreateDeliveryMethodMutationVariables
+>;
+export const UpdateDeliveryMethodDocument = gql`
+  mutation UpdateDeliveryMethod($id: Int!, $input: DeliveryMethodUpdateInput!) {
+    updateDeliveryMethod(input: $input, id: $id) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+export type UpdateDeliveryMethodMutationFn = Apollo.MutationFunction<
+  UpdateDeliveryMethodMutation,
+  UpdateDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useUpdateDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useUpdateDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDeliveryMethodMutation, { data, loading, error }] = useUpdateDeliveryMethodMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateDeliveryMethodMutation,
+    UpdateDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    UpdateDeliveryMethodMutation,
+    UpdateDeliveryMethodMutationVariables
+  >(UpdateDeliveryMethodDocument, baseOptions);
+}
+export type UpdateDeliveryMethodMutationHookResult = ReturnType<
+  typeof useUpdateDeliveryMethodMutation
+>;
+export type UpdateDeliveryMethodMutationResult =
+  Apollo.MutationResult<UpdateDeliveryMethodMutation>;
+export type UpdateDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  UpdateDeliveryMethodMutation,
+  UpdateDeliveryMethodMutationVariables
 >;
 export const GetSignedUrlDocument = gql`
   query GetSignedUrl($input: QuerySignedUrlInput!) {
@@ -1613,6 +2228,286 @@ export type UpdateProductMutationResult =
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<
   UpdateProductMutation,
   UpdateProductMutationVariables
+>;
+export const GetTenantsDocument = gql`
+  query GetTenants {
+    tenants {
+      items {
+        ...Tenant
+        vatRate {
+          ...VatRate
+        }
+        socialMedias {
+          ...SocialMedia
+        }
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${VatRateFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+
+/**
+ * __useGetTenantsQuery__
+ *
+ * To run a query within a React component, call `useGetTenantsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTenantsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTenantsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTenantsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetTenantsQuery,
+    GetTenantsQueryVariables
+  >
+) {
+  return Apollo.useQuery<GetTenantsQuery, GetTenantsQueryVariables>(
+    GetTenantsDocument,
+    baseOptions
+  );
+}
+export function useGetTenantsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTenantsQuery,
+    GetTenantsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetTenantsQuery, GetTenantsQueryVariables>(
+    GetTenantsDocument,
+    baseOptions
+  );
+}
+export type GetTenantsQueryHookResult = ReturnType<typeof useGetTenantsQuery>;
+export type GetTenantsLazyQueryHookResult = ReturnType<
+  typeof useGetTenantsLazyQuery
+>;
+export type GetTenantsQueryResult = Apollo.QueryResult<
+  GetTenantsQuery,
+  GetTenantsQueryVariables
+>;
+export const DeleteTenantDocument = gql`
+  mutation DeleteTenant($id: Int!) {
+    deleteTenant(id: $id)
+  }
+`;
+export type DeleteTenantMutationFn = Apollo.MutationFunction<
+  DeleteTenantMutation,
+  DeleteTenantMutationVariables
+>;
+
+/**
+ * __useDeleteTenantMutation__
+ *
+ * To run a mutation, you first call `useDeleteTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTenantMutation, { data, loading, error }] = useDeleteTenantMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteTenantMutation,
+    DeleteTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    DeleteTenantMutation,
+    DeleteTenantMutationVariables
+  >(DeleteTenantDocument, baseOptions);
+}
+export type DeleteTenantMutationHookResult = ReturnType<
+  typeof useDeleteTenantMutation
+>;
+export type DeleteTenantMutationResult =
+  Apollo.MutationResult<DeleteTenantMutation>;
+export type DeleteTenantMutationOptions = Apollo.BaseMutationOptions<
+  DeleteTenantMutation,
+  DeleteTenantMutationVariables
+>;
+export const GetTenantDocument = gql`
+  query GetTenant($id: Int!) {
+    tenant(id: $id) {
+      ...Tenant
+      vatRate {
+        ...VatRate
+      }
+      socialMedias {
+        ...SocialMedia
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${VatRateFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+
+/**
+ * __useGetTenantQuery__
+ *
+ * To run a query within a React component, call `useGetTenantQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTenantQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTenantQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetTenantQuery(
+  baseOptions: Apollo.QueryHookOptions<GetTenantQuery, GetTenantQueryVariables>
+) {
+  return Apollo.useQuery<GetTenantQuery, GetTenantQueryVariables>(
+    GetTenantDocument,
+    baseOptions
+  );
+}
+export function useGetTenantLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTenantQuery,
+    GetTenantQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetTenantQuery, GetTenantQueryVariables>(
+    GetTenantDocument,
+    baseOptions
+  );
+}
+export type GetTenantQueryHookResult = ReturnType<typeof useGetTenantQuery>;
+export type GetTenantLazyQueryHookResult = ReturnType<
+  typeof useGetTenantLazyQuery
+>;
+export type GetTenantQueryResult = Apollo.QueryResult<
+  GetTenantQuery,
+  GetTenantQueryVariables
+>;
+export const CreateTenantDocument = gql`
+  mutation CreateTenant($input: TenantCreateInput!) {
+    createTenant(input: $input) {
+      ...Tenant
+    }
+  }
+  ${TenantFragmentDoc}
+`;
+export type CreateTenantMutationFn = Apollo.MutationFunction<
+  CreateTenantMutation,
+  CreateTenantMutationVariables
+>;
+
+/**
+ * __useCreateTenantMutation__
+ *
+ * To run a mutation, you first call `useCreateTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTenantMutation, { data, loading, error }] = useCreateTenantMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateTenantMutation,
+    CreateTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    CreateTenantMutation,
+    CreateTenantMutationVariables
+  >(CreateTenantDocument, baseOptions);
+}
+export type CreateTenantMutationHookResult = ReturnType<
+  typeof useCreateTenantMutation
+>;
+export type CreateTenantMutationResult =
+  Apollo.MutationResult<CreateTenantMutation>;
+export type CreateTenantMutationOptions = Apollo.BaseMutationOptions<
+  CreateTenantMutation,
+  CreateTenantMutationVariables
+>;
+export const UpdateTenantDocument = gql`
+  mutation UpdateTenant($id: Int!, $input: TenantUpdateInput!) {
+    updateTenant(input: $input, id: $id) {
+      ...Tenant
+      vatRate {
+        ...VatRate
+      }
+      socialMedias {
+        ...SocialMedia
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${VatRateFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+export type UpdateTenantMutationFn = Apollo.MutationFunction<
+  UpdateTenantMutation,
+  UpdateTenantMutationVariables
+>;
+
+/**
+ * __useUpdateTenantMutation__
+ *
+ * To run a mutation, you first call `useUpdateTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTenantMutation, { data, loading, error }] = useUpdateTenantMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTenantMutation,
+    UpdateTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    UpdateTenantMutation,
+    UpdateTenantMutationVariables
+  >(UpdateTenantDocument, baseOptions);
+}
+export type UpdateTenantMutationHookResult = ReturnType<
+  typeof useUpdateTenantMutation
+>;
+export type UpdateTenantMutationResult =
+  Apollo.MutationResult<UpdateTenantMutation>;
+export type UpdateTenantMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTenantMutation,
+  UpdateTenantMutationVariables
 >;
 
 export interface PossibleTypesResultData {

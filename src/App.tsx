@@ -6,6 +6,7 @@ import { theme, Skeleton } from '@tabetalt/kit';
 import { getRoutes } from './routing';
 import gqlClient from './api/client';
 import { useAuth } from './context/AuthContext';
+import { TenantProvider } from './context/TenantContext';
 
 const renderLoader = () => <Skeleton />;
 
@@ -16,7 +17,9 @@ export const App: React.FC = () => {
   return (
     <ApolloProvider client={gqlClient}>
       <ThemeProvider theme={theme}>
-        <Suspense fallback={renderLoader()}>{routes}</Suspense>
+        <TenantProvider>
+          <Suspense fallback={renderLoader()}>{routes}</Suspense>
+        </TenantProvider>
       </ThemeProvider>
     </ApolloProvider>
   );

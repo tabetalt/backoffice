@@ -6,9 +6,10 @@ import type { CellProps } from 'react-table';
 import * as DineroHelper from '../../../helpers';
 import {
   GetProductsDocument,
+  TenantPriceDisplay,
   useDeleteProductMutation,
 } from '../../../generated/graphql';
-
+import { useTenant } from '../../../context/TenantContext';
 import { ProductItem } from './Products';
 
 const { OpenIcon, TrashIcon, PencilIcon } = icons;
@@ -52,6 +53,7 @@ export interface ProductsListingProps {
 }
 
 const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
+  const { currentTenant } = useTenant();
   const columns = useMemo(
     () => [
       {
@@ -62,7 +64,10 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
         Header: 'Produktpris',
         accessor: 'price',
         Cell: ({ row: { original: product } }: CellProps<ProductItem>) =>
-          DineroHelper.formatPrice(product?.price).grossAmount,
+          DineroHelper.formatPrice(
+            product?.price,
+            currentTenant?.priceDisplay === TenantPriceDisplay.IncVat
+          ),
       },
       {
         Header: 'Lagerstatus',
@@ -99,7 +104,6 @@ const ProductsListing: React.FC<ProductsListingProps> = ({ data }) => {
     ],
     []
   );
-
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return <Table options={{ columns, data }} />;

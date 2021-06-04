@@ -1,3 +1,81 @@
 fragment Tenant on Tenant {
   id
+  status
+  priceDisplay
+  title
+  displayName
+  url
+  languageCode
+  email
+  postalCode
+  postalAddress
+  address
+  orgNumber
+}
+
+fragment Money on Money {
+  amount
+  currency
+  precision
+}
+
+fragment VatRate on VatRate {
+  id
+  value {
+    ...Money
+  }
+}
+
+fragment SocialMedia on SocialMedia {
+  id
+  type
+  url
+}
+
+query GetTenants {
+  tenants {
+    items {
+      ...Tenant
+      vatRate {
+        ...VatRate
+      }
+      socialMedias {
+        ...SocialMedia
+      }
+    }
+  }
+}
+
+mutation DeleteTenant($id: Int!) {
+  deleteTenant(id: $id)
+}
+
+query GetTenant($id: Int!) {
+  tenant(id: $id) {
+    ...Tenant
+    vatRate {
+      ...VatRate
+    }
+    socialMedias {
+      ...SocialMedia
+    }
+  }
+}
+
+mutation CreateTenant($input: TenantCreateInput!) {
+  createTenant(input: $input) {
+    ...Tenant
+  }
+}
+
+mutation UpdateTenant($id: Int!, $input: TenantUpdateInput!) {
+  updateTenant(input: $input, id: $id) {
+    ...Tenant
+    vatRate {
+      ...VatRate
+    }
+    socialMedias {
+      ...SocialMedia
+    }
+  }
 }

@@ -36,7 +36,6 @@ const Products: React.FC = () => {
   } else {
     content = <ProductsListing data={data?.products?.items} />;
   }
-
   const onExport = () => null;
   const onImport = () => null;
   const onAdd = () => navigate('/catalog/product/new/basic');

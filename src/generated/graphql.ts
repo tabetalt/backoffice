@@ -19,6 +19,29 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type Address = {
+  __typename?: 'Address';
+  id: Scalars['Int'];
+  regionCode: Scalars['Int'];
+  type: AddressType;
+  languageCode: Scalars['String'];
+  postalCode: Scalars['String'];
+  sortingCode: Scalars['String'];
+  administrativeArea: Scalars['String'];
+  locality: Scalars['String'];
+  addressLines: Array<Scalars['String']>;
+  recipients: Array<Scalars['String']>;
+  organization: Scalars['String'];
+  tenantId: Scalars['Int'];
+};
+
+export enum AddressType {
+  AddressTypeUnspecified = 'ADDRESS_TYPE_UNSPECIFIED',
+  Invoice = 'INVOICE',
+  Postal = 'POSTAL',
+  Visitor = 'VISITOR',
+}
+
 export type Attachment = {
   __typename?: 'Attachment';
   id: Scalars['Int'];
@@ -290,7 +313,6 @@ export type Mutation = {
   createTenant: Tenant;
   updateTenant: Tenant;
   deleteTenant: Scalars['Boolean'];
-  uploadTenant: Scalars['Boolean'];
   createDeliveryMethod: DeliveryMethod;
   updateDeliveryMethod: DeliveryMethod;
   deleteDeliveryMethod: Scalars['Boolean'];
@@ -325,10 +347,6 @@ export type MutationUpdateTenantArgs = {
 };
 
 export type MutationDeleteTenantArgs = {
-  id: Scalars['Int'];
-};
-
-export type MutationUploadTenantArgs = {
   id: Scalars['Int'];
 };
 
@@ -436,29 +454,22 @@ export type Order = {
   tenantId: Scalars['Int'];
   tenant: Tenant;
   totalPrice?: Maybe<Price>;
-  totalProductsPrice?: Maybe<Price>;
-  productsTotal?: Maybe<Money>;
   products: Array<OrderToProduct>;
   payments?: Maybe<Array<Payment>>;
   deliveryMethodId?: Maybe<Scalars['Int']>;
   deliveryMethod?: Maybe<DeliveryMethod>;
-  deliveryAddress?: Maybe<Scalars['String']>;
-  orderAddress?: Maybe<Scalars['String']>;
-  clientName?: Maybe<Scalars['String']>;
-  clientEmail?: Maybe<Scalars['String']>;
+  deliveryAddressId?: Maybe<Scalars['Int']>;
+  deliveryAddress?: Maybe<Address>;
+  orderAddressId?: Maybe<Scalars['Int']>;
+  orderAddress?: Maybe<Address>;
 };
 
 export type OrderCreateInput = {
   status?: Maybe<OrderStatus>;
   paymentStatus?: Maybe<PaymentStatus>;
   tenantId: Scalars['Int'];
-  deliveryMethodId?: Maybe<Scalars['Int']>;
   totalPrice?: Maybe<PriceInput>;
   products?: Maybe<Array<OrderProductCreateInput>>;
-  deliveryAddress?: Maybe<Scalars['String']>;
-  orderAddress?: Maybe<Scalars['String']>;
-  clientName?: Maybe<Scalars['String']>;
-  clientEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrderProductCreateInput = {
@@ -480,19 +491,14 @@ export type OrderToProduct = {
   productId: Scalars['Int'];
   product: Product;
   count: Scalars['Int'];
-  total?: Maybe<Price>;
+  totalPrice: Price;
 };
 
 export type OrderUpdateInput = {
   status?: Maybe<OrderStatus>;
   paymentStatus?: Maybe<PaymentStatus>;
-  deliveryMethodId?: Maybe<Scalars['Int']>;
   totalPrice?: Maybe<PriceInput>;
   products?: Maybe<Array<OrderProductCreateInput>>;
-  deliveryAddress?: Maybe<Scalars['String']>;
-  orderAddress?: Maybe<Scalars['String']>;
-  clientName?: Maybe<Scalars['String']>;
-  clientEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrdersListResponse = {
@@ -908,6 +914,62 @@ export type GetCategoryQuery = { __typename?: 'Query' } & {
   } & CategoryFragment;
 };
 
+export type MoneyFragment = { __typename?: 'Money' } & Pick<
+  Money,
+  'amount' | 'currency' | 'precision'
+>;
+
+export type DeliveryMethodFragment = { __typename?: 'DeliveryMethod' } & Pick<
+  DeliveryMethod,
+  'id' | 'name' | 'digitalDelivery' | 'status' | 'tenantId'
+> & { price: { __typename?: 'Money' } & MoneyFragment };
+
+export type GetDeliveryMethodsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetDeliveryMethodsQuery = { __typename?: 'Query' } & {
+  deliveryMethods: { __typename?: 'DeliveryMethodsListResponse' } & {
+    items: Array<{ __typename?: 'DeliveryMethod' } & DeliveryMethodFragment>;
+  };
+};
+
+export type DeleteDeliveryMethodMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteDeliveryMethodMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'deleteDeliveryMethod'
+>;
+
+export type GetDeliveryMethodQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type GetDeliveryMethodQuery = { __typename?: 'Query' } & {
+  deliveryMethod: { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment;
+};
+
+export type CreateDeliveryMethodMutationVariables = Exact<{
+  input: DeliveryMethodCreateInput;
+}>;
+
+export type CreateDeliveryMethodMutation = { __typename?: 'Mutation' } & {
+  createDeliveryMethod: {
+    __typename?: 'DeliveryMethod';
+  } & DeliveryMethodFragment;
+};
+
+export type UpdateDeliveryMethodMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: DeliveryMethodUpdateInput;
+}>;
+
+export type UpdateDeliveryMethodMutation = { __typename?: 'Mutation' } & {
+  updateDeliveryMethod: {
+    __typename?: 'DeliveryMethod';
+  } & DeliveryMethodFragment;
+};
+
 export type GetSignedUrlQueryVariables = Exact<{
   input: QuerySignedUrlInput;
 }>;
@@ -917,116 +979,6 @@ export type GetSignedUrlQuery = { __typename?: 'Query' } & {
     SignedUrl,
     'url' | 'expires' | 'accessUrl'
   >;
-};
-
-export type MoneyFragment = { __typename?: 'Money' } & Pick<
-  Money,
-  'amount' | 'currency' | 'precision'
->;
-
-export type PriceFragment = { __typename?: 'Price' } & {
-  vatAmount: { __typename?: 'Money' } & MoneyFragment;
-  grossAmount: { __typename?: 'Money' } & MoneyFragment;
-  netAmount: { __typename?: 'Money' } & MoneyFragment;
-};
-
-export type DeliveryMethodFragment = { __typename?: 'DeliveryMethod' } & Pick<
-  DeliveryMethod,
-  'name'
-> & { price: { __typename?: 'Money' } & MoneyFragment };
-
-export type ProductPartialFragment = { __typename?: 'Product' } & Pick<
-  Product,
-  'id' | 'title'
-> & {
-    price?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
-    vatRate?: Maybe<
-      { __typename?: 'VatRate' } & {
-        value: { __typename?: 'Money' } & MoneyFragment;
-      }
-    >;
-  };
-
-export type OrderToProductFragment = { __typename?: 'OrderToProduct' } & Pick<
-  OrderToProduct,
-  'count'
-> & {
-    product: { __typename?: 'Product' } & ProductPartialFragment;
-    total?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
-  };
-
-export type OrderShortFragment = { __typename?: 'Order' } & Pick<
-  Order,
-  | 'id'
-  | 'orderTime'
-  | 'status'
-  | 'paymentStatus'
-  | 'tenantId'
-  | 'deliveryAddress'
-  | 'orderAddress'
-  | 'clientName'
-  | 'clientEmail'
-> & {
-    deliveryMethod?: Maybe<
-      { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment
-    >;
-    totalPrice?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
-  };
-
-export type PaymentFragment = { __typename?: 'Payment' } & Pick<
-  Payment,
-  'id' | 'paymentTime' | 'status' | 'processingId' | 'processingCode'
->;
-
-export type OrderFragment = { __typename?: 'Order' } & {
-  totalProductsPrice?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
-  deliveryMethod?: Maybe<
-    { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment
-  >;
-  products: Array<{ __typename?: 'OrderToProduct' } & OrderToProductFragment>;
-  payments?: Maybe<Array<{ __typename?: 'Payment' } & PaymentFragment>>;
-} & OrderShortFragment;
-
-export type GetOrdersQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetOrdersQuery = { __typename?: 'Query' } & {
-  orders: { __typename?: 'OrdersListResponse' } & {
-    items: Array<{ __typename?: 'Order' } & OrderShortFragment>;
-  };
-};
-
-export type DeleteOrderMutationVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-export type DeleteOrderMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'deleteOrder'
->;
-
-export type GetOrderQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-export type GetOrderQuery = { __typename?: 'Query' } & {
-  order: { __typename?: 'Order' } & OrderFragment;
-};
-
-export type CreateOrderMutationVariables = Exact<{
-  input: OrderCreateInput;
-}>;
-
-export type CreateOrderMutation = { __typename?: 'Mutation' } & {
-  createOrder: { __typename?: 'Order' } & OrderFragment;
-};
-
-export type UpdateOrderMutationVariables = Exact<{
-  id: Scalars['Int'];
-  input: OrderUpdateInput;
-}>;
-
-export type UpdateOrderMutation = { __typename?: 'Mutation' } & {
-  updateOrder: { __typename?: 'Order' } & OrderFragment;
 };
 
 export type ProductShortFragment = { __typename?: 'Product' } & Pick<
@@ -1045,6 +997,12 @@ export type ProductShortFragment = { __typename?: 'Product' } & Pick<
   | 'stockControl'
   | 'inStockNum'
 >;
+
+export type PriceFragment = { __typename?: 'Price' } & {
+  vatAmount: { __typename?: 'Money' } & MoneyFragment;
+  grossAmount: { __typename?: 'Money' } & MoneyFragment;
+  netAmount: { __typename?: 'Money' } & MoneyFragment;
+};
 
 export type VariantFragment = { __typename?: 'Variant' } & Pick<Variant, 'id'>;
 
@@ -1117,7 +1075,90 @@ export type UpdateProductMutation = { __typename?: 'Mutation' } & {
   } & ProductShortFragment;
 };
 
-export type TenantFragment = { __typename?: 'Tenant' } & Pick<Tenant, 'id'>;
+export type TenantFragment = { __typename?: 'Tenant' } & Pick<
+  Tenant,
+  | 'id'
+  | 'status'
+  | 'priceDisplay'
+  | 'title'
+  | 'displayName'
+  | 'url'
+  | 'languageCode'
+  | 'email'
+  | 'postalCode'
+  | 'postalAddress'
+  | 'address'
+  | 'orgNumber'
+>;
+
+export type VatRateFragment = { __typename?: 'VatRate' } & Pick<
+  VatRate,
+  'id'
+> & { value: { __typename?: 'Money' } & MoneyFragment };
+
+export type SocialMediaFragment = { __typename?: 'SocialMedia' } & Pick<
+  SocialMedia,
+  'id' | 'type' | 'url'
+>;
+
+export type GetTenantsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetTenantsQuery = { __typename?: 'Query' } & {
+  tenants: { __typename?: 'TenantsListResponse' } & {
+    items: Array<
+      { __typename?: 'Tenant' } & {
+        vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
+        socialMedias?: Maybe<
+          Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+        >;
+      } & TenantFragment
+    >;
+  };
+};
+
+export type DeleteTenantMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteTenantMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'deleteTenant'
+>;
+
+export type GetTenantQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type GetTenantQuery = { __typename?: 'Query' } & {
+  tenant: { __typename?: 'Tenant' } & {
+    vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
+    socialMedias?: Maybe<
+      Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+    >;
+  } & TenantFragment;
+};
+
+export type CreateTenantMutationVariables = Exact<{
+  input: TenantCreateInput;
+}>;
+
+export type CreateTenantMutation = { __typename?: 'Mutation' } & {
+  createTenant: { __typename?: 'Tenant' } & TenantFragment;
+};
+
+export type UpdateTenantMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: TenantUpdateInput;
+}>;
+
+export type UpdateTenantMutation = { __typename?: 'Mutation' } & {
+  updateTenant: { __typename?: 'Tenant' } & {
+    vatRate?: Maybe<{ __typename?: 'VatRate' } & VatRateFragment>;
+    socialMedias?: Maybe<
+      Array<{ __typename?: 'SocialMedia' } & SocialMediaFragment>
+    >;
+  } & TenantFragment;
+};
 
 export const CategoryShortFragmentDoc = gql`
   fragment CategoryShort on Category {
@@ -1134,107 +1175,16 @@ export const MoneyFragmentDoc = gql`
 `;
 export const DeliveryMethodFragmentDoc = gql`
   fragment DeliveryMethod on DeliveryMethod {
+    id
     name
     price {
       ...Money
     }
-  }
-  ${MoneyFragmentDoc}
-`;
-export const PriceFragmentDoc = gql`
-  fragment Price on Price {
-    vatAmount {
-      ...Money
-    }
-    grossAmount {
-      ...Money
-    }
-    netAmount {
-      ...Money
-    }
-  }
-  ${MoneyFragmentDoc}
-`;
-export const OrderShortFragmentDoc = gql`
-  fragment OrderShort on Order {
-    id
-    orderTime
+    digitalDelivery
     status
-    paymentStatus
     tenantId
-    deliveryAddress
-    orderAddress
-    clientName
-    clientEmail
-    deliveryMethod {
-      ...DeliveryMethod
-    }
-    totalPrice {
-      ...Price
-    }
   }
-  ${DeliveryMethodFragmentDoc}
-  ${PriceFragmentDoc}
-`;
-export const ProductPartialFragmentDoc = gql`
-  fragment ProductPartial on Product {
-    id
-    title
-    price {
-      ...Price
-    }
-    vatRate {
-      value {
-        ...Money
-      }
-    }
-  }
-  ${PriceFragmentDoc}
   ${MoneyFragmentDoc}
-`;
-export const OrderToProductFragmentDoc = gql`
-  fragment OrderToProduct on OrderToProduct {
-    product {
-      ...ProductPartial
-    }
-    count
-    total {
-      ...Price
-    }
-  }
-  ${ProductPartialFragmentDoc}
-  ${PriceFragmentDoc}
-`;
-export const PaymentFragmentDoc = gql`
-  fragment Payment on Payment {
-    id
-    paymentTime
-    status
-    processingId
-    processingCode
-  }
-`;
-export const OrderFragmentDoc = gql`
-  fragment Order on Order {
-    ...OrderShort
-    totalProductsPrice {
-      ...Price
-    }
-    deliveryMethod {
-      ...DeliveryMethod
-    }
-    products {
-      ...OrderToProduct
-    }
-    payments {
-      ...Payment
-    }
-  }
-  ${OrderShortFragmentDoc}
-  ${PriceFragmentDoc}
-  ${DeliveryMethodFragmentDoc}
-  ${OrderToProductFragmentDoc}
-  ${PaymentFragmentDoc}
 `;
 export const ProductShortFragmentDoc = gql`
   fragment ProductShort on Product {
@@ -1252,6 +1202,20 @@ export const ProductShortFragmentDoc = gql`
     stockControl
     inStockNum
   }
+`;
+export const PriceFragmentDoc = gql`
+  fragment Price on Price {
+    vatAmount {
+      ...Money
+    }
+    grossAmount {
+      ...Money
+    }
+    netAmount {
+      ...Money
+    }
+  }
+  ${MoneyFragmentDoc}
 `;
 export const VariantFragmentDoc = gql`
   fragment Variant on Variant {
@@ -1301,6 +1265,33 @@ export const ProductFragmentDoc = gql`
 export const TenantFragmentDoc = gql`
   fragment Tenant on Tenant {
     id
+    status
+    priceDisplay
+    title
+    displayName
+    url
+    languageCode
+    email
+    postalCode
+    postalAddress
+    address
+    orgNumber
+  }
+`;
+export const VatRateFragmentDoc = gql`
+  fragment VatRate on VatRate {
+    id
+    value {
+      ...Money
+    }
+  }
+  ${MoneyFragmentDoc}
+`;
+export const SocialMediaFragmentDoc = gql`
+  fragment SocialMedia on SocialMedia {
+    id
+    type
+    url
   }
 `;
 export const CreateCategoryDocument = gql`
@@ -1634,6 +1625,269 @@ export type GetCategoryQueryResult = Apollo.QueryResult<
   GetCategoryQuery,
   GetCategoryQueryVariables
 >;
+export const GetDeliveryMethodsDocument = gql`
+  query GetDeliveryMethods {
+    deliveryMethods {
+      items {
+        ...DeliveryMethod
+      }
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+
+/**
+ * __useGetDeliveryMethodsQuery__
+ *
+ * To run a query within a React component, call `useGetDeliveryMethodsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeliveryMethodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeliveryMethodsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDeliveryMethodsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >(GetDeliveryMethodsDocument, baseOptions);
+}
+export function useGetDeliveryMethodsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetDeliveryMethodsQuery,
+    GetDeliveryMethodsQueryVariables
+  >(GetDeliveryMethodsDocument, baseOptions);
+}
+export type GetDeliveryMethodsQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodsQuery
+>;
+export type GetDeliveryMethodsLazyQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodsLazyQuery
+>;
+export type GetDeliveryMethodsQueryResult = Apollo.QueryResult<
+  GetDeliveryMethodsQuery,
+  GetDeliveryMethodsQueryVariables
+>;
+export const DeleteDeliveryMethodDocument = gql`
+  mutation DeleteDeliveryMethod($id: Int!) {
+    deleteDeliveryMethod(id: $id)
+  }
+`;
+export type DeleteDeliveryMethodMutationFn = Apollo.MutationFunction<
+  DeleteDeliveryMethodMutation,
+  DeleteDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useDeleteDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useDeleteDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteDeliveryMethodMutation, { data, loading, error }] = useDeleteDeliveryMethodMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteDeliveryMethodMutation,
+    DeleteDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    DeleteDeliveryMethodMutation,
+    DeleteDeliveryMethodMutationVariables
+  >(DeleteDeliveryMethodDocument, baseOptions);
+}
+export type DeleteDeliveryMethodMutationHookResult = ReturnType<
+  typeof useDeleteDeliveryMethodMutation
+>;
+export type DeleteDeliveryMethodMutationResult =
+  Apollo.MutationResult<DeleteDeliveryMethodMutation>;
+export type DeleteDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  DeleteDeliveryMethodMutation,
+  DeleteDeliveryMethodMutationVariables
+>;
+export const GetDeliveryMethodDocument = gql`
+  query GetDeliveryMethod($id: Int!) {
+    deliveryMethod(id: $id) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+
+/**
+ * __useGetDeliveryMethodQuery__
+ *
+ * To run a query within a React component, call `useGetDeliveryMethodQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeliveryMethodQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeliveryMethodQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetDeliveryMethodQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >(GetDeliveryMethodDocument, baseOptions);
+}
+export function useGetDeliveryMethodLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetDeliveryMethodQuery,
+    GetDeliveryMethodQueryVariables
+  >(GetDeliveryMethodDocument, baseOptions);
+}
+export type GetDeliveryMethodQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodQuery
+>;
+export type GetDeliveryMethodLazyQueryHookResult = ReturnType<
+  typeof useGetDeliveryMethodLazyQuery
+>;
+export type GetDeliveryMethodQueryResult = Apollo.QueryResult<
+  GetDeliveryMethodQuery,
+  GetDeliveryMethodQueryVariables
+>;
+export const CreateDeliveryMethodDocument = gql`
+  mutation CreateDeliveryMethod($input: DeliveryMethodCreateInput!) {
+    createDeliveryMethod(input: $input) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+export type CreateDeliveryMethodMutationFn = Apollo.MutationFunction<
+  CreateDeliveryMethodMutation,
+  CreateDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useCreateDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useCreateDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDeliveryMethodMutation, { data, loading, error }] = useCreateDeliveryMethodMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDeliveryMethodMutation,
+    CreateDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    CreateDeliveryMethodMutation,
+    CreateDeliveryMethodMutationVariables
+  >(CreateDeliveryMethodDocument, baseOptions);
+}
+export type CreateDeliveryMethodMutationHookResult = ReturnType<
+  typeof useCreateDeliveryMethodMutation
+>;
+export type CreateDeliveryMethodMutationResult =
+  Apollo.MutationResult<CreateDeliveryMethodMutation>;
+export type CreateDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  CreateDeliveryMethodMutation,
+  CreateDeliveryMethodMutationVariables
+>;
+export const UpdateDeliveryMethodDocument = gql`
+  mutation UpdateDeliveryMethod($id: Int!, $input: DeliveryMethodUpdateInput!) {
+    updateDeliveryMethod(input: $input, id: $id) {
+      ...DeliveryMethod
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+`;
+export type UpdateDeliveryMethodMutationFn = Apollo.MutationFunction<
+  UpdateDeliveryMethodMutation,
+  UpdateDeliveryMethodMutationVariables
+>;
+
+/**
+ * __useUpdateDeliveryMethodMutation__
+ *
+ * To run a mutation, you first call `useUpdateDeliveryMethodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDeliveryMethodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDeliveryMethodMutation, { data, loading, error }] = useUpdateDeliveryMethodMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateDeliveryMethodMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateDeliveryMethodMutation,
+    UpdateDeliveryMethodMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    UpdateDeliveryMethodMutation,
+    UpdateDeliveryMethodMutationVariables
+  >(UpdateDeliveryMethodDocument, baseOptions);
+}
+export type UpdateDeliveryMethodMutationHookResult = ReturnType<
+  typeof useUpdateDeliveryMethodMutation
+>;
+export type UpdateDeliveryMethodMutationResult =
+  Apollo.MutationResult<UpdateDeliveryMethodMutation>;
+export type UpdateDeliveryMethodMutationOptions = Apollo.BaseMutationOptions<
+  UpdateDeliveryMethodMutation,
+  UpdateDeliveryMethodMutationVariables
+>;
 export const GetSignedUrlDocument = gql`
   query GetSignedUrl($input: QuerySignedUrlInput!) {
     signedUrl(input: $input) {
@@ -1691,259 +1945,6 @@ export type GetSignedUrlLazyQueryHookResult = ReturnType<
 export type GetSignedUrlQueryResult = Apollo.QueryResult<
   GetSignedUrlQuery,
   GetSignedUrlQueryVariables
->;
-export const GetOrdersDocument = gql`
-  query GetOrders {
-    orders {
-      items {
-        ...OrderShort
-      }
-    }
-  }
-  ${OrderShortFragmentDoc}
-`;
-
-/**
- * __useGetOrdersQuery__
- *
- * To run a query within a React component, call `useGetOrdersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOrdersQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetOrdersQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetOrdersQuery, GetOrdersQueryVariables>
-) {
-  return Apollo.useQuery<GetOrdersQuery, GetOrdersQueryVariables>(
-    GetOrdersDocument,
-    baseOptions
-  );
-}
-export function useGetOrdersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOrdersQuery,
-    GetOrdersQueryVariables
-  >
-) {
-  return Apollo.useLazyQuery<GetOrdersQuery, GetOrdersQueryVariables>(
-    GetOrdersDocument,
-    baseOptions
-  );
-}
-export type GetOrdersQueryHookResult = ReturnType<typeof useGetOrdersQuery>;
-export type GetOrdersLazyQueryHookResult = ReturnType<
-  typeof useGetOrdersLazyQuery
->;
-export type GetOrdersQueryResult = Apollo.QueryResult<
-  GetOrdersQuery,
-  GetOrdersQueryVariables
->;
-export const DeleteOrderDocument = gql`
-  mutation DeleteOrder($id: Int!) {
-    deleteOrder(id: $id)
-  }
-`;
-export type DeleteOrderMutationFn = Apollo.MutationFunction<
-  DeleteOrderMutation,
-  DeleteOrderMutationVariables
->;
-
-/**
- * __useDeleteOrderMutation__
- *
- * To run a mutation, you first call `useDeleteOrderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOrderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteOrderMutation, { data, loading, error }] = useDeleteOrderMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteOrderMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteOrderMutation,
-    DeleteOrderMutationVariables
-  >
-) {
-  return Apollo.useMutation<DeleteOrderMutation, DeleteOrderMutationVariables>(
-    DeleteOrderDocument,
-    baseOptions
-  );
-}
-export type DeleteOrderMutationHookResult = ReturnType<
-  typeof useDeleteOrderMutation
->;
-export type DeleteOrderMutationResult =
-  Apollo.MutationResult<DeleteOrderMutation>;
-export type DeleteOrderMutationOptions = Apollo.BaseMutationOptions<
-  DeleteOrderMutation,
-  DeleteOrderMutationVariables
->;
-export const GetOrderDocument = gql`
-  query GetOrder($id: Int!) {
-    order(id: $id) {
-      ...Order
-    }
-  }
-  ${OrderFragmentDoc}
-`;
-
-/**
- * __useGetOrderQuery__
- *
- * To run a query within a React component, call `useGetOrderQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOrderQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetOrderQuery(
-  baseOptions: Apollo.QueryHookOptions<GetOrderQuery, GetOrderQueryVariables>
-) {
-  return Apollo.useQuery<GetOrderQuery, GetOrderQueryVariables>(
-    GetOrderDocument,
-    baseOptions
-  );
-}
-export function useGetOrderLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOrderQuery,
-    GetOrderQueryVariables
-  >
-) {
-  return Apollo.useLazyQuery<GetOrderQuery, GetOrderQueryVariables>(
-    GetOrderDocument,
-    baseOptions
-  );
-}
-export type GetOrderQueryHookResult = ReturnType<typeof useGetOrderQuery>;
-export type GetOrderLazyQueryHookResult = ReturnType<
-  typeof useGetOrderLazyQuery
->;
-export type GetOrderQueryResult = Apollo.QueryResult<
-  GetOrderQuery,
-  GetOrderQueryVariables
->;
-export const CreateOrderDocument = gql`
-  mutation CreateOrder($input: OrderCreateInput!) {
-    createOrder(input: $input) {
-      ...Order
-    }
-  }
-  ${OrderFragmentDoc}
-`;
-export type CreateOrderMutationFn = Apollo.MutationFunction<
-  CreateOrderMutation,
-  CreateOrderMutationVariables
->;
-
-/**
- * __useCreateOrderMutation__
- *
- * To run a mutation, you first call `useCreateOrderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOrderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createOrderMutation, { data, loading, error }] = useCreateOrderMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateOrderMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateOrderMutation,
-    CreateOrderMutationVariables
-  >
-) {
-  return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(
-    CreateOrderDocument,
-    baseOptions
-  );
-}
-export type CreateOrderMutationHookResult = ReturnType<
-  typeof useCreateOrderMutation
->;
-export type CreateOrderMutationResult =
-  Apollo.MutationResult<CreateOrderMutation>;
-export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<
-  CreateOrderMutation,
-  CreateOrderMutationVariables
->;
-export const UpdateOrderDocument = gql`
-  mutation UpdateOrder($id: Int!, $input: OrderUpdateInput!) {
-    updateOrder(id: $id, input: $input) {
-      ...Order
-    }
-  }
-  ${OrderFragmentDoc}
-`;
-export type UpdateOrderMutationFn = Apollo.MutationFunction<
-  UpdateOrderMutation,
-  UpdateOrderMutationVariables
->;
-
-/**
- * __useUpdateOrderMutation__
- *
- * To run a mutation, you first call `useUpdateOrderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateOrderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateOrderMutation, { data, loading, error }] = useUpdateOrderMutation({
- *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateOrderMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateOrderMutation,
-    UpdateOrderMutationVariables
-  >
-) {
-  return Apollo.useMutation<UpdateOrderMutation, UpdateOrderMutationVariables>(
-    UpdateOrderDocument,
-    baseOptions
-  );
-}
-export type UpdateOrderMutationHookResult = ReturnType<
-  typeof useUpdateOrderMutation
->;
-export type UpdateOrderMutationResult =
-  Apollo.MutationResult<UpdateOrderMutation>;
-export type UpdateOrderMutationOptions = Apollo.BaseMutationOptions<
-  UpdateOrderMutation,
-  UpdateOrderMutationVariables
 >;
 export const GetProductsDocument = gql`
   query GetProducts {
@@ -2227,6 +2228,286 @@ export type UpdateProductMutationResult =
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<
   UpdateProductMutation,
   UpdateProductMutationVariables
+>;
+export const GetTenantsDocument = gql`
+  query GetTenants {
+    tenants {
+      items {
+        ...Tenant
+        vatRate {
+          ...VatRate
+        }
+        socialMedias {
+          ...SocialMedia
+        }
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${VatRateFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+
+/**
+ * __useGetTenantsQuery__
+ *
+ * To run a query within a React component, call `useGetTenantsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTenantsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTenantsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTenantsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetTenantsQuery,
+    GetTenantsQueryVariables
+  >
+) {
+  return Apollo.useQuery<GetTenantsQuery, GetTenantsQueryVariables>(
+    GetTenantsDocument,
+    baseOptions
+  );
+}
+export function useGetTenantsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTenantsQuery,
+    GetTenantsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetTenantsQuery, GetTenantsQueryVariables>(
+    GetTenantsDocument,
+    baseOptions
+  );
+}
+export type GetTenantsQueryHookResult = ReturnType<typeof useGetTenantsQuery>;
+export type GetTenantsLazyQueryHookResult = ReturnType<
+  typeof useGetTenantsLazyQuery
+>;
+export type GetTenantsQueryResult = Apollo.QueryResult<
+  GetTenantsQuery,
+  GetTenantsQueryVariables
+>;
+export const DeleteTenantDocument = gql`
+  mutation DeleteTenant($id: Int!) {
+    deleteTenant(id: $id)
+  }
+`;
+export type DeleteTenantMutationFn = Apollo.MutationFunction<
+  DeleteTenantMutation,
+  DeleteTenantMutationVariables
+>;
+
+/**
+ * __useDeleteTenantMutation__
+ *
+ * To run a mutation, you first call `useDeleteTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTenantMutation, { data, loading, error }] = useDeleteTenantMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteTenantMutation,
+    DeleteTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    DeleteTenantMutation,
+    DeleteTenantMutationVariables
+  >(DeleteTenantDocument, baseOptions);
+}
+export type DeleteTenantMutationHookResult = ReturnType<
+  typeof useDeleteTenantMutation
+>;
+export type DeleteTenantMutationResult =
+  Apollo.MutationResult<DeleteTenantMutation>;
+export type DeleteTenantMutationOptions = Apollo.BaseMutationOptions<
+  DeleteTenantMutation,
+  DeleteTenantMutationVariables
+>;
+export const GetTenantDocument = gql`
+  query GetTenant($id: Int!) {
+    tenant(id: $id) {
+      ...Tenant
+      vatRate {
+        ...VatRate
+      }
+      socialMedias {
+        ...SocialMedia
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${VatRateFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+
+/**
+ * __useGetTenantQuery__
+ *
+ * To run a query within a React component, call `useGetTenantQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTenantQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTenantQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetTenantQuery(
+  baseOptions: Apollo.QueryHookOptions<GetTenantQuery, GetTenantQueryVariables>
+) {
+  return Apollo.useQuery<GetTenantQuery, GetTenantQueryVariables>(
+    GetTenantDocument,
+    baseOptions
+  );
+}
+export function useGetTenantLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTenantQuery,
+    GetTenantQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetTenantQuery, GetTenantQueryVariables>(
+    GetTenantDocument,
+    baseOptions
+  );
+}
+export type GetTenantQueryHookResult = ReturnType<typeof useGetTenantQuery>;
+export type GetTenantLazyQueryHookResult = ReturnType<
+  typeof useGetTenantLazyQuery
+>;
+export type GetTenantQueryResult = Apollo.QueryResult<
+  GetTenantQuery,
+  GetTenantQueryVariables
+>;
+export const CreateTenantDocument = gql`
+  mutation CreateTenant($input: TenantCreateInput!) {
+    createTenant(input: $input) {
+      ...Tenant
+    }
+  }
+  ${TenantFragmentDoc}
+`;
+export type CreateTenantMutationFn = Apollo.MutationFunction<
+  CreateTenantMutation,
+  CreateTenantMutationVariables
+>;
+
+/**
+ * __useCreateTenantMutation__
+ *
+ * To run a mutation, you first call `useCreateTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTenantMutation, { data, loading, error }] = useCreateTenantMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateTenantMutation,
+    CreateTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    CreateTenantMutation,
+    CreateTenantMutationVariables
+  >(CreateTenantDocument, baseOptions);
+}
+export type CreateTenantMutationHookResult = ReturnType<
+  typeof useCreateTenantMutation
+>;
+export type CreateTenantMutationResult =
+  Apollo.MutationResult<CreateTenantMutation>;
+export type CreateTenantMutationOptions = Apollo.BaseMutationOptions<
+  CreateTenantMutation,
+  CreateTenantMutationVariables
+>;
+export const UpdateTenantDocument = gql`
+  mutation UpdateTenant($id: Int!, $input: TenantUpdateInput!) {
+    updateTenant(input: $input, id: $id) {
+      ...Tenant
+      vatRate {
+        ...VatRate
+      }
+      socialMedias {
+        ...SocialMedia
+      }
+    }
+  }
+  ${TenantFragmentDoc}
+  ${VatRateFragmentDoc}
+  ${SocialMediaFragmentDoc}
+`;
+export type UpdateTenantMutationFn = Apollo.MutationFunction<
+  UpdateTenantMutation,
+  UpdateTenantMutationVariables
+>;
+
+/**
+ * __useUpdateTenantMutation__
+ *
+ * To run a mutation, you first call `useUpdateTenantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTenantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTenantMutation, { data, loading, error }] = useUpdateTenantMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTenantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTenantMutation,
+    UpdateTenantMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    UpdateTenantMutation,
+    UpdateTenantMutationVariables
+  >(UpdateTenantDocument, baseOptions);
+}
+export type UpdateTenantMutationHookResult = ReturnType<
+  typeof useUpdateTenantMutation
+>;
+export type UpdateTenantMutationResult =
+  Apollo.MutationResult<UpdateTenantMutation>;
+export type UpdateTenantMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTenantMutation,
+  UpdateTenantMutationVariables
 >;
 
 export interface PossibleTypesResultData {

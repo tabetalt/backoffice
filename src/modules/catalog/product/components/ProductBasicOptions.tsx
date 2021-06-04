@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
-import { Box, Button } from 'theme-ui';
+import { Box, Button, Label } from 'theme-ui';
 import {
   Field,
   InputTags,
@@ -22,8 +22,11 @@ import {
   GetSignedUrlQuery,
   GetSignedUrlQueryVariables,
   ProductStatus,
+  TenantPriceDisplay,
   useGetCategoriesShortQuery,
 } from '../../../../generated/graphql';
+import { useTenant } from '../../../../context/TenantContext';
+import { DineroObject } from 'dinero.js';
 
 export type Product = GetProductQuery['product'];
 
@@ -78,12 +81,16 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
   error,
   product,
 }) => {
+  const { currentTenant } = useTenant();
   const [inputTagsSuggetions] = useState<TagProps[]>([]);
   const form = useFormik<ProductBasicOptionsValues>({
     initialValues: {
       ...defaultValues,
       ...product,
-      price: DineroHelper.formatPrice(product?.price).grossAmount,
+      price: DineroHelper.formatPrice(
+        product?.price,
+        currentTenant?.priceDisplay === TenantPriceDisplay.IncVat
+      ),
       categories: product?.categories.map((category) => ({
         id: category?.id,
         name: category?.title,
@@ -162,7 +169,13 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
             placeholder="Strikket genser"
             name="title"
             value={form.values.title}
-            onChange={form.handleChange}
+            onChange={(e: React.ChangeEvent<any>) => {
+              form.handleChange(e);
+              form.setFieldValue(
+                'slug',
+                e.currentTarget.value.toLowerCase().replaceAll(' ', '-')
+              );
+            }}
             onBlur={form.handleBlur}
           />
           {form.touched.title && form.errors.title && (
@@ -186,7 +199,11 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
         </div>
         <div>
           <PrefilledInput
-            label="Pris inkl. MVA"
+            label={
+              currentTenant?.priceDisplay === TenantPriceDisplay.IncVat
+                ? 'Pris inkl. MVA'
+                : 'Pris'
+            }
             prefilledText="NOK"
             prefilledTextPosition={TextPosition.RIGHT}
             placeholder="258,00"
@@ -198,6 +215,15 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
           />
           {form.touched.price && form.errors.price && (
             <Error message={form.errors.price} />
+          )}
+          {currentTenant?.priceDisplay === TenantPriceDisplay.IncVat && (
+            <Label sx={{ color: 'gray', ml: 158 }}>
+              {'Pris eks. MVA: ' +
+                DineroHelper.priceWithoutRate(
+                  currentTenant?.vatRate?.value as DineroObject,
+                  form.values.price
+                )}
+            </Label>
           )}
         </div>
         <div>

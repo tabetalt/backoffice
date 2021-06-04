@@ -3,9 +3,11 @@ import { Box, Flex, Avatar, Text, IconButton } from 'theme-ui';
 import NavLink from './NavLink';
 import { icons } from '@tabetalt/kit';
 import { useAuth } from '../../context/AuthContext';
+import { useTenant } from '../../context/TenantContext';
 
 const Sidebar: React.FC = () => {
   const { auth, currentUser } = useAuth();
+  const { currentTenant } = useTenant();
   return (
     <Flex
       sx={{
@@ -23,7 +25,7 @@ const Sidebar: React.FC = () => {
           alt="user avatar"
           src="https://via.placeholder.com/54x54"
         />
-        <Text sx={{ ml: 3 }}>Butikknavn</Text>
+        <Text sx={{ ml: 3 }}>{currentTenant?.displayName}</Text>
       </Box>
       <Box sx={{ flexGrow: 3 }}>
         {/* <NavLink to="/">

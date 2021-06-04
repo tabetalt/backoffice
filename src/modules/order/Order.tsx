@@ -45,8 +45,8 @@ const Order: React.FC = () => {
       id: orderId,
     },
   });
-  const [updateOrder, { error: updateError }] = useUpdateOrderMutation();
-  const [deleteOrder, { error: deleteError }] = useDeleteOrderMutation({
+  const [updateOrder] = useUpdateOrderMutation();
+  const [deleteOrder] = useDeleteOrderMutation({
     refetchQueries: [{ query: GetOrdersDocument }],
   });
 
@@ -252,7 +252,10 @@ const Order: React.FC = () => {
           </Flex>
           <Flex sx={{ mt: 4 }}>
             <Text>
-              {data?.order.products[0]?.product.vatRate?.value.amount}% MVA
+              {data?.order.products[0]?.product.vatRate?.value.amount
+                ? data?.order.products[0]?.product.vatRate?.value.amount
+                : 0}
+              % MVA
             </Text>
             <Text>
               {DineroHelper.formatPrice(data?.order.totalPrice).vatAmount} NOK

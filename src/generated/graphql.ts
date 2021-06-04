@@ -19,29 +19,6 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type Address = {
-  __typename?: 'Address';
-  id: Scalars['Int'];
-  regionCode: Scalars['Int'];
-  type: AddressType;
-  languageCode: Scalars['String'];
-  postalCode: Scalars['String'];
-  sortingCode: Scalars['String'];
-  administrativeArea: Scalars['String'];
-  locality: Scalars['String'];
-  addressLines: Array<Scalars['String']>;
-  recipients: Array<Scalars['String']>;
-  organization: Scalars['String'];
-  tenantId: Scalars['Int'];
-};
-
-export enum AddressType {
-  AddressTypeUnspecified = 'ADDRESS_TYPE_UNSPECIFIED',
-  Invoice = 'INVOICE',
-  Postal = 'POSTAL',
-  Visitor = 'VISITOR',
-}
-
 export type Attachment = {
   __typename?: 'Attachment';
   id: Scalars['Int'];
@@ -313,6 +290,7 @@ export type Mutation = {
   createTenant: Tenant;
   updateTenant: Tenant;
   deleteTenant: Scalars['Boolean'];
+  uploadTenant: Scalars['Boolean'];
   createDeliveryMethod: DeliveryMethod;
   updateDeliveryMethod: DeliveryMethod;
   deleteDeliveryMethod: Scalars['Boolean'];
@@ -347,6 +325,10 @@ export type MutationUpdateTenantArgs = {
 };
 
 export type MutationDeleteTenantArgs = {
+  id: Scalars['Int'];
+};
+
+export type MutationUploadTenantArgs = {
   id: Scalars['Int'];
 };
 
@@ -454,22 +436,28 @@ export type Order = {
   tenantId: Scalars['Int'];
   tenant: Tenant;
   totalPrice?: Maybe<Price>;
+  totalProductsPrice?: Maybe<Price>;
   products: Array<OrderToProduct>;
   payments?: Maybe<Array<Payment>>;
   deliveryMethodId?: Maybe<Scalars['Int']>;
   deliveryMethod?: Maybe<DeliveryMethod>;
-  deliveryAddressId?: Maybe<Scalars['Int']>;
-  deliveryAddress?: Maybe<Address>;
-  orderAddressId?: Maybe<Scalars['Int']>;
-  orderAddress?: Maybe<Address>;
+  deliveryAddress?: Maybe<Scalars['String']>;
+  orderAddress?: Maybe<Scalars['String']>;
+  clientName?: Maybe<Scalars['String']>;
+  clientEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrderCreateInput = {
   status?: Maybe<OrderStatus>;
   paymentStatus?: Maybe<PaymentStatus>;
   tenantId: Scalars['Int'];
+  deliveryMethodId?: Maybe<Scalars['Int']>;
   totalPrice?: Maybe<PriceInput>;
   products?: Maybe<Array<OrderProductCreateInput>>;
+  deliveryAddress?: Maybe<Scalars['String']>;
+  orderAddress?: Maybe<Scalars['String']>;
+  clientName?: Maybe<Scalars['String']>;
+  clientEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrderProductCreateInput = {
@@ -491,14 +479,19 @@ export type OrderToProduct = {
   productId: Scalars['Int'];
   product: Product;
   count: Scalars['Int'];
-  totalPrice: Price;
+  total?: Maybe<Price>;
 };
 
 export type OrderUpdateInput = {
   status?: Maybe<OrderStatus>;
   paymentStatus?: Maybe<PaymentStatus>;
+  deliveryMethodId?: Maybe<Scalars['Int']>;
   totalPrice?: Maybe<PriceInput>;
   products?: Maybe<Array<OrderProductCreateInput>>;
+  deliveryAddress?: Maybe<Scalars['String']>;
+  orderAddress?: Maybe<Scalars['String']>;
+  clientName?: Maybe<Scalars['String']>;
+  clientEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrdersListResponse = {
@@ -981,6 +974,106 @@ export type GetSignedUrlQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export type PriceFragment = { __typename?: 'Price' } & {
+  vatAmount: { __typename?: 'Money' } & MoneyFragment;
+  grossAmount: { __typename?: 'Money' } & MoneyFragment;
+  netAmount: { __typename?: 'Money' } & MoneyFragment;
+};
+
+export type ProductPartialFragment = { __typename?: 'Product' } & Pick<
+  Product,
+  'id' | 'title'
+> & {
+    price?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
+    vatRate?: Maybe<
+      { __typename?: 'VatRate' } & {
+        value: { __typename?: 'Money' } & MoneyFragment;
+      }
+    >;
+  };
+
+export type OrderToProductFragment = { __typename?: 'OrderToProduct' } & Pick<
+  OrderToProduct,
+  'count'
+> & {
+    product: { __typename?: 'Product' } & ProductPartialFragment;
+    total?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
+  };
+
+export type OrderShortFragment = { __typename?: 'Order' } & Pick<
+  Order,
+  | 'id'
+  | 'orderTime'
+  | 'status'
+  | 'paymentStatus'
+  | 'tenantId'
+  | 'deliveryAddress'
+  | 'orderAddress'
+  | 'clientName'
+  | 'clientEmail'
+> & {
+    deliveryMethod?: Maybe<
+      { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment
+    >;
+    totalPrice?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
+  };
+
+export type PaymentFragment = { __typename?: 'Payment' } & Pick<
+  Payment,
+  'id' | 'paymentTime' | 'status' | 'processingId' | 'processingCode'
+>;
+
+export type OrderFragment = { __typename?: 'Order' } & {
+  totalProductsPrice?: Maybe<{ __typename?: 'Price' } & PriceFragment>;
+  deliveryMethod?: Maybe<
+    { __typename?: 'DeliveryMethod' } & DeliveryMethodFragment
+  >;
+  products: Array<{ __typename?: 'OrderToProduct' } & OrderToProductFragment>;
+  payments?: Maybe<Array<{ __typename?: 'Payment' } & PaymentFragment>>;
+} & OrderShortFragment;
+
+export type GetOrdersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetOrdersQuery = { __typename?: 'Query' } & {
+  orders: { __typename?: 'OrdersListResponse' } & {
+    items: Array<{ __typename?: 'Order' } & OrderShortFragment>;
+  };
+};
+
+export type DeleteOrderMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteOrderMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'deleteOrder'
+>;
+
+export type GetOrderQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type GetOrderQuery = { __typename?: 'Query' } & {
+  order: { __typename?: 'Order' } & OrderFragment;
+};
+
+export type CreateOrderMutationVariables = Exact<{
+  input: OrderCreateInput;
+}>;
+
+export type CreateOrderMutation = { __typename?: 'Mutation' } & {
+  createOrder: { __typename?: 'Order' } & OrderFragment;
+};
+
+export type UpdateOrderMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: OrderUpdateInput;
+}>;
+
+export type UpdateOrderMutation = { __typename?: 'Mutation' } & {
+  updateOrder: { __typename?: 'Order' } & OrderFragment;
+};
+
 export type ProductShortFragment = { __typename?: 'Product' } & Pick<
   Product,
   | 'id'
@@ -997,12 +1090,6 @@ export type ProductShortFragment = { __typename?: 'Product' } & Pick<
   | 'stockControl'
   | 'inStockNum'
 >;
-
-export type PriceFragment = { __typename?: 'Price' } & {
-  vatAmount: { __typename?: 'Money' } & MoneyFragment;
-  grossAmount: { __typename?: 'Money' } & MoneyFragment;
-  netAmount: { __typename?: 'Money' } & MoneyFragment;
-};
 
 export type VariantFragment = { __typename?: 'Variant' } & Pick<Variant, 'id'>;
 
@@ -1186,6 +1273,101 @@ export const DeliveryMethodFragmentDoc = gql`
   }
   ${MoneyFragmentDoc}
 `;
+export const PriceFragmentDoc = gql`
+  fragment Price on Price {
+    vatAmount {
+      ...Money
+    }
+    grossAmount {
+      ...Money
+    }
+    netAmount {
+      ...Money
+    }
+  }
+  ${MoneyFragmentDoc}
+`;
+export const OrderShortFragmentDoc = gql`
+  fragment OrderShort on Order {
+    id
+    orderTime
+    status
+    paymentStatus
+    tenantId
+    deliveryAddress
+    orderAddress
+    clientName
+    clientEmail
+    deliveryMethod {
+      ...DeliveryMethod
+    }
+    totalPrice {
+      ...Price
+    }
+  }
+  ${DeliveryMethodFragmentDoc}
+  ${PriceFragmentDoc}
+`;
+export const ProductPartialFragmentDoc = gql`
+  fragment ProductPartial on Product {
+    id
+    title
+    price {
+      ...Price
+    }
+    vatRate {
+      value {
+        ...Money
+      }
+    }
+  }
+  ${PriceFragmentDoc}
+  ${MoneyFragmentDoc}
+`;
+export const OrderToProductFragmentDoc = gql`
+  fragment OrderToProduct on OrderToProduct {
+    product {
+      ...ProductPartial
+    }
+    count
+    total {
+      ...Price
+    }
+  }
+  ${ProductPartialFragmentDoc}
+  ${PriceFragmentDoc}
+`;
+export const PaymentFragmentDoc = gql`
+  fragment Payment on Payment {
+    id
+    paymentTime
+    status
+    processingId
+    processingCode
+  }
+`;
+export const OrderFragmentDoc = gql`
+  fragment Order on Order {
+    ...OrderShort
+    totalProductsPrice {
+      ...Price
+    }
+    deliveryMethod {
+      ...DeliveryMethod
+    }
+    products {
+      ...OrderToProduct
+    }
+    payments {
+      ...Payment
+    }
+  }
+  ${OrderShortFragmentDoc}
+  ${PriceFragmentDoc}
+  ${DeliveryMethodFragmentDoc}
+  ${OrderToProductFragmentDoc}
+  ${PaymentFragmentDoc}
+`;
 export const ProductShortFragmentDoc = gql`
   fragment ProductShort on Product {
     id
@@ -1202,20 +1384,6 @@ export const ProductShortFragmentDoc = gql`
     stockControl
     inStockNum
   }
-`;
-export const PriceFragmentDoc = gql`
-  fragment Price on Price {
-    vatAmount {
-      ...Money
-    }
-    grossAmount {
-      ...Money
-    }
-    netAmount {
-      ...Money
-    }
-  }
-  ${MoneyFragmentDoc}
 `;
 export const VariantFragmentDoc = gql`
   fragment Variant on Variant {
@@ -1945,6 +2113,259 @@ export type GetSignedUrlLazyQueryHookResult = ReturnType<
 export type GetSignedUrlQueryResult = Apollo.QueryResult<
   GetSignedUrlQuery,
   GetSignedUrlQueryVariables
+>;
+export const GetOrdersDocument = gql`
+  query GetOrders {
+    orders {
+      items {
+        ...OrderShort
+      }
+    }
+  }
+  ${OrderShortFragmentDoc}
+`;
+
+/**
+ * __useGetOrdersQuery__
+ *
+ * To run a query within a React component, call `useGetOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrdersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrdersQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetOrdersQuery, GetOrdersQueryVariables>
+) {
+  return Apollo.useQuery<GetOrdersQuery, GetOrdersQueryVariables>(
+    GetOrdersDocument,
+    baseOptions
+  );
+}
+export function useGetOrdersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOrdersQuery,
+    GetOrdersQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetOrdersQuery, GetOrdersQueryVariables>(
+    GetOrdersDocument,
+    baseOptions
+  );
+}
+export type GetOrdersQueryHookResult = ReturnType<typeof useGetOrdersQuery>;
+export type GetOrdersLazyQueryHookResult = ReturnType<
+  typeof useGetOrdersLazyQuery
+>;
+export type GetOrdersQueryResult = Apollo.QueryResult<
+  GetOrdersQuery,
+  GetOrdersQueryVariables
+>;
+export const DeleteOrderDocument = gql`
+  mutation DeleteOrder($id: Int!) {
+    deleteOrder(id: $id)
+  }
+`;
+export type DeleteOrderMutationFn = Apollo.MutationFunction<
+  DeleteOrderMutation,
+  DeleteOrderMutationVariables
+>;
+
+/**
+ * __useDeleteOrderMutation__
+ *
+ * To run a mutation, you first call `useDeleteOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOrderMutation, { data, loading, error }] = useDeleteOrderMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteOrderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteOrderMutation,
+    DeleteOrderMutationVariables
+  >
+) {
+  return Apollo.useMutation<DeleteOrderMutation, DeleteOrderMutationVariables>(
+    DeleteOrderDocument,
+    baseOptions
+  );
+}
+export type DeleteOrderMutationHookResult = ReturnType<
+  typeof useDeleteOrderMutation
+>;
+export type DeleteOrderMutationResult =
+  Apollo.MutationResult<DeleteOrderMutation>;
+export type DeleteOrderMutationOptions = Apollo.BaseMutationOptions<
+  DeleteOrderMutation,
+  DeleteOrderMutationVariables
+>;
+export const GetOrderDocument = gql`
+  query GetOrder($id: Int!) {
+    order(id: $id) {
+      ...Order
+    }
+  }
+  ${OrderFragmentDoc}
+`;
+
+/**
+ * __useGetOrderQuery__
+ *
+ * To run a query within a React component, call `useGetOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrderQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOrderQuery(
+  baseOptions: Apollo.QueryHookOptions<GetOrderQuery, GetOrderQueryVariables>
+) {
+  return Apollo.useQuery<GetOrderQuery, GetOrderQueryVariables>(
+    GetOrderDocument,
+    baseOptions
+  );
+}
+export function useGetOrderLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOrderQuery,
+    GetOrderQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetOrderQuery, GetOrderQueryVariables>(
+    GetOrderDocument,
+    baseOptions
+  );
+}
+export type GetOrderQueryHookResult = ReturnType<typeof useGetOrderQuery>;
+export type GetOrderLazyQueryHookResult = ReturnType<
+  typeof useGetOrderLazyQuery
+>;
+export type GetOrderQueryResult = Apollo.QueryResult<
+  GetOrderQuery,
+  GetOrderQueryVariables
+>;
+export const CreateOrderDocument = gql`
+  mutation CreateOrder($input: OrderCreateInput!) {
+    createOrder(input: $input) {
+      ...Order
+    }
+  }
+  ${OrderFragmentDoc}
+`;
+export type CreateOrderMutationFn = Apollo.MutationFunction<
+  CreateOrderMutation,
+  CreateOrderMutationVariables
+>;
+
+/**
+ * __useCreateOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderMutation, { data, loading, error }] = useCreateOrderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOrderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOrderMutation,
+    CreateOrderMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(
+    CreateOrderDocument,
+    baseOptions
+  );
+}
+export type CreateOrderMutationHookResult = ReturnType<
+  typeof useCreateOrderMutation
+>;
+export type CreateOrderMutationResult =
+  Apollo.MutationResult<CreateOrderMutation>;
+export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<
+  CreateOrderMutation,
+  CreateOrderMutationVariables
+>;
+export const UpdateOrderDocument = gql`
+  mutation UpdateOrder($id: Int!, $input: OrderUpdateInput!) {
+    updateOrder(id: $id, input: $input) {
+      ...Order
+    }
+  }
+  ${OrderFragmentDoc}
+`;
+export type UpdateOrderMutationFn = Apollo.MutationFunction<
+  UpdateOrderMutation,
+  UpdateOrderMutationVariables
+>;
+
+/**
+ * __useUpdateOrderMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrderMutation, { data, loading, error }] = useUpdateOrderMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateOrderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateOrderMutation,
+    UpdateOrderMutationVariables
+  >
+) {
+  return Apollo.useMutation<UpdateOrderMutation, UpdateOrderMutationVariables>(
+    UpdateOrderDocument,
+    baseOptions
+  );
+}
+export type UpdateOrderMutationHookResult = ReturnType<
+  typeof useUpdateOrderMutation
+>;
+export type UpdateOrderMutationResult =
+  Apollo.MutationResult<UpdateOrderMutation>;
+export type UpdateOrderMutationOptions = Apollo.BaseMutationOptions<
+  UpdateOrderMutation,
+  UpdateOrderMutationVariables
 >;
 export const GetProductsDocument = gql`
   query GetProducts {

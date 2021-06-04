@@ -87,10 +87,10 @@ const ProductBasicOptions: React.FC<ProductBasicOptionsProps> = ({
     initialValues: {
       ...defaultValues,
       ...product,
-      price: DineroHelper.formatPrice(
-        product?.price,
+      price:
         currentTenant?.priceDisplay === TenantPriceDisplay.IncVat
-      ),
+          ? DineroHelper.formatPrice(product?.price).netAmount
+          : DineroHelper.formatPrice(product?.price).grossAmount,
       categories: product?.categories.map((category) => ({
         id: category?.id,
         name: category?.title,

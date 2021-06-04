@@ -16,14 +16,6 @@ fragment Price on Price {
   }
 }
 
-fragment DeliveryMethod on DeliveryMethod {
-  name
-  price{ 
-    ...Money
-  }
-
-}
-
 fragment ProductPartial on Product {
   id
   title

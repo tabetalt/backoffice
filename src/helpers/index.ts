@@ -30,27 +30,14 @@ export const formatMoney = (money?: Money | null): string => {
   const moneyValue = money as DineroObject;
   const amount = moneyValue ? Dinero(moneyValue).toFormat('0.00') : '0';
   return amount;
+};
+
 export const dineroFromMoney = (value: Money): Dinero.Dinero => {
   return Dinero(value as DineroObject);
 };
 
 export const dineroFromString = (value: string): Dinero.Dinero => {
   return dineroFromMoney(moneyFromString(value));
-};
-
-export const formatPrice = (
-  price?: Price | null,
-  isVatRequired = false
-): string => {
-  if (!price) return '0';
-  const priceValue = dineroFromMoney(
-    isVatRequired ? price.netAmount : price.grossAmount
-  );
-  return priceValue ? priceValue.toFormat('0.00') : '0';
-};
-
-export const formatMoney = (value?: Money): string => {
-  return value ? dineroFromMoney(value).toFormat('0.00') : '0';
 };
 
 export const valueFromString = (

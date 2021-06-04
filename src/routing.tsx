@@ -35,8 +35,10 @@ const secureRoutes = [
   },
   {
     path: 'order/*',
-    element: <Orders />,
-    children: [{ path: ':orderId', element: <Order /> }],
+    children: [
+      { path: '', element: <Orders /> },
+      { path: '/:orderId', element: <Order /> },
+    ],
   },
   {
     path: 'page/*',

@@ -1,27 +1,43 @@
 import Dinero, { DineroObject } from 'dinero.js';
 import { Price, Money, CurrencyCode } from '../generated/graphql';
 
+type FormatPrice = {
+  netAmount: string;
+  grossAmount: string;
+  vatAmount: string;
+};
+
+export const formatPrice = (price?: Price | null): FormatPrice => {
+  const priceNetAmountValue = price?.netAmount as DineroObject;
+  const priceGrossAmountValue = price?.grossAmount as DineroObject;
+  const priceVatAmountValue = price?.vatAmount as DineroObject;
+
+  return {
+    netAmount: priceNetAmountValue
+      ? Dinero(priceNetAmountValue).toFormat('0.00')
+      : '0',
+    grossAmount: priceGrossAmountValue
+      ? Dinero(priceGrossAmountValue).toFormat('0.00')
+      : '0',
+    vatAmount: priceVatAmountValue
+      ? Dinero(priceVatAmountValue).toFormat('0.00')
+      : '0',
+  };
+};
+
+export const formatMoney = (money?: Money | null): string => {
+  if (!money) return '0';
+  const moneyValue = money as DineroObject;
+  const amount = moneyValue ? Dinero(moneyValue).toFormat('0.00') : '0';
+  return amount;
+};
+
 export const dineroFromMoney = (value: Money): Dinero.Dinero => {
   return Dinero(value as DineroObject);
 };
 
 export const dineroFromString = (value: string): Dinero.Dinero => {
   return dineroFromMoney(moneyFromString(value));
-};
-
-export const formatPrice = (
-  price?: Price | null,
-  isVatRequired = false
-): string => {
-  if (!price) return '0';
-  const priceValue = dineroFromMoney(
-    isVatRequired ? price.netAmount : price.grossAmount
-  );
-  return priceValue ? priceValue.toFormat('0.00') : '0';
-};
-
-export const formatMoney = (value?: Money): string => {
-  return value ? dineroFromMoney(value).toFormat('0.00') : '0';
 };
 
 export const valueFromString = (
@@ -48,16 +64,6 @@ export const moneyFromString = (
   };
 
   return price;
-};
-
-export const vatRateCalculation = (
-  vatRateObject: DineroObject,
-  price: string
-): string => {
-  const dineroPrice = dineroFromString(price);
-  const vatAmount = dineroPrice.multiply(vatRateObject.amount / 100);
-
-  return dineroPrice.add(vatAmount).toFormat('0.00');
 };
 
 export const priceWithoutRate = (

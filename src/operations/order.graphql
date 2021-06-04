@@ -1,0 +1,112 @@
+fragment Money on Money {
+  amount
+  currency
+  precision
+}
+
+fragment Price on Price {
+  vatAmount {
+    ...Money
+  }
+  grossAmount {
+    ...Money
+  }
+  netAmount {
+    ...Money
+  }
+}
+
+fragment ProductPartial on Product {
+  id
+  title
+  price{
+    ...Price
+  }
+  vatRate{
+    value{
+      ...Money
+    }
+  }
+}
+
+fragment OrderToProduct on OrderToProduct {
+  product {
+    ...ProductPartial
+  }
+  count
+  total{
+    ...Price
+  }
+}
+
+fragment OrderShort on Order {
+  id
+  orderTime
+  status
+  paymentStatus
+  tenantId
+  deliveryAddress
+  orderAddress
+  clientName
+  clientEmail
+  deliveryMethod{
+    ...DeliveryMethod
+  }
+  totalPrice {
+    ...Price
+  }
+}
+
+fragment Payment on Payment {
+  id
+  paymentTime
+  status
+  processingId
+  processingCode
+}
+
+fragment Order on Order {
+  ...OrderShort
+  totalProductsPrice {
+    ...Price
+  }
+  deliveryMethod{
+    ...DeliveryMethod
+  }
+  products {
+    ...OrderToProduct
+  }
+  payments {
+    ...Payment
+  }
+}
+
+query GetOrders {
+  orders {
+    items {
+      ...OrderShort
+    }
+  }
+}
+
+mutation DeleteOrder($id: Int!) {
+  deleteOrder(id: $id)
+}
+
+query GetOrder($id: Int!) {
+  order(id: $id) {
+    ...Order
+  }
+}
+
+mutation CreateOrder($input: OrderCreateInput!) {
+  createOrder(input: $input) {
+    ...Order
+  }
+}
+
+mutation UpdateOrder($id: Int!, $input: OrderUpdateInput!) {
+  updateOrder(id: $id, input: $input) {
+    ...Order
+  }
+}

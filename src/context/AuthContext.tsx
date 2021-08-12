@@ -5,6 +5,7 @@ import { auth } from '../firebase';
 interface ContextValue {
   currentUser: firebase.User | null;
   auth: firebase.auth.Auth;
+  hasCapability?: (capability: string) => boolean;
   isLoggedIn: () => boolean;
 }
 
@@ -36,7 +37,13 @@ export const AuthProvider: React.FC = ({ children }) => {
     };
   }, []);
 
+  const hasCapability = (capability: string) => {
+    const { capabilities = [] } = currentUser;
+    return Boolean(capabilities.includes(capability));
+  };
+
   const context = {
+    hasCapability,
     currentUser,
     auth,
     isLoggedIn,
